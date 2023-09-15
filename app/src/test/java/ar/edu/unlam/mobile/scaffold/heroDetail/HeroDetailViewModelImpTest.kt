@@ -64,7 +64,10 @@ class HeroDetailViewModelImpTest {
         coEvery { repo.getHero(1) } returns expectedHero
 
         viewModel.getHero(1)
-        delay(1000L)
+        val isLoading = viewModel.isLoading
+        while(isLoading.value) {
+            delay(100L)
+        }
         val hero = viewModel.hero.value
 
         assertThat(hero).isEqualTo(expectedHero)
