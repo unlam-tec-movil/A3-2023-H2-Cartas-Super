@@ -45,31 +45,31 @@ fun CollectionScreen(
         val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
 
         if(isLoading.value) {
-                CircularProgressIndicator(modifier = modifier.align(Alignment.Center))
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
-            Galeria(
+            val onItemClick: (Int) -> Unit = {heroID -> controller.navigate(route = "herodetail/$heroID")}
+            HeroGallery(
                 modifier = Modifier.fillMaxSize(),
                 heroList = viewModel.heroList.collectAsStateWithLifecycle().value,
-                controller = controller
+                onItemClick = onItemClick
             )
         }
     }
 }
 
 @Composable
-fun Galeria(
+fun HeroGallery(
     modifier: Modifier = Modifier,
     heroList: List<DataHero>,
-    itemSize: Dp = 100.dp,
-    controller: NavHostController
+    itemSize: Dp = 125.dp,
+    onItemClick: (Int) -> Unit
 ) {
-    val onItemClick: (Int) -> Unit = {heroID -> controller.navigate(route = "herodetail/$heroID")}
     LazyVerticalGrid(
+        modifier = modifier,
         columns = GridCells.Adaptive(itemSize),
         content = {
             items(heroList.size) {i ->
-                GaleriaItem(
-                    modifier = modifier,
+                GalleryItem(
                     dataHero = heroList[i],
                     onItemClick = onItemClick
                 )
@@ -78,10 +78,8 @@ fun Galeria(
     )
 }
 
-// SOLUCIONAR QUE CADA ITEM MANTENGA EL MISMO TAMAÑO QUE LOS DEMÁS
-
 @Composable
-fun GaleriaItem(
+fun GalleryItem(
     modifier: Modifier = Modifier,
     dataHero: DataHero = DataHero(),
     onItemClick : (Int) -> Unit,
@@ -97,11 +95,12 @@ fun GaleriaItem(
         ) {
             Column {
                 HeroImage(
+                    modifier = Modifier.padding(4.dp),
                     url = dataHero.image.url
                 )
                 Text(dataHero.name,
                     modifier = Modifier
-                        .padding(bottom = 8.dp)
+                        .padding(bottom = 4.dp, start = 4.dp, end = 4.dp)
                         .align(Alignment.CenterHorizontally),
                     color = Color.Black,
                     textAlign = TextAlign.Center
