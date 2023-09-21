@@ -2,11 +2,11 @@ package ar.edu.unlam.mobile.scaffold.data.repository
 
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
-import ar.edu.unlam.mobile.scaffold.data.database.entities.toHero
+import ar.edu.unlam.mobile.scaffold.data.database.entities.toHeroModel
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
-import ar.edu.unlam.mobile.scaffold.domain.hero.toHeroEntity
+import ar.edu.unlam.mobile.scaffold.domain.hero.toHeroEntityModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -57,11 +57,11 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
         return withContext(Dispatchers.IO) {
             val heroDB = dataBase.getHero(heroId)
             if (heroDB != null) {
-                heroDB.toHero()
+                heroDB.toHeroModel()
             } else {
                 val hero = api.getHero(heroId)
                 val formattedHero = formatDataHero(hero)
-                dataBase.insertHero(formattedHero.toHeroEntity())
+                dataBase.insertHero(formattedHero.toHeroEntityModel())
                 formattedHero
             }
         }
@@ -76,17 +76,17 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
             for(i in 1..COLLECTION_MAX_SIZE) {
                 val heroDb = dbList.find { it.id == i }
                 if (heroDb != null) {
-                    heroList.add(heroDb.toHero())
+                    heroList.add(heroDb.toHeroModel())
                 } else {
                     val heroApi = formatDataHero(api.getHero(i))
-                    saveToDbList.add(heroApi.toHeroEntity())
+                    saveToDbList.add(heroApi.toHeroEntityModel())
                     heroList.add(heroApi)
                 }
             }
         } else {
             for(i in 1..COLLECTION_MAX_SIZE) {
                 val heroApi = formatDataHero(api.getHero(i))
-                saveToDbList.add(heroApi.toHeroEntity())
+                saveToDbList.add(heroApi.toHeroEntityModel())
                 heroList.add(heroApi)
             }
         }

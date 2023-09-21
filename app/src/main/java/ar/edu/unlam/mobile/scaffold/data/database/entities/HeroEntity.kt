@@ -25,7 +25,7 @@ data class HeroEntity(
     @ColumnInfo("isFavorite") val isFavorite: Boolean = false
 )
 
-fun HeroEntity.toHero(): DataHero {
+fun HeroEntity.toHeroModel(): DataHero {
     return DataHero(
         appearance = appearanceEntityToAppearance(this.appearance),
         biography = biographyEntityToBiography(this.biography),
