@@ -11,6 +11,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +19,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
@@ -42,10 +45,15 @@ fun NavigationButton(modifier : Modifier = Modifier,text: String = "button",onCl
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    viewModel: HomeViewmodel = hiltViewModel(),
     controller: NavHostController
 ) {
 
-    val navButtonModifier = Modifier.wrapContentSize().padding(16.dp)
+    val cacheProgress by viewModel.cachingProgress.collectAsStateWithLifecycle()
+
+    val navButtonModifier = Modifier
+        .wrapContentSize()
+        .padding(16.dp)
 
     Box(modifier = modifier) {
         Image(
@@ -79,6 +87,7 @@ fun HomeScreen(
             ) {
                 controller.navigate(route = "collection")
             }
+            Text(text = "$cacheProgress")
         }
     }
 }
