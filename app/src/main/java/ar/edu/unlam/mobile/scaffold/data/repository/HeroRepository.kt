@@ -8,6 +8,8 @@ import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
 import ar.edu.unlam.mobile.scaffold.domain.hero.toHeroEntityModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -17,6 +19,17 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
 
     // private val API_COLLECTION_SIZE = 731 // no eliminar
     private val COLLECTION_MAX_SIZE = 50 // es menor o igual a API_COLLECTION_SIZE
+
+
+    override fun preloadHeroCache(): Flow<Float> {
+        return flow<Float> {
+            for(i in 1..COLLECTION_MAX_SIZE) {
+                getHero(i)
+                val percentage = i / COLLECTION_MAX_SIZE.toFloat() * 100
+                emit(percentage)
+            }
+        }
+    }
 
     override suspend fun getAdversaryDeck(size:Int): List<DataHero> {
         return getRandomPlayerDeck(size)
