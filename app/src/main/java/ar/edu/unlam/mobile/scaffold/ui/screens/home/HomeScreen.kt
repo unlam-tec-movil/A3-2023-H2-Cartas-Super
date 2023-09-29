@@ -90,7 +90,10 @@ fun HomeScreen(
                     Text(text = "Loading: $cacheProgress%")
                     LoadingAnimation(
                         modifier = Modifier
-                            .padding(start = 10.dp)
+                            .padding(start = 10.dp, top = 10.dp),
+                        circleSize = 15.dp,
+                        spaceBetween = 5.dp,
+                        travelDistance = 15.dp
                     )
                 }
             } else {

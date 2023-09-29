@@ -8,35 +8,34 @@ import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
 import ar.edu.unlam.mobile.scaffold.domain.hero.toHeroEntityModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
 
 class HeroRepository @Inject constructor(private val api: HeroService, private val dataBase: HeroDao) :
     IHeroRepository {
 
     // private val API_COLLECTION_SIZE = 731 // no eliminar
     private val COLLECTION_MAX_SIZE = 731 // es menor o igual a API_COLLECTION_SIZE
-
-
     override fun preloadHeroCache(): Flow<Float> {
         return flow<Float> {
             emit(0f)
-            for(i in 1..COLLECTION_MAX_SIZE) {
+            for (i in 1..COLLECTION_MAX_SIZE) {
                 getHero(i)
+                delay(1000L) // solo es para testing, borrar esta linea después
                 val percentage = i / COLLECTION_MAX_SIZE.toFloat() * 100
                 emit(percentage)
             }
         }
     }
 
-    override suspend fun getAdversaryDeck(size:Int): List<DataHero> {
+    override suspend fun getAdversaryDeck(size: Int): List<DataHero> {
         return getRandomPlayerDeck(size)
     }
 
-    override suspend fun getRandomPlayerDeck(size:Int): List<DataHero> {
+    override suspend fun getRandomPlayerDeck(size: Int): List<DataHero> {
         val list = mutableListOf<DataHero>()
         return withContext(Dispatchers.IO) {
             for (i in 1..size) {
@@ -48,9 +47,9 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
         }
     }
     private fun formatDataHero(h: DataHero): DataHero {
-        return if(isPowerStatsNull(h)) convertNullPowerstatsToNotNull(h) else h
+        return if (isPowerStatsNull(h)) convertNullPowerstatsToNotNull(h) else h
     }
-    private fun isPowerStatsNull(h: DataHero):Boolean {
+    private fun isPowerStatsNull(h: DataHero): Boolean {
         return h.powerstats.power == "null"
     }
 
@@ -86,8 +85,8 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
         val heroList = mutableListOf<DataHero>()
         val saveToDbList = mutableListOf<HeroEntity>()
 
-        if(dbList.isNotEmpty()) {
-            for(i in 1..COLLECTION_MAX_SIZE) {
+        if (dbList.isNotEmpty()) {
+            for (i in 1..COLLECTION_MAX_SIZE) {
                 val heroDb = dbList.find { it.id == i }
                 if (heroDb != null) {
                     heroList.add(heroDb.toHeroModel())
@@ -98,7 +97,7 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
                 }
             }
         } else {
-            for(i in 1..COLLECTION_MAX_SIZE) {
+            for (i in 1..COLLECTION_MAX_SIZE) {
                 val heroApi = formatDataHero(api.getHero(i))
                 saveToDbList.add(heroApi.toHeroEntityModel())
                 heroList.add(heroApi)
