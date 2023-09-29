@@ -23,10 +23,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
+import ar.edu.unlam.mobile.scaffold.ui.components.LoadingAnimation
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Composable
-fun NavigationButton(modifier : Modifier = Modifier,text: String = "button",onClick: () -> Unit) {
+fun NavigationButton(
+    modifier: Modifier = Modifier,
+    text: String = "button",
+    onClick: () -> Unit
+) {
     Button(
         onClick = {
             onClick()
@@ -35,7 +40,8 @@ fun NavigationButton(modifier : Modifier = Modifier,text: String = "button",onCl
         colors = ButtonDefaults.buttonColors(Color.Yellow)
     ) {
         Text(
-            text = text, fontSize = 20.sp,
+            text = text,
+            fontSize = 20.sp,
             color = Color.Black,
             fontFamily = shaka_pow
         )
@@ -48,9 +54,7 @@ fun HomeScreen(
     viewModel: HomeViewmodel = hiltViewModel(),
     controller: NavHostController
 ) {
-
     val cacheProgress by viewModel.cachingProgress.collectAsStateWithLifecycle()
-
     val navButtonModifier = Modifier
         .wrapContentSize()
         .padding(16.dp)
@@ -81,14 +85,22 @@ fun HomeScreen(
             ) {
                 controller.navigate(route = "quiz")
             }
-            NavigationButton(
-                modifier = navButtonModifier,
-                text = "Coleccion"
-            ) {
-                controller.navigate(route = "collection")
+            if (cacheProgress < 100f) {
+                Button(onClick = { }) {
+                    Text(text = "Loading: $cacheProgress%")
+                    LoadingAnimation(
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                    )
+                }
+            } else {
+                NavigationButton(
+                    modifier = navButtonModifier,
+                    text = "Coleccion"
+                ) {
+                    controller.navigate(route = "collection")
+                }
             }
-            Text(text = "$cacheProgress")
         }
     }
 }
-

@@ -14,7 +14,7 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 
 @HiltViewModel
-class HomeViewmodel @Inject constructor(private val repo : IHeroRepository) : ViewModel() {
+class HomeViewmodel @Inject constructor(private val repo: IHeroRepository) : ViewModel() {
 
     private val _cachingProgress = MutableStateFlow(0.00f)
     val cachingProgress = _cachingProgress.asStateFlow()
@@ -31,11 +31,9 @@ class HomeViewmodel @Inject constructor(private val repo : IHeroRepository) : Vi
             cachingProgressFlow.map {
                 (it * 100).roundToInt() / 100f
             }
-                .collect() { progress ->
+                .collect { progress ->
                     _cachingProgress.value = progress
                 }
         }
     }
-
-
 }
