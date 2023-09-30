@@ -8,7 +8,6 @@ import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
 import ar.edu.unlam.mobile.scaffold.domain.hero.toHeroEntityModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -24,7 +23,6 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
             emit(0f)
             for (i in 1..COLLECTION_MAX_SIZE) {
                 getHero(i)
-                delay(100L)
                 val percentage = i / COLLECTION_MAX_SIZE.toFloat()
                 emit(percentage)
             }
