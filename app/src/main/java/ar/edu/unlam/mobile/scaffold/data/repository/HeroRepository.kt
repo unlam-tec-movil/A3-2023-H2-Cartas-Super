@@ -20,12 +20,12 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
     // private val API_COLLECTION_SIZE = 731 // no eliminar
     private val COLLECTION_MAX_SIZE = 731 // es menor o igual a API_COLLECTION_SIZE
     override fun preloadHeroCache(): Flow<Float> {
-        return flow<Float> {
+        return flow {
             emit(0f)
             for (i in 1..COLLECTION_MAX_SIZE) {
                 getHero(i)
-                delay(1000L) // solo es para testing, borrar esta linea después
-                val percentage = i / COLLECTION_MAX_SIZE.toFloat() * 100
+                delay(100L)
+                val percentage = i / COLLECTION_MAX_SIZE.toFloat()
                 emit(percentage)
             }
         }

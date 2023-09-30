@@ -29,7 +29,7 @@ class HomeViewmodel @Inject constructor(private val repo: IHeroRepository) : Vie
         withContext(Dispatchers.IO) {
             val cachingProgressFlow = repo.preloadHeroCache()
             cachingProgressFlow.map {
-                (it * 100).roundToInt() / 100f
+                (it * 10000).roundToInt() / 10000f
             }
                 .collect { progress ->
                     _cachingProgress.value = progress

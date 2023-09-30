@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
-import ar.edu.unlam.mobile.scaffold.ui.components.LoadingAnimation
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomProgressBarWithDots
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Composable
@@ -85,7 +85,8 @@ fun HomeScreen(
             ) {
                 controller.navigate(route = "quiz")
             }
-            if (cacheProgress < 100f) {
+            if (cacheProgress < 1f) {
+                /*
                 Button(onClick = { }) {
                     Text(text = "Loading: $cacheProgress%")
                     LoadingAnimation(
@@ -96,6 +97,9 @@ fun HomeScreen(
                         travelDistance = 15.dp
                     )
                 }
+
+                 */
+                CustomProgressBarWithDots(modifier = navButtonModifier, progress = cacheProgress)
             } else {
                 NavigationButton(
                     modifier = navButtonModifier,
