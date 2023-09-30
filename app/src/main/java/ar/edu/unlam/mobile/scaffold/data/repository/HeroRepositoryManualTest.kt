@@ -1,8 +1,9 @@
 package ar.edu.unlam.mobile.scaffold.data.repository
 
-import ar.edu.unlam.mobile.scaffold.data.repository.IHeroRepository
+
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class HeroRepositoryManualTest @Inject constructor(): IHeroRepository {
@@ -80,10 +81,6 @@ class HeroRepositoryManualTest @Inject constructor(): IHeroRepository {
         return listOf(hero1,hero2,hero3)
     }
 
-    suspend fun getPlayerDeck(idDeck: Int): List<DataHero> {
-        return heroListTest1()
-    }
-
 
     override suspend fun getAdversaryDeck(size: Int): List<DataHero> {
         return heroListTest2()
@@ -106,6 +103,10 @@ class HeroRepositoryManualTest @Inject constructor(): IHeroRepository {
             )
         }
         return dataHeroTestList
+    }
+
+    override fun preloadHeroCache(): Flow<Float> {
+        TODO("Not yet implemented")
     }
 
 }
