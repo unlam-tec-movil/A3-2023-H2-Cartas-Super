@@ -7,11 +7,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 @HiltViewModel
 class HomeViewmodel @Inject constructor(private val repo: IHeroRepository) : ViewModel() {
@@ -28,9 +26,7 @@ class HomeViewmodel @Inject constructor(private val repo: IHeroRepository) : Vie
     private suspend fun preloadHeroes() {
         withContext(Dispatchers.IO) {
             val cachingProgressFlow = repo.preloadHeroCache()
-            cachingProgressFlow.map {
-                (it * 10000).roundToInt() / 10000f
-            }
+            cachingProgressFlow
                 .collect { progress ->
                     _cachingProgress.value = progress
                 }

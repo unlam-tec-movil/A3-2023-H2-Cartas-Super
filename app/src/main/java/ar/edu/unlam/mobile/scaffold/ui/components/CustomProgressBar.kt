@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Preview
 @Composable
@@ -46,7 +47,7 @@ fun CustomProgressBar(
         targetValue = barProgress,
         tween(
             durationMillis = 1000,
-            delayMillis = 200,
+            delayMillis = 0,
             easing = LinearOutSlowInEasing
         ),
         label = "Custom Progress Bar Animation"
@@ -55,13 +56,13 @@ fun CustomProgressBar(
     Box(
         modifier = modifier
             .height(height)
-            .clip(RoundedCornerShape(height / 0.75.dp))
+            .clip(RoundedCornerShape(30.dp))
     ) {
         // background
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(height / 0.75.dp))
+                .clip(RoundedCornerShape(30.dp))
                 .background(backgroundColor)
         )
         // foreground
@@ -69,7 +70,7 @@ fun CustomProgressBar(
             modifier = Modifier
                 .fillMaxWidth(size)
                 .fillMaxHeight()
-                .clip(RoundedCornerShape(height / 0.75.dp))
+                .clip(RoundedCornerShape(30.dp))
                 .background(foregroundColor)
                 .animateContentSize()
         )
@@ -93,7 +94,8 @@ fun CustomProgressBarWithDots(
             val cacheProgress = "%.2f".format(progress * 100f)
             Text(
                 modifier = Modifier.padding(top = 9.dp),
-                text = "Loading: $cacheProgress%"
+                text = "Loading: $cacheProgress%",
+                fontFamily = shaka_pow
             )
             LoadingAnimation(
                 modifier = Modifier
