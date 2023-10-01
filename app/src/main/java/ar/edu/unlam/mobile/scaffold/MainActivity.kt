@@ -23,6 +23,7 @@ import ar.edu.unlam.mobile.scaffold.ui.screens.collection.CollectionScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.heroduel.HeroDuelScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.home.HomeScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.qr.QrScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.quiz.QuizScreen
 import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -84,6 +85,12 @@ fun MainScreen() {
             }
             composable("duel") {
                 HeroDuelScreen(
+                    modifier = Modifier.padding(paddingValue),
+                    controller = controller
+                )
+            }
+            composable("qr") {
+                QrScreen(
                     modifier = Modifier.padding(paddingValue),
                     controller = controller
                 )

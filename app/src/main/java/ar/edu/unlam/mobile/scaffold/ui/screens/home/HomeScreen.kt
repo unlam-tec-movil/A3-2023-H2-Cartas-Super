@@ -69,7 +69,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 70.dp),
+                .padding(bottom = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom
         ) {
@@ -84,6 +84,12 @@ fun HomeScreen(
                 text = "Quiz"
             ) {
                 controller.navigate(route = "quiz")
+            }
+            NavigationButton(
+                modifier = navButtonModifier,
+                text = "Intercambio"
+            ) {
+                controller.navigate(route = "qr")
             }
             if (cacheProgress < 1f) {
                 CustomProgressBarWithDots(modifier = navButtonModifier, progress = cacheProgress)
