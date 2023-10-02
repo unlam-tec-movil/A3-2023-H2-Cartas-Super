@@ -1,6 +1,5 @@
 package ar.edu.unlam.mobile.scaffold.data.network
 
-import ar.edu.unlam.mobile.scaffold.data.network.IHeroApiClient
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -8,9 +7,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class HeroService @Inject constructor(private val api: IHeroApiClient){
+class HeroService @Inject constructor(private val api: IHeroApiClient) {
 
-    suspend fun getHero(id:Int): DataHero {
+    private val LOWEST_HERO_ID = 1
+    private val HIGEST_HERO_ID = 731
+    suspend fun getHero(id: Int): DataHero {
+        if (id < LOWEST_HERO_ID || id > HIGEST_HERO_ID) {
+            throw HeroServiceException(message = "Hero id out of range [$LOWEST_HERO_ID,$HIGEST_HERO_ID].")
+        }
         return withContext(Dispatchers.IO) {
             val response = api.getHeroResponse(id.toString())
             response.body() ?: DataHero()
