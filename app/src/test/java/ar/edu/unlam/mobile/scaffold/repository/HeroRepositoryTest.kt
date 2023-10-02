@@ -11,7 +11,9 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit4.MockKRule
+import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 
@@ -45,6 +47,11 @@ class HeroRepositoryTest {
 
     @RelaxedMockK
     lateinit var db: HeroDao
+
+    @After
+    fun afterTests() {
+        unmockkAll()
+    }
 
     @Test
     fun getHeroFromApiWhenRoomDoesntHaveIt() = runTest {
@@ -92,8 +99,31 @@ class HeroRepositoryTest {
         val listSize = HeroRepository(api, db).getAllHero().size
         assertThat(listSize).isEqualTo(expectedSize)
     }
-/*
-@Test
-    fun whenDatabaseHasZeroEntriesReturn
- */
+
+    @Test
+    fun whenDatabaseHasZeroEntriesGetEverythingFromApi() = runTest {
+        coEvery { db.getAll() } returns emptyList()
+        for (i in 1..731) {
+            coEvery { api.getHero(i) } returns DataHero(id = i.toString(), name = "Test $i")
+        }
+        val heroList = HeroRepository(api, db).getAllHero()
+        for (i in 1..731) {
+            val hero = heroList[i - 1]
+            val name = hero.name
+            val id = hero.id.toInt()
+            assertThat(name).isEqualTo("Test $i")
+            assertThat(id).isEqualTo(i)
+        }
+    }
+
+    @Test
+    fun whenProvidingASizeToGetRandomPlayerDeckReturnAHeroListOfAskedSize() = runTest {
+        val expectedSize = 4
+        coEvery { db.getAll() } returns emptyList()
+        for (i in 1..731) {
+            coEvery { api.getHero(i) } returns DataHero(id = i.toString(), name = "Test $i")
+        }
+        val heroDeck = HeroRepository(api, db).getRandomPlayerDeck(expectedSize)
+        assertThat(heroDeck.size).isEqualTo(expectedSize)
+    }
 }
