@@ -12,6 +12,7 @@ import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit4.MockKRule
 import io.mockk.unmockkAll
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Rule
@@ -125,5 +126,22 @@ class HeroRepositoryTest {
         }
         val heroDeck = HeroRepository(api, db).getRandomPlayerDeck(expectedSize)
         assertThat(heroDeck.size).isEqualTo(expectedSize)
+    }
+
+    @Test
+    fun whenPreloadingHeroCacheEmitValuesBetweenZeroAndOne() = runTest {
+        coEvery { db.getAll() } returns emptyList()
+        for (i in 1..731) {
+            coEvery { api.getHero(i) } returns DataHero(id = i.toString(), name = "Test $i")
+        }
+        val emissionList = HeroRepository(api, db).preloadHeroCache().toList()
+        val iterator = emissionList.iterator()
+        assertThat(emissionList[0]).isWithin(1.0E-5F).of(0f)
+        assertThat(emissionList.last()).isWithin(1.0E-5F).of(1f)
+        while (iterator.hasNext()) {
+            val value = iterator.next()
+            assertThat(value).isAtLeast(0f)
+            assertThat(value).isAtMost(1f)
+        }
     }
 }
