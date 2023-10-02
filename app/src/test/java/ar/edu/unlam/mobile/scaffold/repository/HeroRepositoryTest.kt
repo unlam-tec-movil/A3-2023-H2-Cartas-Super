@@ -1,12 +1,11 @@
 package ar.edu.unlam.mobile.scaffold.repository
 
-
-
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
 import ar.edu.unlam.mobile.scaffold.data.repository.HeroRepository
+import ar.edu.unlam.mobile.scaffold.data.repository.HeroRepositoryException
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -66,9 +65,35 @@ class HeroRepositoryTest {
         coEvery { api.getHero(1) } returns DataHero(id = "2")
         coEvery { db.getHero(1) } returns expectedHeroEntity
 
-        val repo = HeroRepository(api,db)
+        val repo = HeroRepository(api, db)
         val hero = repo.getHero(1)
 
         assertThat(hero).isEqualTo(expectedHero)
     }
+
+    @Test(expected = HeroRepositoryException::class)
+    fun whenProvidingHeroIdLowerThanOneThrowHeroRepositoryException() = runTest {
+        HeroRepository(api, db).getHero(0)
+    }
+
+    @Test(expected = HeroRepositoryException::class)
+    fun whenProvidingHeroIdHigherThan731ThrowHeroRepositoryException() = runTest {
+        HeroRepository(api, db).getHero(732)
+    }
+
+    @Test
+    fun whenDatabaseHas731EntriesReturnListDirectlyWithSize731() = runTest {
+        val expectedSize = 731
+        val heroEntityList: MutableList<HeroEntity> = mutableListOf()
+        for (i in 1..expectedSize) {
+            heroEntityList.add(HeroEntity(id = i, name = "$i test"))
+        }
+        coEvery { db.getAll() } returns heroEntityList
+        val listSize = HeroRepository(api, db).getAllHero().size
+        assertThat(listSize).isEqualTo(expectedSize)
+    }
+/*
+@Test
+    fun whenDatabaseHasZeroEntriesReturn
+ */
 }
