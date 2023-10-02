@@ -1,18 +1,20 @@
 package ar.edu.unlam.mobile.scaffold.repository
 
-
-
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
 import ar.edu.unlam.mobile.scaffold.data.repository.HeroRepository
+import ar.edu.unlam.mobile.scaffold.data.repository.HeroRepositoryException
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit4.MockKRule
+import io.mockk.unmockkAll
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 
@@ -47,6 +49,11 @@ class HeroRepositoryTest {
     @RelaxedMockK
     lateinit var db: HeroDao
 
+    @After
+    fun afterTests() {
+        unmockkAll()
+    }
+
     @Test
     fun getHeroFromApiWhenRoomDoesntHaveIt() = runTest {
         val expectedHero = DataHero(id = "1", name = "Mr. Test")
@@ -66,9 +73,75 @@ class HeroRepositoryTest {
         coEvery { api.getHero(1) } returns DataHero(id = "2")
         coEvery { db.getHero(1) } returns expectedHeroEntity
 
-        val repo = HeroRepository(api,db)
+        val repo = HeroRepository(api, db)
         val hero = repo.getHero(1)
 
         assertThat(hero).isEqualTo(expectedHero)
+    }
+
+    @Test(expected = HeroRepositoryException::class)
+    fun whenProvidingHeroIdLowerThanOneThrowHeroRepositoryException() = runTest {
+        HeroRepository(api, db).getHero(0)
+    }
+
+    @Test(expected = HeroRepositoryException::class)
+    fun whenProvidingHeroIdHigherThan731ThrowHeroRepositoryException() = runTest {
+        HeroRepository(api, db).getHero(732)
+    }
+
+    @Test
+    fun whenDatabaseHas731EntriesReturnListDirectlyWithSize731() = runTest {
+        val expectedSize = 731
+        val heroEntityList: MutableList<HeroEntity> = mutableListOf()
+        for (i in 1..expectedSize) {
+            heroEntityList.add(HeroEntity(id = i, name = "$i test"))
+        }
+        coEvery { db.getAll() } returns heroEntityList
+        val listSize = HeroRepository(api, db).getAllHero().size
+        assertThat(listSize).isEqualTo(expectedSize)
+    }
+
+    @Test
+    fun whenDatabaseHasZeroEntriesGetEverythingFromApi() = runTest {
+        coEvery { db.getAll() } returns emptyList()
+        for (i in 1..731) {
+            coEvery { api.getHero(i) } returns DataHero(id = i.toString(), name = "Test $i")
+        }
+        val heroList = HeroRepository(api, db).getAllHero()
+        for (i in 1..731) {
+            val hero = heroList[i - 1]
+            val name = hero.name
+            val id = hero.id.toInt()
+            assertThat(name).isEqualTo("Test $i")
+            assertThat(id).isEqualTo(i)
+        }
+    }
+
+    @Test
+    fun whenProvidingASizeToGetRandomPlayerDeckReturnAHeroListOfAskedSize() = runTest {
+        val expectedSize = 4
+        coEvery { db.getAll() } returns emptyList()
+        for (i in 1..731) {
+            coEvery { api.getHero(i) } returns DataHero(id = i.toString(), name = "Test $i")
+        }
+        val heroDeck = HeroRepository(api, db).getRandomPlayerDeck(expectedSize)
+        assertThat(heroDeck.size).isEqualTo(expectedSize)
+    }
+
+    @Test
+    fun whenPreloadingHeroCacheEmitValuesBetweenZeroAndOne() = runTest {
+        coEvery { db.getAll() } returns emptyList()
+        for (i in 1..731) {
+            coEvery { api.getHero(i) } returns DataHero(id = i.toString(), name = "Test $i")
+        }
+        val emissionList = HeroRepository(api, db).preloadHeroCache().toList()
+        val iterator = emissionList.iterator()
+        assertThat(emissionList[0]).isWithin(1.0E-5F).of(0f)
+        assertThat(emissionList.last()).isWithin(1.0E-5F).of(1f)
+        while (iterator.hasNext()) {
+            val value = iterator.next()
+            assertThat(value).isAtLeast(0f)
+            assertThat(value).isAtMost(1f)
+        }
     }
 }

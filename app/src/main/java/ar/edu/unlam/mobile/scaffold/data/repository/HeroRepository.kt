@@ -65,6 +65,9 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
     }
 
     override suspend fun getHero(heroId: Int): DataHero {
+        if (heroId < 1 || heroId > COLLECTION_MAX_SIZE) {
+            throw HeroRepositoryException("Hero id outside of range [1,$COLLECTION_MAX_SIZE].")
+        }
         return withContext(Dispatchers.IO) {
             val heroDB = dataBase.getHero(heroId)
             if (heroDB != null) {
