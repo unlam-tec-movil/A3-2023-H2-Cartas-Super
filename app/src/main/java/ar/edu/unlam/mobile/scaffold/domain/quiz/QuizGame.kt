@@ -2,8 +2,7 @@ package ar.edu.unlam.mobile.scaffold.domain.quiz
 
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 
-
-class QuizGame (private val heroList:List<DataHero>) {
+class QuizGame(private val heroList: List<DataHero>) {
     lateinit var correctAnswer: DataHero
         private set
     lateinit var option1: DataHero
@@ -35,8 +34,8 @@ class QuizGame (private val heroList:List<DataHero>) {
         option4 = list[0]
     }
 
-    fun isCorrectAnswer(option: QuizOption):Boolean {
-        return when(option) {
+    fun isCorrectAnswer(option: QuizOption): Boolean {
+        return when (option) {
             QuizOption.OPTION_1 -> correctAnswer.id == option1.id
             QuizOption.OPTION_2 -> correctAnswer.id == option2.id
             QuizOption.OPTION_3 -> correctAnswer.id == option3.id
