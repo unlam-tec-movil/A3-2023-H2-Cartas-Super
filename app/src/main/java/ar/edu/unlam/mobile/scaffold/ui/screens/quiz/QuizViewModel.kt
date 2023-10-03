@@ -2,7 +2,7 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.quiz
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ar.edu.unlam.mobile.scaffold.data.repository.IHeroRepository
+import ar.edu.unlam.mobile.scaffold.data.repository.quizrepository.IQuizGameRepository
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizGame
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizOption
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,11 +14,11 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class QuizViewModel @Inject constructor(repo: IHeroRepository) : ViewModel() {
+class QuizViewModel @Inject constructor(repo: IQuizGameRepository) : ViewModel() {
 
     private lateinit var game: QuizGame
 
-    //CREAR UN REPO DE JUEGOS PARA OBTENER QUIZGAME YA CREADOS
+    // CREAR UN REPO DE JUEGOS PARA OBTENER QUIZGAME YA CREADOS
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
@@ -26,7 +26,7 @@ class QuizViewModel @Inject constructor(repo: IHeroRepository) : ViewModel() {
     private val _heroPortraitUrl = MutableStateFlow("https://loremflickr.com/400/400/cat?lock=1")
     val heroPortraitUrl = _heroPortraitUrl.asStateFlow()
 
-    private val _option1= MutableStateFlow("option 1")
+    private val _option1 = MutableStateFlow("option 1")
     val option1 = _option1.asStateFlow()
 
     private val _option2 = MutableStateFlow("option 2")
@@ -44,15 +44,11 @@ class QuizViewModel @Inject constructor(repo: IHeroRepository) : ViewModel() {
     private val _isCorrectAnswer = MutableStateFlow(false)
     val isCorrectAnswer = _isCorrectAnswer.asStateFlow()
 
-    private val HERO_LIST_SIZE = 4
-
     init {
         viewModelScope.launch {
-            _isLoading.value = true
-            val heroList = withContext(Dispatchers.IO) {
-                repo.getRandomPlayerDeck(HERO_LIST_SIZE)
+            game = withContext(Dispatchers.IO) {
+                repo.getNewQuizGame()
             }
-            game = QuizGame(heroList)
             gameInit()
             _isLoading.value = false
         }

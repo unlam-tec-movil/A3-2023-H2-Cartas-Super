@@ -1,10 +1,8 @@
 package ar.edu.unlam.mobile.scaffold.heroDetail
 
-
-
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.MainDispatcherRule
-import ar.edu.unlam.mobile.scaffold.data.repository.IHeroRepository
+import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailViewModelImp
 import com.google.common.truth.Truth.assertThat
@@ -35,7 +33,7 @@ class HeroDetailViewModelImpTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @get:Rule
-    val mainDispatcherRule = MainDispatcherRule() //leer la descripción de la clase
+    val mainDispatcherRule = MainDispatcherRule() // leer la descripción de la clase
 
     /*
         @relaxedmockk
@@ -57,7 +55,7 @@ class HeroDetailViewModelImpTest {
     }
 
     // runTest es una corutina para testing, lo que permite usar funciones suspend
-    //coEvery es lo mismo que un Every pero permite dar comportamiento a funciones suspend
+    // coEvery es lo mismo que un Every pero permite dar comportamiento a funciones suspend
     @Test
     fun whenPassingAnId_returnTheCorrectHero() = runTest {
         val expectedHero = DataHero(id = "1", name = "Mr. Test")
@@ -65,12 +63,11 @@ class HeroDetailViewModelImpTest {
 
         viewModel.getHero(1)
         val isLoading = viewModel.isLoading
-        while(isLoading.value) {
+        while (isLoading.value) {
             delay(100L)
         }
         val hero = viewModel.hero.value
 
         assertThat(hero).isEqualTo(expectedHero)
     }
-
 }

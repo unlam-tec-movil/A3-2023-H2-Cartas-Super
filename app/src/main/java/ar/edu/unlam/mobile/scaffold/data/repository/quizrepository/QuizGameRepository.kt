@@ -1,5 +1,6 @@
-package ar.edu.unlam.mobile.scaffold.data.repository
+package ar.edu.unlam.mobile.scaffold.data.repository.quizrepository
 
+import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizGame
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

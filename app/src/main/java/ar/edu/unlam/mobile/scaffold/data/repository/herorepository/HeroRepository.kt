@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.data.repository
+package ar.edu.unlam.mobile.scaffold.data.repository.herorepository
 
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity

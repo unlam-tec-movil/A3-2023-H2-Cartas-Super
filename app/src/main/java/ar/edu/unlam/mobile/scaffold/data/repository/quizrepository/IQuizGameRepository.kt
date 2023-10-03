@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.data.repository
+package ar.edu.unlam.mobile.scaffold.data.repository.quizrepository
 
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizGame
 
