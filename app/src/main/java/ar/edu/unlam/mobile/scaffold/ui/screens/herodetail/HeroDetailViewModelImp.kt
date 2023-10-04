@@ -13,9 +13,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class HeroDetailViewModelImp @Inject constructor(private val repo: IHeroRepository): ViewModel() {
+class HeroDetailViewModelImp @Inject constructor(private val repo: IHeroRepository) : ViewModel() {
 
-    //var hero by mutableStateOf(DataHero())
+    // var hero by mutableStateOf(DataHero())
     //    private set
 
     private val _hero = MutableStateFlow(DataHero())
@@ -26,7 +26,6 @@ class HeroDetailViewModelImp @Inject constructor(private val repo: IHeroReposito
 
     fun getHero(id: Int) {
         viewModelScope.launch {
-            _isLoading.value = true
             _hero.value = withContext(Dispatchers.IO) {
                 repo.getHero(id)
             }
