@@ -16,7 +16,6 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 
-
 /*
     Para ver el preview de estos composables hay que hacer lo siguiente:
     Hay un botoncito de un celular arriba a la derecha del rectángulo del preview.
@@ -28,7 +27,7 @@ import coil.request.ImageRequest
 fun HeroSimpleImage(
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
-    url:String = "https://loremflickr.com/400/400/cat?lock=1",
+    url: String = "https://loremflickr.com/400/400/cat?lock=1",
     contentScale: ContentScale = ContentScale.Fit,
     context: Context = LocalContext.current
 ) {
@@ -63,7 +62,7 @@ fun HeroImage(
     contentScale: ContentScale = ContentScale.Fit,
     context: Context = LocalContext.current
 ) {
-    val imageRequest = subcomposeImageRequestBuilder(context,url)
+    val imageRequest = subcomposeImageRequestBuilder(context, url)
 
     SubcomposeAsyncImage(
         modifier = modifier,
