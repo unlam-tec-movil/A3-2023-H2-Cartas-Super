@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,6 +28,9 @@ import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroConnections
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroImage
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroStats
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroWork
+import ar.edu.unlam.mobile.scaffold.ui.screens.home.NavigationButton
+
+
 
 @Composable
 fun HeroDetailScreen(
@@ -35,6 +39,9 @@ fun HeroDetailScreen(
     viewModel: HeroDetailViewModelImp = hiltViewModel(),
     heroID: Int = 1
 ) {
+    val navButtonModifier = Modifier
+        .wrapContentSize()
+        .padding(16.dp)
     viewModel.getHero(heroID)
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
@@ -61,6 +68,13 @@ fun HeroDetailScreen(
                     url = dataHero.image.url,
                     contentScale = ContentScale.FillWidth
                 )
+                NavigationButton(
+                    modifier = navButtonModifier
+                        .align(Alignment.CenterHorizontally),
+                    text = "Intercambio"
+                ) {
+                    controller.navigate(route = "qr")
+                }
                 HeroText(modifier = titleTextModifier, text =  "${dataHero.id} ${dataHero.name}")
                 HeroText(modifier = titleTextModifier, text =  "Stats")
                 HeroStats(
