@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -44,7 +45,10 @@ import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroImage
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Composable
-fun PopupResult(isCorrectAnswer: Boolean = false, show: Boolean = false) {
+fun PopupResult(
+    isCorrectAnswer: Boolean = false,
+    show: Boolean = false,
+) {
     val context = LocalContext.current
     val textToShow = if (isCorrectAnswer) {
         "¡Felicidades! Tu respuesta es la correcta."
@@ -66,50 +70,113 @@ fun PopupResult(isCorrectAnswer: Boolean = false, show: Boolean = false) {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun QuizResultPopup(
+    isCorrectAnswer: Boolean = false,
+    show: Boolean = false,
+    correctHeroName: String = "Correct Hero",
+    chosenHero: String = "Chosen Hero",
+    onClickPlayAgain: () -> Unit = {},
+    onClickMainMenu: () -> Unit = {}
+) {
+    val textToShow = if (isCorrectAnswer) {
+        "¡Felicidades! $correctHeroName es la respuesta correcta."
+    } else {
+        "Lamentablemente, $chosenHero es incorrecto. Respuesta correcta: $correctHeroName."
+    }
+    if (show) {
+        AlertDialog(
+            onDismissRequest = {},
+            title = { Text("Resultado") },
+            text = { Text(text = textToShow) },
+            confirmButton = {
+                TextButton(onClick = onClickPlayAgain) {
+                    Text("Jugar de nuevo".uppercase())
+                }
+            },
+            properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
+            dismissButton = {
+                TextButton(onClick = onClickMainMenu) {
+                    Text("Menú principal".uppercase())
+                }
+            }
+        )
+    }
+}
+
 @Composable
 fun QuizScreen(
     modifier: Modifier = Modifier,
     controller: NavHostController,
     viewModel: QuizViewModel = hiltViewModel()
 ) {
-    val offset = Offset(6.0f, 4.0f)
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val imageUrl by viewModel.heroPortraitUrl.collectAsStateWithLifecycle()
     val option1Text by viewModel.option1.collectAsStateWithLifecycle()
     val option2Text by viewModel.option2.collectAsStateWithLifecycle()
     val option3Text by viewModel.option3.collectAsStateWithLifecycle()
     val option4Text by viewModel.option4.collectAsStateWithLifecycle()
-    if (isLoading) {
-        Box(modifier = modifier.fillMaxSize()) {
+    val onClickOption1 = viewModel::selectOption1
+    val onClickOption2 = viewModel::selectOption2
+    val onClickOption3 = viewModel::selectOption3
+    val onClickOption4 = viewModel::selectOption4
+    val isCorrectAnswer by viewModel.isCorrectAnswer.collectAsStateWithLifecycle()
+    val showPopup by viewModel.showResult.collectAsStateWithLifecycle()
+
+    QuizUi(
+        modifier = modifier,
+        isLoading = isLoading,
+        imageUrl = imageUrl,
+        option1Text = option1Text,
+        option2Text = option2Text,
+        option3Text = option3Text,
+        option4Text = option4Text,
+        onClickOption1 = onClickOption1,
+        onClickOption2 = onClickOption2,
+        onClickOption3 = onClickOption3,
+        onClickOption4 = onClickOption4,
+    ) {
+        PopupResult(
+            isCorrectAnswer = isCorrectAnswer,
+            show = showPopup
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun QuizUi(
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = true,
+    imageUrl: String = "https://loremflickr.com/400/400/cat?lock=1",
+    option1Text: String = "Option 1",
+    option2Text: String = "Option 2",
+    option3Text: String = "Option 3",
+    option4Text: String = "Option 4",
+    onClickOption1: () -> Unit = {},
+    onClickOption2: () -> Unit = {},
+    onClickOption3: () -> Unit = {},
+    onClickOption4: () -> Unit = {},
+    content: @Composable (BoxScope.() -> Unit) = {}
+) {
+    Box(modifier = modifier) {
+        Image(
+            painter = painterResource(id = R.drawable.fondo_coleccion),
+            contentDescription = "Pantalla Coleccion",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
+        )
+        if (isLoading) {
             CircularProgressIndicator(modifier = modifier.align(Alignment.Center))
-        }
-    } else {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Image(
-                painter = painterResource(id = R.drawable.fondo_coleccion),
-                contentDescription = "Pantalla Coleccion",
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier.fillMaxSize()
-            )
+        } else {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = modifier,
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = "¿Quien es este heroe?",
-                    color = Color.White,
-                    fontFamily = shaka_pow,
-                    fontSize = 30.sp,
+                QuizTitle(
                     modifier = Modifier.padding(18.dp),
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        shadow = Shadow(
-                            color = Color.Black,
-                            offset = offset,
-                            blurRadius = 4f
-                        )
-                    )
                 )
                 HeroImage(
                     modifier = Modifier
@@ -125,17 +192,38 @@ fun QuizScreen(
                     option2Text = option2Text,
                     option3Text = option3Text,
                     option4Text = option4Text,
-                    onOption1Click = viewModel::selectOption1,
-                    onOption2Click = viewModel::selectOption2,
-                    onOption3Click = viewModel::selectOption3,
-                    onOption4Click = viewModel::selectOption4
+                    onOption1Click = onClickOption1,
+                    onOption2Click = onClickOption2,
+                    onOption3Click = onClickOption3,
+                    onOption4Click = onClickOption4
                 )
             }
         }
+        content()
     }
-    PopupResult(
-        isCorrectAnswer = viewModel.isCorrectAnswer.collectAsStateWithLifecycle().value,
-        show = viewModel.showResult.collectAsStateWithLifecycle().value
+}
+
+@Composable
+fun QuizTitle(
+    modifier: Modifier = Modifier,
+    shadowOffset: Offset = Offset(6.0f, 4.0f),
+    shadowColor: Color = Color.Black,
+    text: String = "¿Quien es este heroe?"
+) {
+    Text(
+        text = text,
+        color = Color.White,
+        fontFamily = shaka_pow,
+        fontSize = 30.sp,
+        modifier = modifier,
+        style = TextStyle(
+            fontSize = 18.sp,
+            shadow = Shadow(
+                color = shadowColor,
+                offset = shadowOffset,
+                blurRadius = 4f
+            )
+        )
     )
 }
 
