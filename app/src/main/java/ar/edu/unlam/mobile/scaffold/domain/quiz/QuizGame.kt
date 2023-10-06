@@ -40,19 +40,19 @@ class QuizGame(private val heroList: List<DataHero>) {
     fun isCorrectAnswer(option: QuizOption): Boolean {
         return when (option) {
             QuizOption.OPTION_1 -> {
-                selectedAnswer = option1.id
+                selectedAnswer = option1.name
                 correctAnswer.id == option1.id
             }
             QuizOption.OPTION_2 -> {
-                selectedAnswer = option2.id
+                selectedAnswer = option2.name
                 correctAnswer.id == option2.id
             }
             QuizOption.OPTION_3 -> {
-                selectedAnswer = option3.id
+                selectedAnswer = option3.name
                 correctAnswer.id == option3.id
             }
             QuizOption.OPTION_4 -> {
-                selectedAnswer = option4.id
+                selectedAnswer = option4.name
                 correctAnswer.id == option4.id
             }
         }
