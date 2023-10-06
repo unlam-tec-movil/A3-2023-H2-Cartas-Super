@@ -35,34 +35,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import ar.edu.unlam.mobile.scaffold.R
-import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroImage
-import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.MainActivity
-
+import ar.edu.unlam.mobile.scaffold.R
+import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroImage
+import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Composable
-fun PopupResult(isCorrectAnswer:Boolean = false, show:Boolean = false) {
+fun PopupResult(isCorrectAnswer: Boolean = false, show: Boolean = false) {
     val context = LocalContext.current
-    val textToShow = if(isCorrectAnswer) {
+    val textToShow = if (isCorrectAnswer) {
         "¡Felicidades! Tu respuesta es la correcta."
-    }else{
+    } else {
         "Lamentablemente tu respuesta es incorrecta."
     }
-    if(show) {
+    if (show) {
         AlertDialog(
             onDismissRequest = {},
             title = { Text("Resultado") },
             text = { Text(text = textToShow) },
             confirmButton = {
-                TextButton(onClick = { context.startActivity(Intent(context, MainActivity::class.java))}) {
+                TextButton(onClick = { context.startActivity(Intent(context, MainActivity::class.java)) }) {
                     Text("Menú principal".uppercase())
                 }
             },
-            properties = DialogProperties(dismissOnBackPress = false,dismissOnClickOutside = false)
+            properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
         )
     }
 }
@@ -80,11 +79,11 @@ fun QuizScreen(
     val option2Text by viewModel.option2.collectAsStateWithLifecycle()
     val option3Text by viewModel.option3.collectAsStateWithLifecycle()
     val option4Text by viewModel.option4.collectAsStateWithLifecycle()
-    if(isLoading) {
+    if (isLoading) {
         Box(modifier = modifier.fillMaxSize()) {
             CircularProgressIndicator(modifier = modifier.align(Alignment.Center))
         }
-    }else{
+    } else {
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
                 painter = painterResource(id = R.drawable.fondo_coleccion),
@@ -144,14 +143,14 @@ fun QuizScreen(
 @Composable
 fun AnswerPanel(
     modifier: Modifier = Modifier,
-    onOption1Click:() -> Unit = {},
-    onOption2Click:() -> Unit = {},
-    onOption3Click:() -> Unit = {},
-    onOption4Click:() -> Unit = {},
-    option1Text:String = "option 1",
-    option2Text:String = "option 2",
-    option3Text:String = "option 3",
-    option4Text:String = "option 4",
+    onOption1Click: () -> Unit = {},
+    onOption2Click: () -> Unit = {},
+    onOption3Click: () -> Unit = {},
+    onOption4Click: () -> Unit = {},
+    option1Text: String = "option 1",
+    option2Text: String = "option 2",
+    option3Text: String = "option 3",
+    option4Text: String = "option 4",
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -172,12 +171,11 @@ fun AnswerPanel(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun AnswerButton(
     modifier: Modifier = Modifier,
-    text:String = "text",
+    text: String = "text",
     onButtonClick: () -> Unit = {}
 ) {
     Button(
@@ -188,7 +186,8 @@ fun AnswerButton(
         colors = ButtonDefaults.buttonColors(Color.Red)
     ) {
         Text(
-            text = text, fontSize = 20.sp,
+            text = text,
+            fontSize = 20.sp,
             color = Color.White,
             fontFamily = shaka_pow,
             textAlign = TextAlign.Center
