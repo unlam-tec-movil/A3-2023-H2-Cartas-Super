@@ -26,7 +26,6 @@ class HeroDetailViewModelImp @Inject constructor(private val repo: IHeroReposito
 
     fun getHero(id: Int) {
         viewModelScope.launch {
-            _isLoading.value = true
             _hero.value = withContext(Dispatchers.IO) {
                 repo.getHero(id)
             }
