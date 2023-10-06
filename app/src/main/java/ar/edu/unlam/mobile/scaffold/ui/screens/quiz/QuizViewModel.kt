@@ -88,6 +88,9 @@ class QuizViewModel @Inject constructor(private val repo: IQuizGameRepository) :
         selectOption(QuizOption.OPTION_4)
     }
 
+    fun hideResultPopup() {
+        _showResult.value = false
+    }
     private fun selectOption(option: QuizOption) {
         _isCorrectAnswer.value = game.isCorrectAnswer(option)
         _chosenHero.value = game.selectedAnswer

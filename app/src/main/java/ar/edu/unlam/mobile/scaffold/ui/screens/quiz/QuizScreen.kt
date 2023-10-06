@@ -98,7 +98,10 @@ fun QuizScreen(
     val chosenHero by viewModel.chosenHero.collectAsStateWithLifecycle()
 
     val onNewGame = viewModel::newGame
-    val onClickMainMenu = { controller.navigate(route = "home") }
+    val onClickMainMenu = {
+        viewModel.hideResultPopup()
+        controller.navigate(route = "home")
+    }
 
     QuizUi(
         modifier = modifier,
