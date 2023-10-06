@@ -99,7 +99,6 @@ fun QuizScreen(
 
     val onNewGame = viewModel::newGame
     val onClickMainMenu = {
-        viewModel.hideResultPopup()
         controller.navigate(route = "home")
     }
 
