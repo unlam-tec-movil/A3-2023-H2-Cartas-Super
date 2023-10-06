@@ -10,15 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class QuizViewModel @Inject constructor(repo: IQuizGameRepository) : ViewModel() {
+class QuizViewModel @Inject constructor(private val repo: IQuizGameRepository) : ViewModel() {
 
     private lateinit var game: QuizGame
-
-    // CREAR UN REPO DE JUEGOS PARA OBTENER QUIZGAME YA CREADOS
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
@@ -44,22 +41,35 @@ class QuizViewModel @Inject constructor(repo: IQuizGameRepository) : ViewModel()
     private val _isCorrectAnswer = MutableStateFlow(false)
     val isCorrectAnswer = _isCorrectAnswer.asStateFlow()
 
+    private val _correctAnswer = MutableStateFlow("Correct Hero Name")
+    val correctAnswer = _correctAnswer.asStateFlow()
+
+    private val _chosenHero = MutableStateFlow("Chosen hero name")
+    val chosenHero = _chosenHero.asStateFlow()
+
     init {
-        viewModelScope.launch {
-            game = withContext(Dispatchers.IO) {
-                repo.getNewQuizGame()
-            }
+        viewModelScope.launch(Dispatchers.IO) {
             gameInit()
-            _isLoading.value = false
         }
     }
 
-    private fun gameInit() {
+    fun newGame() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.value = true
+            _showResult.value = false
+            gameInit()
+        }
+    }
+
+    private suspend fun gameInit() {
+        game = repo.getNewQuizGame()
         _heroPortraitUrl.value = game.correctAnswer.image.url
         _option1.value = game.option1.name
         _option2.value = game.option2.name
         _option3.value = game.option3.name
         _option4.value = game.option4.name
+        _correctAnswer.value = game.correctAnswer.name
+        _isLoading.value = false
     }
 
     fun selectOption1() {
@@ -80,6 +90,7 @@ class QuizViewModel @Inject constructor(repo: IQuizGameRepository) : ViewModel()
 
     private fun selectOption(option: QuizOption) {
         _isCorrectAnswer.value = game.isCorrectAnswer(option)
+        _chosenHero.value = game.selectedAnswer
         _showResult.value = true
     }
 }

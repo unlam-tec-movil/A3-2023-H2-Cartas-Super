@@ -1,6 +1,5 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.quiz
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +27,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -39,36 +37,9 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import ar.edu.unlam.mobile.scaffold.MainActivity
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroImage
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
-
-@Composable
-fun PopupResult(
-    isCorrectAnswer: Boolean = false,
-    show: Boolean = false,
-) {
-    val context = LocalContext.current
-    val textToShow = if (isCorrectAnswer) {
-        "¡Felicidades! Tu respuesta es la correcta."
-    } else {
-        "Lamentablemente tu respuesta es incorrecta."
-    }
-    if (show) {
-        AlertDialog(
-            onDismissRequest = {},
-            title = { Text("Resultado") },
-            text = { Text(text = textToShow) },
-            confirmButton = {
-                TextButton(onClick = { context.startActivity(Intent(context, MainActivity::class.java)) }) {
-                    Text("Menú principal".uppercase())
-                }
-            },
-            properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
-        )
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
@@ -123,6 +94,11 @@ fun QuizScreen(
     val onClickOption4 = viewModel::selectOption4
     val isCorrectAnswer by viewModel.isCorrectAnswer.collectAsStateWithLifecycle()
     val showPopup by viewModel.showResult.collectAsStateWithLifecycle()
+    val correctAnswer by viewModel.correctAnswer.collectAsStateWithLifecycle()
+    val chosenHero by viewModel.chosenHero.collectAsStateWithLifecycle()
+
+    val onNewGame = viewModel::newGame
+    val onClickMainMenu = { controller.navigate(route = "home") }
 
     QuizUi(
         modifier = modifier,
@@ -137,9 +113,13 @@ fun QuizScreen(
         onClickOption3 = onClickOption3,
         onClickOption4 = onClickOption4,
     ) {
-        PopupResult(
+        QuizResultPopup(
             isCorrectAnswer = isCorrectAnswer,
-            show = showPopup
+            show = showPopup,
+            correctHeroName = correctAnswer,
+            chosenHero = chosenHero,
+            onClickPlayAgain = onNewGame,
+            onClickMainMenu = onClickMainMenu
         )
     }
 }
