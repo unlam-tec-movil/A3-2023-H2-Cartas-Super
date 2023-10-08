@@ -3,7 +3,6 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.quiz
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +26,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -44,6 +44,7 @@ import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 @Preview(showBackground = true)
 @Composable
 fun QuizResultPopup(
+    modifier: Modifier = Modifier,
     isCorrectAnswer: Boolean = false,
     show: Boolean = false,
     correctHeroName: String = "Correct Hero",
@@ -58,6 +59,7 @@ fun QuizResultPopup(
     }
     if (show) {
         AlertDialog(
+            modifier = modifier,
             onDismissRequest = {},
             title = { Text("Resultado") },
             text = { Text(text = textToShow) },
@@ -114,23 +116,20 @@ fun QuizScreen(
         onClickOption2 = onClickOption2,
         onClickOption3 = onClickOption3,
         onClickOption4 = onClickOption4,
-    ) {
-        QuizResultPopup(
-            isCorrectAnswer = isCorrectAnswer,
-            show = showPopup,
-            correctHeroName = correctAnswer,
-            chosenHero = chosenHero,
-            onClickPlayAgain = onNewGame,
-            onClickMainMenu = onClickMainMenu
-        )
-    }
+        isCorrectAnswer = isCorrectAnswer,
+        showPopup = showPopup,
+        correctHeroName = correctAnswer,
+        chosenHero = chosenHero,
+        onClickPlayAgain = onNewGame,
+        onClickMainMenu = onClickMainMenu
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun QuizUi(
     modifier: Modifier = Modifier,
-    isLoading: Boolean = true,
+    isLoading: Boolean = false,
     imageUrl: String = "https://loremflickr.com/400/400/cat?lock=1",
     option1Text: String = "Option 1",
     option2Text: String = "Option 2",
@@ -140,17 +139,28 @@ fun QuizUi(
     onClickOption2: () -> Unit = {},
     onClickOption3: () -> Unit = {},
     onClickOption4: () -> Unit = {},
-    content: @Composable (BoxScope.() -> Unit) = {}
+    isCorrectAnswer: Boolean = false,
+    showPopup: Boolean = false,
+    correctHeroName: String = "Correct Hero",
+    chosenHero: String = "Chosen Hero",
+    onClickPlayAgain: () -> Unit = {},
+    onClickMainMenu: () -> Unit = {}
 ) {
     Box(modifier = modifier) {
         Image(
             painter = painterResource(id = R.drawable.fondo_coleccion),
             contentDescription = "Pantalla Coleccion",
             contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag("background image")
         )
         if (isLoading) {
-            CircularProgressIndicator(modifier = modifier.align(Alignment.Center))
+            CircularProgressIndicator(
+                modifier = modifier
+                    .align(Alignment.Center)
+                    .testTag("loading composable")
+            )
         } else {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -158,18 +168,22 @@ fun QuizUi(
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 QuizTitle(
-                    modifier = Modifier.padding(18.dp),
+                    modifier = Modifier
+                        .padding(18.dp)
+                        .testTag("title")
                 )
                 HeroImage(
                     modifier = Modifier
                         .aspectRatio(ratio = 1f)
-                        .padding(8.dp),
+                        .padding(8.dp)
+                        .testTag("hero image"),
                     url = imageUrl
                 )
                 AnswerPanel(
                     modifier = Modifier
                         .padding(8.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .testTag("answer panel"),
                     option1Text = option1Text,
                     option2Text = option2Text,
                     option3Text = option3Text,
@@ -181,7 +195,15 @@ fun QuizUi(
                 )
             }
         }
-        content()
+        QuizResultPopup(
+            modifier = Modifier.testTag("Result popup"),
+            isCorrectAnswer = isCorrectAnswer,
+            show = showPopup,
+            correctHeroName = correctHeroName,
+            chosenHero = chosenHero,
+            onClickPlayAgain = onClickPlayAgain,
+            onClickMainMenu = onClickMainMenu
+        )
     }
 }
 
@@ -229,14 +251,30 @@ fun AnswerPanel(
         Column(
             modifier = Modifier
         ) {
-            AnswerButton(text = option1Text, onButtonClick = onOption1Click)
+            AnswerButton(
+                modifier = Modifier.testTag("Answer option 1 button"),
+                text = option1Text,
+                onButtonClick = onOption1Click
+            )
             Spacer(modifier = Modifier.padding(4.dp))
-            AnswerButton(text = option3Text, onButtonClick = onOption3Click)
+            AnswerButton(
+                modifier = Modifier.testTag("Answer option 3 button"),
+                text = option3Text,
+                onButtonClick = onOption3Click
+            )
         }
         Column {
-            AnswerButton(text = option2Text, onButtonClick = onOption2Click)
+            AnswerButton(
+                modifier = Modifier.testTag("Answer option 2 button"),
+                text = option2Text,
+                onButtonClick = onOption2Click
+            )
             Spacer(modifier = Modifier.padding(4.dp))
-            AnswerButton(text = option4Text, onButtonClick = onOption4Click)
+            AnswerButton(
+                modifier = Modifier.testTag("Answer option 4 button"),
+                text = option4Text,
+                onButtonClick = onOption4Click
+            )
         }
     }
 }
