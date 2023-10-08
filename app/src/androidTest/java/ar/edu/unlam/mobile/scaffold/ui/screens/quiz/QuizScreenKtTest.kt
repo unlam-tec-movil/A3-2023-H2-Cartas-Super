@@ -6,7 +6,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,8 +17,8 @@ class QuizScreenKtTest {
     @get: Rule
     val composeTestRule = createComposeRule()
 
-    @Before
-    fun setUp() {
+    @Test
+    fun whenHavingDefaultStates_VerifyIfAllViewsExists() {
         composeTestRule.setContent { // setting our composable as content for test
             ComicWarTheme {
                 QuizUi(
@@ -27,15 +26,35 @@ class QuizScreenKtTest {
                 )
             }
         }
-    }
-
-    @Test
-    fun verifyIfAllViewsExists() {
         composeTestRule.onNodeWithTag("background image").assertExists()
-        // composeTestRule.onNodeWithTag("loading composable").assertExists()
         composeTestRule.onNodeWithTag("title").assertExists()
         composeTestRule.onNodeWithTag("hero image").assertExists()
         composeTestRule.onNodeWithTag("answer panel").assertExists()
-        // composeTestRule.onNodeWithTag("Result popup").assertExists()
+    }
+
+    @Test
+    fun whenItsLoadingVerifyLoadingComposableExists() {
+        composeTestRule.setContent { // setting our composable as content for test
+            ComicWarTheme {
+                QuizUi(
+                    modifier = Modifier.fillMaxSize(),
+                    isLoading = true
+                )
+            }
+        }
+        composeTestRule.onNodeWithTag("loading composable").assertExists()
+    }
+
+    @Test
+    fun whenShowPopupIsTrueVerifyResultPopupExists() {
+        composeTestRule.setContent { // setting our composable as content for test
+            ComicWarTheme {
+                QuizUi(
+                    modifier = Modifier.fillMaxSize(),
+                    showPopup = true
+                )
+            }
+        }
+        composeTestRule.onNodeWithTag("Result popup").assertExists()
     }
 }
