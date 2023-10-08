@@ -245,8 +245,4 @@ class QuizViewModelTest {
         viewModel.selectOption4()
         assertThat(viewModel.chosenHero.value).isEqualTo(viewModel.option4.value)
     }
-
-    @Test
-    fun newGame() = runTest {
-    }
 }
