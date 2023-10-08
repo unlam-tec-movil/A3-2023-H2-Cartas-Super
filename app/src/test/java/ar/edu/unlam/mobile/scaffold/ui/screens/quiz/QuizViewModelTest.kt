@@ -111,7 +111,47 @@ class QuizViewModelTest {
         }
 
     @Test
-    fun getShowResult() = runTest {
+    fun `after viewmodel finishes loading, showResult must be false`() = runTest {
+        while (viewModel.isLoading.value) {
+            // wait till it finishes loading
+        }
+        assertThat(viewModel.showResult.value).isFalse()
+    }
+
+    @Test
+    fun `after using  selectOption1(), showResult must be true`() = runTest {
+        while (viewModel.isLoading.value) {
+            // wait till it finishes loading
+        }
+        viewModel.selectOption1()
+        assertThat(viewModel.showResult.value).isTrue()
+    }
+
+    @Test
+    fun `after using  selectOption2(), showResult must be true`() = runTest {
+        while (viewModel.isLoading.value) {
+            // wait till it finishes loading
+        }
+        viewModel.selectOption2()
+        assertThat(viewModel.showResult.value).isTrue()
+    }
+
+    @Test
+    fun `after using  selectOption3(), showResult must be true`() = runTest {
+        while (viewModel.isLoading.value) {
+            // wait till it finishes loading
+        }
+        viewModel.selectOption3()
+        assertThat(viewModel.showResult.value).isTrue()
+    }
+
+    @Test
+    fun `after using  selectOption4(), showResult must be true`() = runTest {
+        while (viewModel.isLoading.value) {
+            // wait till it finishes loading
+        }
+        viewModel.selectOption4()
+        assertThat(viewModel.showResult.value).isTrue()
     }
 
     @Test
