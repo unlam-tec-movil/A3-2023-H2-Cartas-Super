@@ -59,18 +59,29 @@ fun QuizResultPopup(
     }
     if (show) {
         AlertDialog(
-            modifier = modifier,
+            modifier = modifier.testTag("alert dialog"),
             onDismissRequest = {},
             title = { Text("Resultado") },
-            text = { Text(text = textToShow) },
+            text = {
+                Text(
+                    modifier = Modifier.testTag("body"),
+                    text = textToShow
+                )
+            },
             confirmButton = {
-                TextButton(onClick = onClickPlayAgain) {
+                TextButton(
+                    modifier = Modifier.testTag("play again button"),
+                    onClick = onClickPlayAgain
+                ) {
                     Text("Jugar de nuevo".uppercase())
                 }
             },
             properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
             dismissButton = {
-                TextButton(onClick = onClickMainMenu) {
+                TextButton(
+                    modifier = Modifier.testTag("return to main menu button"),
+                    onClick = onClickMainMenu
+                ) {
                     Text("Menú principal".uppercase())
                 }
             }
@@ -252,26 +263,26 @@ fun AnswerPanel(
             modifier = Modifier
         ) {
             AnswerButton(
-                modifier = Modifier.testTag("Answer option 1 button"),
+                modifier = Modifier.testTag("option 1 button"),
                 text = option1Text,
                 onButtonClick = onOption1Click
             )
             Spacer(modifier = Modifier.padding(4.dp))
             AnswerButton(
-                modifier = Modifier.testTag("Answer option 3 button"),
+                modifier = Modifier.testTag("option 3 button"),
                 text = option3Text,
                 onButtonClick = onOption3Click
             )
         }
         Column {
             AnswerButton(
-                modifier = Modifier.testTag("Answer option 2 button"),
+                modifier = Modifier.testTag("option 2 button"),
                 text = option2Text,
                 onButtonClick = onOption2Click
             )
             Spacer(modifier = Modifier.padding(4.dp))
             AnswerButton(
-                modifier = Modifier.testTag("Answer option 4 button"),
+                modifier = Modifier.testTag("option 4 button"),
                 text = option4Text,
                 onButtonClick = onOption4Click
             )

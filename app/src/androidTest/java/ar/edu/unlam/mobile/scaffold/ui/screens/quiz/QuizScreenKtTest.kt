@@ -57,4 +57,32 @@ class QuizScreenKtTest {
         }
         composeTestRule.onNodeWithTag("Result popup").assertExists()
     }
+
+    @Test
+    fun whenShowIsTrueInQuizPopupResultVerifyAllViewsExist() {
+        composeTestRule.setContent {
+            ComicWarTheme {
+                QuizResultPopup(
+                    show = true
+                )
+            }
+        }
+        composeTestRule.onNodeWithTag("alert dialog").assertExists()
+        composeTestRule.onNodeWithTag("body").assertExists()
+        composeTestRule.onNodeWithTag("play again button").assertExists()
+        composeTestRule.onNodeWithTag("return to main menu button").assertExists()
+    }
+
+    @Test
+    fun verifyAllViewsExistsInAnswerPanel() {
+        composeTestRule.setContent {
+            ComicWarTheme {
+                AnswerPanel()
+            }
+        }
+        composeTestRule.onNodeWithTag("option 1 button").assertExists()
+        composeTestRule.onNodeWithTag("option 2 button").assertExists()
+        composeTestRule.onNodeWithTag("option 3 button").assertExists()
+        composeTestRule.onNodeWithTag("option 4 button").assertExists()
+    }
 }
