@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorData
@@ -49,7 +50,8 @@ fun ParallaxHeroImage(
                 .width(256.dp)
                 .height(356.dp)
                 .align(Alignment.Center)
-                .blur(radius = 24.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
+                .blur(radius = 24.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
+            contentScale = ContentScale.FillHeight
         )
 
         // Edge (used to give depth to card when tilted)
@@ -68,7 +70,7 @@ fun ParallaxHeroImage(
                 .background(
                     color = Color.White.copy(alpha = 0.3f),
                     shape = RoundedCornerShape(16.dp)
-                ),
+                )
         )
 
         // Image Card
@@ -88,8 +90,9 @@ fun ParallaxHeroImage(
                 .clip(RoundedCornerShape(16.dp)),
             alignment = BiasAlignment(
                 horizontalBias = (roll * 0.005).toFloat(),
-                verticalBias = 0f,
-            )
+                verticalBias = 0f
+            ),
+            contentScale = ContentScale.FillHeight
         )
     }
 }

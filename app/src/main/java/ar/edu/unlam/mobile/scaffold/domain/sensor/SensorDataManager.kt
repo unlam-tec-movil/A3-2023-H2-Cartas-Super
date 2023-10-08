@@ -5,6 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import kotlinx.coroutines.channels.Channel
 
 class SensorDataManager(context: Context) : SensorEventListener {
@@ -14,6 +15,7 @@ class SensorDataManager(context: Context) : SensorEventListener {
     }
 
     fun init() {
+        Log.d("SensorDataManager", "init")
         val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
         val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
@@ -36,11 +38,11 @@ class SensorDataManager(context: Context) : SensorEventListener {
         }
 
         if (gravity != null && geomagnetic != null) {
-            val r = FloatArray(9)
-            val i = FloatArray(9)
+            var r = FloatArray(9)
+            var i = FloatArray(9)
 
             if (SensorManager.getRotationMatrix(r, i, gravity, geomagnetic)) {
-                val orientation = FloatArray(3)
+                var orientation = FloatArray(3)
                 SensorManager.getOrientation(r, orientation)
 
                 data.trySend(
@@ -54,6 +56,7 @@ class SensorDataManager(context: Context) : SensorEventListener {
     }
 
     fun cancel() {
+        Log.d("SensorDataManager", "cancel")
         sensorManager.unregisterListener(this)
     }
 

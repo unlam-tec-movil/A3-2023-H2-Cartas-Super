@@ -37,12 +37,66 @@ import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroConnections
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroStats
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroWork
 import ar.edu.unlam.mobile.scaffold.ui.screens.home.NavigationButton
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @Composable
 fun HeroDetailScreen(
+    modifier: Modifier = Modifier,
+    controller: NavHostController,
+    viewModel: HeroDetailViewModelImp = hiltViewModel(),
+    heroID: Int = 1
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    var data by remember { mutableStateOf<SensorData?>(null) }
+
+    DisposableEffect(Unit) {
+        val dataManager = SensorDataManager(context)
+        dataManager.init()
+
+        val job = scope.launch {
+            dataManager.data
+                .receiveAsFlow()
+                .onEach { data = it }
+                .collect()
+        }
+
+        onDispose {
+            dataManager.cancel()
+            job.cancel()
+        }
+    }
+
+    // Parallax end
+    val navButtonModifier = Modifier
+        .wrapContentSize()
+        .padding(16.dp)
+    viewModel.getHero(heroID)
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+
+    Box(modifier = modifier.fillMaxSize()) {
+        if (isLoading) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        } else {
+            val dataHero by viewModel.hero.collectAsStateWithLifecycle()
+            val titleTextModifier = Modifier.padding(8.dp).fillMaxWidth()
+            ParallaxHeroImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center),
+                imageUrl = dataHero.image.url,
+                data = data
+            )
+        }
+    }
+}
+
+@Composable
+fun HeroDetailScreen1(
     modifier: Modifier = Modifier,
     controller: NavHostController,
     viewModel: HeroDetailViewModelImp = hiltViewModel(),
@@ -62,7 +116,7 @@ fun HeroDetailScreen(
             dataManager.data
                 .receiveAsFlow()
                 .onEach { data = it }
-                .collect {}
+                .collect()
         }
 
         onDispose {
@@ -94,14 +148,15 @@ fun HeroDetailScreen(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState())
             ) {
-                ParallaxHeroImage(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(),
-                    imageUrl = dataHero.image.url,
-                    data = data
-                )
+                Box {
+                    ParallaxHeroImage(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.Center),
+                        imageUrl = dataHero.image.url,
+                        data = data
+                    )
+                }
                 // contentScale = ContentScale.FillWidth
                 NavigationButton(
                     modifier = navButtonModifier
