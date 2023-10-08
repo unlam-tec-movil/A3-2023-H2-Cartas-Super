@@ -64,7 +64,7 @@ class QuizGameRepositoryTest {
     }
 
     @Test
-    fun getNewQuizGameWithCorrectValues() = runTest {
+    fun `get new quiz game with correct values`() = runTest {
         val game = quizRepo.getNewQuizGame()
         assertThat(game.correctAnswer).isIn(heroList)
         assertThat(game.option1).isIn(heroList)
