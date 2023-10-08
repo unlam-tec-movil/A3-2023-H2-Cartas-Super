@@ -38,7 +38,7 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
         return withContext(Dispatchers.IO) {
             for (i in 1..size) {
                 var randomId = (1..COLLECTION_MAX_SIZE).random()
-                val isIdInList = { list.isNotEmpty() && (list.find { it.id == randomId.toString() } == null) }
+                val isIdInList = { list.isNotEmpty() && (list.find { it.id == randomId.toString() } != null) }
                 while (isIdInList()) {
                     randomId = (1..COLLECTION_MAX_SIZE).random()
                 }
