@@ -211,12 +211,39 @@ class QuizViewModelTest {
         }
 
     @Test
-    fun getChosenHero() = runTest {
+    fun `when selectOption1(), then chosenHero must be option1,value`() = runTest {
         while (viewModel.isLoading.value) {
             // wait till it finishes loading
         }
         viewModel.selectOption1()
         assertThat(viewModel.chosenHero.value).isEqualTo(viewModel.option1.value)
+    }
+
+    @Test
+    fun `when selectOption2(), then chosenHero must be option2,value`() = runTest {
+        while (viewModel.isLoading.value) {
+            // wait till it finishes loading
+        }
+        viewModel.selectOption2()
+        assertThat(viewModel.chosenHero.value).isEqualTo(viewModel.option2.value)
+    }
+
+    @Test
+    fun `when selectOption3(), then chosenHero must be option3,value`() = runTest {
+        while (viewModel.isLoading.value) {
+            // wait till it finishes loading
+        }
+        viewModel.selectOption3()
+        assertThat(viewModel.chosenHero.value).isEqualTo(viewModel.option3.value)
+    }
+
+    @Test
+    fun `when selectOption4(), then chosenHero must be option4,value`() = runTest {
+        while (viewModel.isLoading.value) {
+            // wait till it finishes loading
+        }
+        viewModel.selectOption4()
+        assertThat(viewModel.chosenHero.value).isEqualTo(viewModel.option4.value)
     }
 
     @Test
