@@ -155,7 +155,7 @@ class QuizViewModelTest {
     }
 
     @Test
-    fun `when selectOption1(), correctAnswer must be equal to option1,value, else should be different`() =
+    fun `when selectOption1(), if its correct correctAnswer must be equal to option1,value, else should be different`() =
         runTest {
             while (viewModel.isLoading.value) {
                 // wait till it finishes loading
@@ -169,7 +169,7 @@ class QuizViewModelTest {
         }
 
     @Test
-    fun `when selectOption2(), correctAnswer must be equal to option1,value, else should be different`() =
+    fun `when selectOption2(), if its correct correctAnswer must be equal to option1,value, else should be different`() =
         runTest {
             while (viewModel.isLoading.value) {
                 // wait till it finishes loading
@@ -183,7 +183,7 @@ class QuizViewModelTest {
         }
 
     @Test
-    fun `when selectOption3(), correctAnswer must be equal to option1,value, else should be different`() =
+    fun `when selectOption3(), if its correct correctAnswer must be equal to option1,value, else should be different`() =
         runTest {
             while (viewModel.isLoading.value) {
                 // wait till it finishes loading
@@ -197,7 +197,7 @@ class QuizViewModelTest {
         }
 
     @Test
-    fun `when selectOption4(), correctAnswer must be equal to option1,value, else should be different`() =
+    fun `when selectOption4(), if its correct correctAnswer must be equal to option1,value, else should be different`() =
         runTest {
             while (viewModel.isLoading.value) {
                 // wait till it finishes loading
@@ -211,30 +211,15 @@ class QuizViewModelTest {
         }
 
     @Test
-    fun getCorrectAnswer() = runTest {
-    }
-
-    @Test
     fun getChosenHero() = runTest {
+        while (viewModel.isLoading.value) {
+            // wait till it finishes loading
+        }
+        viewModel.selectOption1()
+        assertThat(viewModel.chosenHero.value).isEqualTo(viewModel.option1.value)
     }
 
     @Test
     fun newGame() = runTest {
-    }
-
-    @Test
-    fun selectOption1() = runTest {
-    }
-
-    @Test
-    fun selectOption2() = runTest {
-    }
-
-    @Test
-    fun selectOption3() = runTest {
-    }
-
-    @Test
-    fun selectOption4() = runTest {
     }
 }
