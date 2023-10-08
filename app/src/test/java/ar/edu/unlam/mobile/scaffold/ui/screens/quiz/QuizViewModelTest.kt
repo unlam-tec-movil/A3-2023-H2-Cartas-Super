@@ -155,8 +155,60 @@ class QuizViewModelTest {
     }
 
     @Test
-    fun isCorrectAnswer() = runTest {
-    }
+    fun `when selectOption1(), correctAnswer must be equal to option1,value, else should be different`() =
+        runTest {
+            while (viewModel.isLoading.value) {
+                // wait till it finishes loading
+            }
+            viewModel.selectOption1()
+            if (viewModel.isCorrectAnswer.value) {
+                assertThat(viewModel.correctAnswer.value).isEqualTo(viewModel.option1.value)
+            } else {
+                assertThat(viewModel.correctAnswer.value).isNotEqualTo(viewModel.option1.value)
+            }
+        }
+
+    @Test
+    fun `when selectOption2(), correctAnswer must be equal to option1,value, else should be different`() =
+        runTest {
+            while (viewModel.isLoading.value) {
+                // wait till it finishes loading
+            }
+            viewModel.selectOption2()
+            if (viewModel.isCorrectAnswer.value) {
+                assertThat(viewModel.correctAnswer.value).isEqualTo(viewModel.option1.value)
+            } else {
+                assertThat(viewModel.correctAnswer.value).isNotEqualTo(viewModel.option1.value)
+            }
+        }
+
+    @Test
+    fun `when selectOption3(), correctAnswer must be equal to option1,value, else should be different`() =
+        runTest {
+            while (viewModel.isLoading.value) {
+                // wait till it finishes loading
+            }
+            viewModel.selectOption3()
+            if (viewModel.isCorrectAnswer.value) {
+                assertThat(viewModel.correctAnswer.value).isEqualTo(viewModel.option1.value)
+            } else {
+                assertThat(viewModel.correctAnswer.value).isNotEqualTo(viewModel.option1.value)
+            }
+        }
+
+    @Test
+    fun `when selectOption4(), correctAnswer must be equal to option1,value, else should be different`() =
+        runTest {
+            while (viewModel.isLoading.value) {
+                // wait till it finishes loading
+            }
+            viewModel.selectOption4()
+            if (viewModel.isCorrectAnswer.value) {
+                assertThat(viewModel.correctAnswer.value).isEqualTo(viewModel.option1.value)
+            } else {
+                assertThat(viewModel.correctAnswer.value).isNotEqualTo(viewModel.option1.value)
+            }
+        }
 
     @Test
     fun getCorrectAnswer() = runTest {
