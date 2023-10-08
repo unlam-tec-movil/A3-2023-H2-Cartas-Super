@@ -81,12 +81,13 @@ class QuizViewModelTest {
 
     @Test
     fun `after viewmodel finishes loading, PortraitUrl should be from heroList`() = runTest {
+        val portraitUrlList = heroList.map { it.image.url }
         while (viewModel.isLoading.value) {
             // wait till it finishes loading
         }
         val url = viewModel.heroPortraitUrl.value
         assertThat(url).isNotEmpty()
-        assertThat(url).isIn(heroList)
+        assertThat(url).isIn(portraitUrlList)
     }
 
     @Test
