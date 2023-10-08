@@ -176,9 +176,9 @@ class QuizViewModelTest {
             }
             viewModel.selectOption2()
             if (viewModel.isCorrectAnswer.value) {
-                assertThat(viewModel.correctAnswer.value).isEqualTo(viewModel.option1.value)
+                assertThat(viewModel.correctAnswer.value).isEqualTo(viewModel.option2.value)
             } else {
-                assertThat(viewModel.correctAnswer.value).isNotEqualTo(viewModel.option1.value)
+                assertThat(viewModel.correctAnswer.value).isNotEqualTo(viewModel.option2.value)
             }
         }
 
@@ -190,9 +190,9 @@ class QuizViewModelTest {
             }
             viewModel.selectOption3()
             if (viewModel.isCorrectAnswer.value) {
-                assertThat(viewModel.correctAnswer.value).isEqualTo(viewModel.option1.value)
+                assertThat(viewModel.correctAnswer.value).isEqualTo(viewModel.option3.value)
             } else {
-                assertThat(viewModel.correctAnswer.value).isNotEqualTo(viewModel.option1.value)
+                assertThat(viewModel.correctAnswer.value).isNotEqualTo(viewModel.option3.value)
             }
         }
 
@@ -204,9 +204,9 @@ class QuizViewModelTest {
             }
             viewModel.selectOption4()
             if (viewModel.isCorrectAnswer.value) {
-                assertThat(viewModel.correctAnswer.value).isEqualTo(viewModel.option1.value)
+                assertThat(viewModel.correctAnswer.value).isEqualTo(viewModel.option4.value)
             } else {
-                assertThat(viewModel.correctAnswer.value).isNotEqualTo(viewModel.option1.value)
+                assertThat(viewModel.correctAnswer.value).isNotEqualTo(viewModel.option4.value)
             }
         }
 
