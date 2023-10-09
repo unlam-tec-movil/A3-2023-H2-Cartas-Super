@@ -14,6 +14,9 @@ class QuizGame(private val heroList: List<DataHero>) {
     lateinit var option4: DataHero
         private set
 
+    var selectedAnswer = "Hero name"
+        private set
+
     init {
         selectCorrectAnswer()
         selectPossibleAnswers()
@@ -36,10 +39,22 @@ class QuizGame(private val heroList: List<DataHero>) {
 
     fun isCorrectAnswer(option: QuizOption): Boolean {
         return when (option) {
-            QuizOption.OPTION_1 -> correctAnswer.id == option1.id
-            QuizOption.OPTION_2 -> correctAnswer.id == option2.id
-            QuizOption.OPTION_3 -> correctAnswer.id == option3.id
-            QuizOption.OPTION_4 -> correctAnswer.id == option4.id
+            QuizOption.OPTION_1 -> {
+                selectedAnswer = option1.name
+                correctAnswer.id == option1.id
+            }
+            QuizOption.OPTION_2 -> {
+                selectedAnswer = option2.name
+                correctAnswer.id == option2.id
+            }
+            QuizOption.OPTION_3 -> {
+                selectedAnswer = option3.name
+                correctAnswer.id == option3.id
+            }
+            QuizOption.OPTION_4 -> {
+                selectedAnswer = option4.name
+                correctAnswer.id == option4.id
+            }
         }
     }
 }

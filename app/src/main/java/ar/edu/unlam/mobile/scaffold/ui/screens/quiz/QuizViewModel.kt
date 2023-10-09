@@ -2,7 +2,7 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.quiz
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ar.edu.unlam.mobile.scaffold.data.repository.IHeroRepository
+import ar.edu.unlam.mobile.scaffold.data.repository.quizrepository.IQuizGameRepository
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizGame
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizOption
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,15 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class QuizViewModel @Inject constructor(repo: IHeroRepository) : ViewModel() {
+class QuizViewModel @Inject constructor(private val repo: IQuizGameRepository) : ViewModel() {
 
     private lateinit var game: QuizGame
-
-    //CREAR UN REPO DE JUEGOS PARA OBTENER QUIZGAME YA CREADOS
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
@@ -26,7 +23,7 @@ class QuizViewModel @Inject constructor(repo: IHeroRepository) : ViewModel() {
     private val _heroPortraitUrl = MutableStateFlow("https://loremflickr.com/400/400/cat?lock=1")
     val heroPortraitUrl = _heroPortraitUrl.asStateFlow()
 
-    private val _option1= MutableStateFlow("option 1")
+    private val _option1 = MutableStateFlow("option 1")
     val option1 = _option1.asStateFlow()
 
     private val _option2 = MutableStateFlow("option 2")
@@ -44,26 +41,35 @@ class QuizViewModel @Inject constructor(repo: IHeroRepository) : ViewModel() {
     private val _isCorrectAnswer = MutableStateFlow(false)
     val isCorrectAnswer = _isCorrectAnswer.asStateFlow()
 
-    private val HERO_LIST_SIZE = 4
+    private val _correctAnswer = MutableStateFlow("Correct Hero Name")
+    val correctAnswer = _correctAnswer.asStateFlow()
+
+    private val _chosenHero = MutableStateFlow("Chosen hero name")
+    val chosenHero = _chosenHero.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            _isLoading.value = true
-            val heroList = withContext(Dispatchers.IO) {
-                repo.getRandomPlayerDeck(HERO_LIST_SIZE)
-            }
-            game = QuizGame(heroList)
+        viewModelScope.launch(Dispatchers.IO) {
             gameInit()
-            _isLoading.value = false
         }
     }
 
-    private fun gameInit() {
+    fun newGame() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.value = true
+            _showResult.value = false
+            gameInit()
+        }
+    }
+
+    private suspend fun gameInit() {
+        game = repo.getNewQuizGame()
         _heroPortraitUrl.value = game.correctAnswer.image.url
         _option1.value = game.option1.name
         _option2.value = game.option2.name
         _option3.value = game.option3.name
         _option4.value = game.option4.name
+        _correctAnswer.value = game.correctAnswer.name
+        _isLoading.value = false
     }
 
     fun selectOption1() {
@@ -84,6 +90,7 @@ class QuizViewModel @Inject constructor(repo: IHeroRepository) : ViewModel() {
 
     private fun selectOption(option: QuizOption) {
         _isCorrectAnswer.value = game.isCorrectAnswer(option)
+        _chosenHero.value = game.selectedAnswer
         _showResult.value = true
     }
 }

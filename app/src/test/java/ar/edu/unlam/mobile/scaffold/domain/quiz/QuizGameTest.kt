@@ -69,12 +69,13 @@ class QuizGameTest {
     )
 
     @Test
-    fun whenCreatingAGameWithAHeroListTheCorrectAnswerMustBeFromTheProvidedHeroList() = runTest {
-        assertThat(quizGame.correctAnswer).isIn(heroList)
-    }
+    fun `when creating a game with a hero list, the correct answer must be from the provided hero list`() =
+        runTest {
+            assertThat(quizGame.correctAnswer).isIn(heroList)
+        }
 
     @Test
-    fun whenCreatingAGameWithAHeroListTheOptionsMustBeFromTheSameList() = runTest {
+    fun `when creating a game with a hero list the options must be from the same list`() = runTest {
         assertThat(quizGame.option1).isIn(heroList)
         assertThat(quizGame.option2).isIn(heroList)
         assertThat(quizGame.option3).isIn(heroList)
@@ -82,7 +83,7 @@ class QuizGameTest {
     }
 
     @Test
-    fun whenSelectingTheCorrectAnswerIsCorrectAnswerMethodMustReturnTrue() = runTest {
+    fun `when selecting the correct answer, isCorrectAnswer() must return true`() = runTest {
         val option1 = quizGame.isCorrectAnswer(QuizOption.OPTION_1)
         val option2 = quizGame.isCorrectAnswer(QuizOption.OPTION_2)
         val option3 = quizGame.isCorrectAnswer(QuizOption.OPTION_3)
