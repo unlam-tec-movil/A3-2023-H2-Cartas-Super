@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -43,60 +44,12 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @Composable
-fun HeroDetailScreen(
-    modifier: Modifier = Modifier,
-    controller: NavHostController,
-    viewModel: HeroDetailViewModelImp = hiltViewModel(),
-    heroID: Int = 1
-) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-
-    var data by remember { mutableStateOf<SensorData?>(null) }
-
-    DisposableEffect(Unit) {
-        val dataManager = SensorDataManager(context)
-        dataManager.init()
-
-        val job = scope.launch {
-            dataManager.data
-                .receiveAsFlow()
-                .onEach { data = it }
-                .collect()
-        }
-
-        onDispose {
-            dataManager.cancel()
-            job.cancel()
-        }
-    }
-
-    // Parallax end
-    val navButtonModifier = Modifier
-        .wrapContentSize()
-        .padding(16.dp)
-    viewModel.getHero(heroID)
-    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
-
-    Box(modifier = modifier.fillMaxSize()) {
-        if (isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-        } else {
-            val dataHero by viewModel.hero.collectAsStateWithLifecycle()
-            val titleTextModifier = Modifier.padding(8.dp).fillMaxWidth()
-            ParallaxHeroImage(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center),
-                imageUrl = dataHero.image.url,
-                data = data
-            )
-        }
-    }
+private fun DebugSensorData(data: SensorData?) {
+    Text(text = "Pitch: ${data?.pitch ?: 0}\nRoll: ${data?.roll ?: 0}")
 }
 
 @Composable
-fun HeroDetailScreen1(
+fun HeroDetailScreen(
     modifier: Modifier = Modifier,
     controller: NavHostController,
     viewModel: HeroDetailViewModelImp = hiltViewModel(),
@@ -137,7 +90,9 @@ fun HeroDetailScreen1(
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
             val dataHero by viewModel.hero.collectAsStateWithLifecycle()
-            val titleTextModifier = Modifier.padding(8.dp).fillMaxWidth()
+            val titleTextModifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
             Image(
                 painter = painterResource(id = R.drawable.fondo_coleccion),
                 contentDescription = "Pantalla detalles del héroe",
@@ -148,7 +103,7 @@ fun HeroDetailScreen1(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState())
             ) {
-                Box {
+                Box(modifier = Modifier.fillMaxWidth()) {
                     ParallaxHeroImage(
                         modifier = Modifier
                             .fillMaxWidth()
