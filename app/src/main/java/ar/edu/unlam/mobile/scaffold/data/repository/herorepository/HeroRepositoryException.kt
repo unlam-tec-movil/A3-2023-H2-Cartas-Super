@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.data.repository
+package ar.edu.unlam.mobile.scaffold.data.repository.herorepository
 
 /*
 https://stackoverflow.com/a/68775013

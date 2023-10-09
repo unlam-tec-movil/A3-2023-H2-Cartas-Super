@@ -1,21 +1,20 @@
-package ar.edu.unlam.mobile.scaffold.heroDetail
+package ar.edu.unlam.mobile.scaffold.data.repository.quizrepository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import ar.edu.unlam.mobile.scaffold.MainDispatcherRule
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
-import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailViewModelImp
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit4.MockKRule
-import kotlinx.coroutines.delay
+import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class HeroDetailViewModelImpTest {
+class QuizGameRepositoryTest {
 
     /*
         JUnit 4 exposes a rule-based API to allow for some automation following the test lifecycle.
@@ -30,10 +29,7 @@ class HeroDetailViewModelImpTest {
         Nos sirve en casos en donde se necesite el uso de livedata, flow, suspend functions, etc.
      */
     @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
-
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule() // leer la descripción de la clase
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     /*
         @relaxedmockk
@@ -47,27 +43,33 @@ class HeroDetailViewModelImpTest {
     @RelaxedMockK
     lateinit var repo: IHeroRepository
 
-    lateinit var viewModel: HeroDetailViewModelImp
+    lateinit var quizRepo: IQuizGameRepository
+
+    private val heroList = listOf(
+        DataHero(id = "1", name = "Mr test 1"),
+        DataHero(id = "2", name = "Mr test 2"),
+        DataHero(id = "3", name = "Mr test 3"),
+        DataHero(id = "4", name = "Mr test 4")
+    )
 
     @Before
     fun setUp() {
-        viewModel = HeroDetailViewModelImp(repo)
+        coEvery { repo.getRandomPlayerDeck(4) } returns heroList
+        quizRepo = QuizGameRepository(repo)
     }
 
-    // runTest es una corutina para testing, lo que permite usar funciones suspend
-    // coEvery es lo mismo que un Every pero permite dar comportamiento a funciones suspend
+    @After
+    fun tearDown() {
+        unmockkAll()
+    }
+
     @Test
-    fun whenPassingAnId_returnTheCorrectHero() = runTest {
-        val expectedHero = DataHero(id = "1", name = "Mr. Test")
-        coEvery { repo.getHero(1) } returns expectedHero
-
-        viewModel.getHero(1)
-        val isLoading = viewModel.isLoading
-        while (isLoading.value) {
-            delay(100L)
-        }
-        val hero = viewModel.hero.value
-
-        assertThat(hero).isEqualTo(expectedHero)
+    fun `get new quiz game with correct values`() = runTest {
+        val game = quizRepo.getNewQuizGame()
+        assertThat(game.correctAnswer).isIn(heroList)
+        assertThat(game.option1).isIn(heroList)
+        assertThat(game.option2).isIn(heroList)
+        assertThat(game.option3).isIn(heroList)
+        assertThat(game.option4).isIn(heroList)
     }
 }

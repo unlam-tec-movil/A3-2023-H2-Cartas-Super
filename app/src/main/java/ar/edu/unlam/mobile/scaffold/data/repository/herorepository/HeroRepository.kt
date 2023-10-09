@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.data.repository
+package ar.edu.unlam.mobile.scaffold.data.repository.herorepository
 
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
@@ -37,7 +37,11 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
         val list = mutableListOf<DataHero>()
         return withContext(Dispatchers.IO) {
             for (i in 1..size) {
-                val randomId = (1..COLLECTION_MAX_SIZE).random()
+                var randomId = (1..COLLECTION_MAX_SIZE).random()
+                val isIdInList = { list.isNotEmpty() && (list.find { it.id == randomId.toString() } != null) }
+                while (isIdInList()) {
+                    randomId = (1..COLLECTION_MAX_SIZE).random()
+                }
                 val hero = getHero(randomId)
                 list.add(hero)
             }
