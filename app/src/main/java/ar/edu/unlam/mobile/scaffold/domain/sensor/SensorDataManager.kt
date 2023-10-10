@@ -14,19 +14,48 @@ class SensorDataManager(context: Context) : SensorEventListener {
         context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
 
-    fun init() {
-        Log.d("SensorDataManager", "init")
-        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
-        val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI)
-        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI)
-    }
-
     private var gravity: FloatArray? = null
     private var geomagnetic: FloatArray? = null
 
     val data: Channel<SensorData> = Channel(Channel.UNLIMITED)
+
+/*
+    TYPE_ACCELEROMETER
+    Type: Hardware
+    Computes the acceleration in m/s2 applied on all three axes (x, y and z), including the force of gravity.
+
+    TYPE_GRAVITY
+    Type: Software or Hardware
+    Computes the gravitational force in m/s2 applied on all three axes (x, y and z).
+
+    TYPE_MAGNETIC_FIELD
+    Type: Hardware
+    Computes the geomagnetic field for all three axes in tesla (μT).
+*/
+    fun init() {
+        Log.d("SensorDataManager", "init")
+        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
+        /*
+            Existe el Sensor.TYPE_ACCELEROMETER, no sé por qué no lo usa.
+         */
+        val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+
+        val isAccelerometerNotSuccessful = !sensorManager.registerListener(
+            this,
+            accelerometer,
+            SensorManager.SENSOR_DELAY_UI
+        )
+        val isMagnetometerNotSuccessful = !sensorManager.registerListener(
+            this,
+            magnetometer,
+            SensorManager.SENSOR_DELAY_UI
+        )
+        if (isAccelerometerNotSuccessful || isMagnetometerNotSuccessful) {
+            throw SensorDataManagerException(
+                message = "El sensor acelerómetro o el magnetómetro no están disponibles en este dispositivo."
+            )
+        }
+    }
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type == Sensor.TYPE_GRAVITY) {
@@ -38,17 +67,17 @@ class SensorDataManager(context: Context) : SensorEventListener {
         }
 
         if (gravity != null && geomagnetic != null) {
-            var r = FloatArray(9)
+            var rotationMatrix = FloatArray(9)
             var i = FloatArray(9)
 
-            if (SensorManager.getRotationMatrix(r, i, gravity, geomagnetic)) {
+            if (SensorManager.getRotationMatrix(rotationMatrix, i, gravity, geomagnetic)) {
                 var orientation = FloatArray(3)
-                SensorManager.getOrientation(r, orientation)
+                SensorManager.getOrientation(rotationMatrix, orientation)
 
                 data.trySend(
                     SensorData(
-                        roll = orientation[2],
-                        pitch = orientation[1]
+                        roll = orientation[2], // Roll (rotation around the y-axis)
+                        pitch = orientation[1] // Pitch (rotation around the x-axis)
                     )
                 )
             }
@@ -64,6 +93,6 @@ class SensorDataManager(context: Context) : SensorEventListener {
 }
 
 data class SensorData(
-    val roll: Float,
-    val pitch: Float
+    val roll: Float, // Roll (rotation around the y-axis)
+    val pitch: Float // Pitch (rotation around the x-axis)
 )
