@@ -1,7 +1,6 @@
 package ar.edu.unlam.mobile.scaffold.ui.components
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
@@ -19,10 +18,8 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorData
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroImage
 
@@ -34,7 +31,7 @@ fun ParallaxHeroImage(
     modifier: Modifier = Modifier,
     depthMultiplier: Int = 20,
     imageUrl: String = "https://loremflickr.com/400/400/cat?lock=1",
-    data: SensorData?
+    data: SensorData? = null
 ) {
     val roll by derivedStateOf { (data?.roll ?: 0f) * depthMultiplier }
     val pitch by derivedStateOf { (data?.pitch ?: 0f) * depthMultiplier }
@@ -51,11 +48,11 @@ fun ParallaxHeroImage(
                         y = (pitch * 2).dp.roundToPx()
                     )
                 }
-                .width(256.dp)
-                .height(356.dp)
+                .width(311.dp)
+                .height(311.dp)
                 .align(Alignment.Center)
                 .blur(radius = 24.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
-            contentScale = ContentScale.FillHeight
+            contentScale = ContentScale.Crop
         )
 
         // Edge (used to give depth to card when tilted)
@@ -68,8 +65,8 @@ fun ParallaxHeroImage(
                         y = -(pitch * 0.9).dp.roundToPx()
                     )
                 }
-                .width(300.dp)
-                .height(400.dp)
+                .width(350.dp)
+                .height(350.dp)
                 .align(Alignment.Center)
                 .background(
                     color = Color.White.copy(alpha = 0.3f),
@@ -88,88 +85,15 @@ fun ParallaxHeroImage(
                         y = -pitch.dp.roundToPx()
                     )
                 }
-                .width(300.dp)
-                .height(400.dp)
+                .width(350.dp)
+                .height(350.dp)
                 .align(Alignment.Center)
                 .clip(RoundedCornerShape(16.dp)),
             alignment = BiasAlignment(
                 horizontalBias = (roll * 0.005).toFloat(),
                 verticalBias = 0f
             ),
-            contentScale = ContentScale.FillHeight
-        )
-    }
-}
-
-@SuppressLint("UnrememberedMutableState")
-@Composable
-fun ParallaxImage(
-    modifier: Modifier = Modifier,
-    depthMultiplier: Int = 20,
-    data: SensorData?
-) {
-    val roll by derivedStateOf { (data?.roll ?: 0f) * depthMultiplier }
-    val pitch by derivedStateOf { (data?.pitch ?: 0f) * depthMultiplier }
-    Box(modifier = modifier) {
-        // Glow Shadow
-        // Has quicker offset change and in opposite direction to the Image Card
-        Image(
-            painter = painterResource(id = R.drawable.default_imagen_heroe),
-            modifier = Modifier
-                .offset {
-                    IntOffset(
-                        x = -(roll * 1.5).dp.roundToPx(),
-                        y = (pitch * 2).dp.roundToPx()
-                    )
-                }
-                .width(256.dp)
-                .height(356.dp)
-                .align(Alignment.Center)
-                .blur(radius = 24.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
-            contentScale = ContentScale.FillHeight,
-            contentDescription = "test"
-        )
-
-        // Edge (used to give depth to card when tilted)
-        // Has slightly slower offset change than Image Card
-        Box(
-            modifier = Modifier
-                .offset {
-                    IntOffset(
-                        x = (roll * 0.9).dp.roundToPx(),
-                        y = -(pitch * 0.9).dp.roundToPx()
-                    )
-                }
-                .width(300.dp)
-                .height(400.dp)
-                .align(Alignment.Center)
-                .background(
-                    color = Color.White.copy(alpha = 0.3f),
-                    shape = RoundedCornerShape(16.dp)
-                )
-        )
-
-        // Image Card
-        // The image inside has a parallax shift in the opposite direction
-        Image(
-            painter = painterResource(id = R.drawable.default_imagen_heroe),
-            modifier = Modifier
-                .offset {
-                    IntOffset(
-                        x = roll.dp.roundToPx(),
-                        y = -pitch.dp.roundToPx()
-                    )
-                }
-                .width(300.dp)
-                .height(400.dp)
-                .align(Alignment.Center)
-                .clip(RoundedCornerShape(16.dp)),
-            alignment = BiasAlignment(
-                horizontalBias = (roll * 0.005).toFloat(),
-                verticalBias = 0f
-            ),
-            contentScale = ContentScale.FillHeight,
-            contentDescription = "test"
+            contentScale = ContentScale.Crop
         )
     }
 }

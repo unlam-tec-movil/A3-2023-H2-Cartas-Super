@@ -40,13 +40,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-
 /*
 @Composable
 private fun DebugSensorData(data: SensorData?) {
     Text(text = "Pitch: ${data?.pitch ?: 0}\nRoll: ${data?.roll ?: 0}")
-}
- */
+}*/
 
 @Composable
 fun HeroDetailScreen(
@@ -95,27 +93,17 @@ fun HeroDetailScreen(
                 painterResourceId = R.drawable.fondo_coleccion,
                 data = data
             )
-            /*
-            Image(
-                painter = painterResource(id = R.drawable.fondo_coleccion),
-                contentDescription = "Pantalla detalles del héroe",
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier.fillMaxSize()
-            )
-             */
             Column(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState())
             ) {
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    ParallaxHeroImage(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.Center),
-                        imageUrl = dataHero.image.url,
-                        data = data
-                    )
-                }
+                ParallaxHeroImage(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 25.dp),
+                    imageUrl = dataHero.image.url,
+                    data = data
+                )
                 NavigationButton(
                     modifier = navButtonModifier
                         .align(Alignment.CenterHorizontally),
@@ -123,6 +111,7 @@ fun HeroDetailScreen(
                 ) {
                     controller.navigate(route = "qr")
                 }
+                // DebugSensorData(data = data)
                 HeroData(modifier = Modifier.fillMaxWidth(), dataHero = dataHero)
             }
         }
