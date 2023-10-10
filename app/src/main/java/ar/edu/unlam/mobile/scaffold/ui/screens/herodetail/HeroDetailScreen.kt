@@ -1,6 +1,5 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.herodetail
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,9 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -31,6 +28,7 @@ import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorData
 import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorDataManager
 import ar.edu.unlam.mobile.scaffold.ui.components.HeroText
+import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxHeroImage
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroAppearance
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroBiography
@@ -92,12 +90,19 @@ fun HeroDetailScreen(
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
             val dataHero by viewModel.hero.collectAsStateWithLifecycle()
+            ParallaxBackgroundImage(
+                modifier = Modifier.fillMaxSize(),
+                painterResourceId = R.drawable.fondo_coleccion,
+                data = data
+            )
+            /*
             Image(
                 painter = painterResource(id = R.drawable.fondo_coleccion),
                 contentDescription = "Pantalla detalles del héroe",
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize()
             )
+             */
             Column(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState())
