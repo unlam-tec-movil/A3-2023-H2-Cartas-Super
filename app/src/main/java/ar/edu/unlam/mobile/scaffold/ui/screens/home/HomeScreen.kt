@@ -1,6 +1,5 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,19 +10,20 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
+import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorData
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomProgressBarWithDots
+import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Composable
@@ -59,13 +59,23 @@ fun HomeScreen(
         .wrapContentSize()
         .padding(16.dp)
 
+    val sensorData by viewModel.sensorData
+        .collectAsStateWithLifecycle(initialValue = SensorData(0f, 0f))
+
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.cancelSensorDataFlow()
+        }
+    }
+
     Box(modifier = modifier) {
-        Image(
-            painter = painterResource(id = R.drawable.pantalla_principal),
+        ParallaxBackgroundImage(
+            modifier = Modifier.fillMaxSize(),
             contentDescription = "Pantalla Coleccion",
-            contentScale = ContentScale.FillWidth,
-            modifier = Modifier.fillMaxSize()
+            painterResourceId = R.drawable.pantalla_principal,
+            data = sensorData
         )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
