@@ -44,14 +44,17 @@ class SensorDataManager @Inject constructor(private val sensorManager: SensorMan
     TYPE_MAGNETIC_FIELD
     Type: Hardware
     Computes the geomagnetic field for all three axes in tesla (μT).
+
+    Existe el Sensor.TYPE_ACCELEROMETER, creo que no lo usa porque TYPE_GRAVITY puede ser
+            emulado por software usando otros sensores.
 */
     private fun init() {
         Log.d("SensorDataManager", "init")
-        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
-        /*
-            Existe el Sensor.TYPE_ACCELEROMETER, creo que no lo usa porque TYPE_GRAVITY puede ser
-            emulado por software usando otros sensores.
-         */
+        var accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
+        if (accelerometer == null) {
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        }
+
         val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
         val isAccelerometerNotSuccessful = !sensorManager.registerListener(
@@ -64,15 +67,20 @@ class SensorDataManager @Inject constructor(private val sensorManager: SensorMan
             magnetometer,
             SensorManager.SENSOR_DELAY_UI
         )
-        if (isAccelerometerNotSuccessful || isMagnetometerNotSuccessful) {
+        if (isAccelerometerNotSuccessful) {
             throw SensorDataManagerException(
-                message = "El sensor acelerómetro o el magnetómetro no están disponibles en este dispositivo."
+                message = "El sensor acelerómetro no está disponible en este dispositivo."
+            )
+        }
+        if (isMagnetometerNotSuccessful) {
+            throw SensorDataManagerException(
+                message = "El sensor magnetrómetro no está disponible en este dispositivo"
             )
         }
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        if (event?.sensor?.type == Sensor.TYPE_GRAVITY) {
+        if (event?.sensor?.type == Sensor.TYPE_GRAVITY || event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
             gravity = event.values
         }
 
