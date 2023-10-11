@@ -9,8 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -21,12 +19,7 @@ class HeroDetailViewModelImp @Inject constructor(
     private val sensorDataManager: SensorDataManager
 ) : ViewModel() {
 
-    val sensorData = flow {
-        sensorDataManager.init()
-        sensorDataManager.data.receiveAsFlow().collect {
-            emit(it)
-        }
-    }
+    val sensorData = sensorDataManager.sensorData
 
     private val _hero = MutableStateFlow(DataHero())
     val hero = _hero.asStateFlow()

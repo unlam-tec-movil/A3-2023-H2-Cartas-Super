@@ -43,7 +43,7 @@ fun HeroDetailScreen(
     viewModel: HeroDetailViewModelImp = hiltViewModel(),
     heroID: Int = 1
 ) {
-    val data by viewModel.sensorData
+    val sensorData by viewModel.sensorData
         .collectAsStateWithLifecycle(initialValue = SensorData(roll = 0f, pitch = 0f))
 
     DisposableEffect(Unit) {
@@ -51,7 +51,6 @@ fun HeroDetailScreen(
             viewModel.cancelSensorDataFlow()
         }
     }
-    // Parallax end
 
     val navButtonModifier = Modifier
         .wrapContentSize()
@@ -67,7 +66,7 @@ fun HeroDetailScreen(
             ParallaxBackgroundImage(
                 modifier = Modifier.fillMaxSize(),
                 painterResourceId = R.drawable.fondo_coleccion,
-                data = data
+                data = sensorData
             )
             Column(
                 modifier = Modifier
@@ -78,7 +77,7 @@ fun HeroDetailScreen(
                         .fillMaxWidth()
                         .padding(bottom = 25.dp),
                     imageUrl = dataHero.image.url,
-                    data = data
+                    data = sensorData
                 )
                 NavigationButton(
                     modifier = navButtonModifier

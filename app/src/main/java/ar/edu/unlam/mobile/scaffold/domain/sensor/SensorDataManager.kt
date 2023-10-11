@@ -6,6 +6,8 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 
 /*
@@ -20,7 +22,14 @@ class SensorDataManager @Inject constructor(private val sensorManager: SensorMan
     private var gravity: FloatArray? = null
     private var geomagnetic: FloatArray? = null
 
-    val data: Channel<SensorData> = Channel(Channel.UNLIMITED)
+    private val data: Channel<SensorData> = Channel(Channel.UNLIMITED)
+
+    val sensorData = flow {
+        init()
+        data.receiveAsFlow().collect {
+            emit(it)
+        }
+    }
 
 /*
     TYPE_ACCELEROMETER
@@ -36,7 +45,7 @@ class SensorDataManager @Inject constructor(private val sensorManager: SensorMan
     Type: Hardware
     Computes the geomagnetic field for all three axes in tesla (μT).
 */
-    fun init() {
+    private fun init() {
         Log.d("SensorDataManager", "init")
         val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
         /*

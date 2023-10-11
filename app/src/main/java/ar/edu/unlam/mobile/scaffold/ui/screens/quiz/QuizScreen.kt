@@ -1,12 +1,10 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.quiz
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,15 +17,14 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,7 +35,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
-import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroImage
+import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorData
+import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
+import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxHeroImage
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Preview(showBackground = true)
@@ -114,6 +113,14 @@ fun QuizScreen(
     val onClickMainMenu = {
         controller.navigate(route = "home")
     }
+    val sensorData by viewModel.sensorData
+        .collectAsStateWithLifecycle(initialValue = SensorData(0f, 0f))
+
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.cancelSensorDataFlow()
+        }
+    }
 
     QuizUi(
         modifier = modifier,
@@ -132,7 +139,8 @@ fun QuizScreen(
         correctHeroName = correctAnswer,
         chosenHero = chosenHero,
         onClickPlayAgain = onNewGame,
-        onClickMainMenu = onClickMainMenu
+        onClickMainMenu = onClickMainMenu,
+        sensorData = sensorData
     )
 }
 
@@ -155,17 +163,19 @@ fun QuizUi(
     correctHeroName: String = "Correct Hero",
     chosenHero: String = "Chosen Hero",
     onClickPlayAgain: () -> Unit = {},
-    onClickMainMenu: () -> Unit = {}
+    onClickMainMenu: () -> Unit = {},
+    sensorData: SensorData = SensorData(0f, 0f)
 ) {
     Box(modifier = modifier) {
-        Image(
-            painter = painterResource(id = R.drawable.fondo_coleccion),
-            contentDescription = "Pantalla Coleccion",
-            contentScale = ContentScale.FillBounds,
+        ParallaxBackgroundImage(
             modifier = Modifier
                 .fillMaxSize()
-                .testTag("background image")
+                .testTag("background image"),
+            contentDescription = "Pantalla Coleccion",
+            painterResourceId = R.drawable.fondo_coleccion,
+            data = sensorData
         )
+
         if (isLoading) {
             CircularProgressIndicator(
                 modifier = modifier
@@ -183,12 +193,11 @@ fun QuizUi(
                         .padding(18.dp)
                         .testTag("title")
                 )
-                HeroImage(
+                ParallaxHeroImage(
                     modifier = Modifier
-                        .aspectRatio(ratio = 1f)
-                        .padding(8.dp)
                         .testTag("hero image"),
-                    url = imageUrl
+                    imageUrl = imageUrl,
+                    data = sensorData
                 )
                 AnswerPanel(
                     modifier = Modifier
