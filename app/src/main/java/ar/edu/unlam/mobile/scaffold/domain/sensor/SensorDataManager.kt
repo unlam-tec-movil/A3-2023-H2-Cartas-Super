@@ -1,18 +1,21 @@
 package ar.edu.unlam.mobile.scaffold.domain.sensor
 
-import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
 import kotlinx.coroutines.channels.Channel
+import javax.inject.Inject
 
+/*
 class SensorDataManager(context: Context) : SensorEventListener {
 
     private val sensorManager by lazy {
         context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
+ */
+class SensorDataManager @Inject constructor(private val sensorManager: SensorManager) : SensorEventListener {
 
     private var gravity: FloatArray? = null
     private var geomagnetic: FloatArray? = null
@@ -22,7 +25,8 @@ class SensorDataManager(context: Context) : SensorEventListener {
 /*
     TYPE_ACCELEROMETER
     Type: Hardware
-    Computes the acceleration in m/s2 applied on all three axes (x, y and z), including the force of gravity.
+    Computes the acceleration in m/s2 applied on all three axes (x, y and z),
+    including the force of gravity.
 
     TYPE_GRAVITY
     Type: Software or Hardware
@@ -36,7 +40,8 @@ class SensorDataManager(context: Context) : SensorEventListener {
         Log.d("SensorDataManager", "init")
         val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
         /*
-            Existe el Sensor.TYPE_ACCELEROMETER, no sé por qué no lo usa.
+            Existe el Sensor.TYPE_ACCELEROMETER, creo que no lo usa porque TYPE_GRAVITY puede ser
+            emulado por software usando otros sensores.
          */
         val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
