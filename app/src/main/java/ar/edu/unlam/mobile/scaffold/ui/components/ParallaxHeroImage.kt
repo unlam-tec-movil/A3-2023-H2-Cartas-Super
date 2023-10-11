@@ -25,16 +25,17 @@ import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroImage
 
 // For changing offset values, it is always preferred to use .offset { } instead of .offset()
 // as offset {..} is implemented to avoid recomposition during the offset changes
+
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun ParallaxHeroImage(
     modifier: Modifier = Modifier,
     depthMultiplier: Int = 20,
     imageUrl: String = "https://loremflickr.com/400/400/cat?lock=1",
-    data: SensorData? = null
+    data: SensorData = SensorData(0f, 0f)
 ) {
-    val roll by derivedStateOf { (data?.roll ?: 0f) * depthMultiplier }
-    val pitch by derivedStateOf { (data?.pitch ?: 0f) * depthMultiplier }
+    val roll by derivedStateOf { data.roll * depthMultiplier }
+    val pitch by derivedStateOf { data.pitch * depthMultiplier }
 
     Box(modifier = modifier) {
         // Glow Shadow

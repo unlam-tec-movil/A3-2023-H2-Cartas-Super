@@ -23,12 +23,12 @@ fun ParallaxBackgroundImage(
     modifier: Modifier = Modifier,
     contentDescription: String = "Parallax background image",
     painterResourceId: Int = R.drawable.pantalla_principal,
-    data: SensorData? = null,
+    data: SensorData = SensorData(0f, 0f),
     strength: Int = 20,
     scale: Float = 1.15f
 ) {
-    val roll by derivedStateOf { (data?.roll ?: 0f) }
-    val pitch by derivedStateOf { (data?.pitch ?: 0f) }
+    val roll by derivedStateOf { (data.roll) }
+    val pitch by derivedStateOf { (data.pitch) }
     Box(modifier = modifier) {
         Image(
             modifier = Modifier
