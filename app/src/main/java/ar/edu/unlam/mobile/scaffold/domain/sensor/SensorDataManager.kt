@@ -31,23 +31,23 @@ class SensorDataManager @Inject constructor(private val sensorManager: SensorMan
         }
     }
 
-/*
-    TYPE_ACCELEROMETER
-    Type: Hardware
-    Computes the acceleration in m/s2 applied on all three axes (x, y and z),
-    including the force of gravity.
+    /*
+        TYPE_ACCELEROMETER
+        Type: Hardware
+        Computes the acceleration in m/s2 applied on all three axes (x, y and z),
+        including the force of gravity.
 
-    TYPE_GRAVITY
-    Type: Software or Hardware
-    Computes the gravitational force in m/s2 applied on all three axes (x, y and z).
+        TYPE_GRAVITY
+        Type: Software or Hardware
+        Computes the gravitational force in m/s2 applied on all three axes (x, y and z).
 
-    TYPE_MAGNETIC_FIELD
-    Type: Hardware
-    Computes the geomagnetic field for all three axes in tesla (μT).
+        TYPE_MAGNETIC_FIELD
+        Type: Hardware
+        Computes the geomagnetic field for all three axes in tesla (μT).
 
-    Existe el Sensor.TYPE_ACCELEROMETER, creo que no lo usa porque TYPE_GRAVITY puede ser
+        Existe el Sensor.TYPE_ACCELEROMETER, creo que no lo usa porque TYPE_GRAVITY puede ser
             emulado por software usando otros sensores.
-*/
+     */
     private fun init() {
         Log.d("SensorDataManager", "init")
         var accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
@@ -67,15 +67,12 @@ class SensorDataManager @Inject constructor(private val sensorManager: SensorMan
             magnetometer,
             SensorManager.SENSOR_DELAY_UI
         )
-        if (isAccelerometerNotSuccessful) {
+        if (isAccelerometerNotSuccessful || isMagnetometerNotSuccessful) {
+            cancel()
+            /*
             throw SensorDataManagerException(
                 message = "El sensor acelerómetro no está disponible en este dispositivo."
-            )
-        }
-        if (isMagnetometerNotSuccessful) {
-            throw SensorDataManagerException(
-                message = "El sensor magnetrómetro no está disponible en este dispositivo"
-            )
+            )*/
         }
     }
 
