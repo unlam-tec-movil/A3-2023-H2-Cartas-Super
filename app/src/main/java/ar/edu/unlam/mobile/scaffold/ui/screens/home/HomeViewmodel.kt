@@ -3,6 +3,7 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
+import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorDataManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +13,12 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewmodel @Inject constructor(private val repo: IHeroRepository) : ViewModel() {
+class HomeViewmodel @Inject constructor(
+    private val repo: IHeroRepository,
+    private val sensorDataManager: SensorDataManager
+) : ViewModel() {
+
+    val sensorData = sensorDataManager.sensorData
 
     private val _cachingProgress = MutableStateFlow(0.00f)
     val cachingProgress = _cachingProgress.asStateFlow()
@@ -31,5 +37,14 @@ class HomeViewmodel @Inject constructor(private val repo: IHeroRepository) : Vie
                     _cachingProgress.value = progress
                 }
         }
+    }
+
+    fun cancelSensorDataFlow() {
+        sensorDataManager.cancel()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        sensorDataManager.cancel()
     }
 }

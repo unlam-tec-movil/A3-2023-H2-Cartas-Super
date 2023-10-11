@@ -54,12 +54,12 @@ private fun asyncImageRequestBuilder(
         .build()
 }
 
-@Preview
 @Composable
 fun HeroImage(
     modifier: Modifier = Modifier,
     url: String = "https://loremflickr.com/400/400/cat?lock=1",
     contentScale: ContentScale = ContentScale.Fit,
+    alignment: Alignment = Alignment.Center,
     context: Context = LocalContext.current
 ) {
     val imageRequest = subcomposeImageRequestBuilder(context, url)
@@ -77,7 +77,8 @@ fun HeroImage(
                 contentDescription = "broken image"
             )
         },
-        contentScale = contentScale
+        contentScale = contentScale,
+        alignment = alignment
     )
 }
 

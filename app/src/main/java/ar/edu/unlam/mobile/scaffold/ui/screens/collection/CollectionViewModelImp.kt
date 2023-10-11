@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorDataManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,12 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class CollectionViewModelImp @Inject constructor(private val repo: IHeroRepository) : ViewModel() {
+class CollectionViewModelImp @Inject constructor(
+    private val repo: IHeroRepository,
+    private val sensorDataManager: SensorDataManager
+) : ViewModel() {
+
+    val sensorData = sensorDataManager.sensorData
 
     private val _heroList = MutableStateFlow<List<DataHero>>(emptyList())
     val heroList = _heroList.asStateFlow()
@@ -29,5 +35,14 @@ class CollectionViewModelImp @Inject constructor(private val repo: IHeroReposito
             }
             _isLoading.value = false
         }
+    }
+
+    fun cancelSensorDataFlow() {
+        sensorDataManager.cancel()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        sensorDataManager.cancel()
     }
 }

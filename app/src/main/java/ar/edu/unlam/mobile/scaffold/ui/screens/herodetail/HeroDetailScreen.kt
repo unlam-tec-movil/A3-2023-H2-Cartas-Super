@@ -1,6 +1,5 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.herodetail
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,26 +10,31 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
+import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorData
 import ar.edu.unlam.mobile.scaffold.ui.components.HeroText
+import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
+import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxHeroImage
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroAppearance
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroBiography
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroConnections
-import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroImage
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroStats
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroWork
 import ar.edu.unlam.mobile.scaffold.ui.screens.home.NavigationButton
-
-
+/*
+@Composable
+private fun DebugSensorData(data: SensorData?) {
+    Text(text = "Pitch: ${data?.pitch ?: 0}\nRoll: ${data?.roll ?: 0}")
+}*/
 
 @Composable
 fun HeroDetailScreen(
@@ -39,6 +43,15 @@ fun HeroDetailScreen(
     viewModel: HeroDetailViewModelImp = hiltViewModel(),
     heroID: Int = 1
 ) {
+    val sensorData by viewModel.sensorData
+        .collectAsStateWithLifecycle(initialValue = SensorData(roll = 0f, pitch = 0f))
+
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.cancelSensorDataFlow()
+        }
+    }
+
     val navButtonModifier = Modifier
         .wrapContentSize()
         .padding(16.dp)
@@ -46,27 +59,25 @@ fun HeroDetailScreen(
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     Box(modifier = modifier) {
-        if(isLoading) {
+        if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-        }else {
+        } else {
             val dataHero by viewModel.hero.collectAsStateWithLifecycle()
-            val titleTextModifier = Modifier.padding(8.dp).fillMaxWidth()
-            Image(
-                painter = painterResource(id = R.drawable.fondo_coleccion),
-                contentDescription = "Pantalla detalles del héroe",
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier.fillMaxSize()
+            ParallaxBackgroundImage(
+                modifier = Modifier.fillMaxSize(),
+                painterResourceId = R.drawable.fondo_coleccion,
+                data = sensorData
             )
             Column(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState())
             ) {
-                HeroImage(modifier = Modifier
-                    .padding(8.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(),
-                    url = dataHero.image.url,
-                    contentScale = ContentScale.FillWidth
+                ParallaxHeroImage(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 25.dp),
+                    imageUrl = dataHero.image.url,
+                    data = sensorData
                 )
                 NavigationButton(
                     modifier = navButtonModifier
@@ -75,22 +86,67 @@ fun HeroDetailScreen(
                 ) {
                     controller.navigate(route = "qr")
                 }
-                HeroText(modifier = titleTextModifier, text =  "${dataHero.id} ${dataHero.name}")
-                HeroText(modifier = titleTextModifier, text =  "Stats")
-                HeroStats(
-                    Modifier.fillMaxWidth(),
-                    stats = dataHero.powerstats
-                )
-                HeroText(modifier = titleTextModifier, text =  "Biografia")
-                HeroBiography(modifier = Modifier.fillMaxWidth(),biography = dataHero.biography)
-                HeroText(modifier = titleTextModifier, text =  "Apariencia")
-                HeroAppearance(modifier = Modifier.fillMaxWidth(),heroAppearance = dataHero.appearance)
-                HeroText(modifier = titleTextModifier, text =  "Profesion")
-                HeroWork(modifier = Modifier.fillMaxWidth(),heroWork = dataHero.work)
-                HeroText(modifier = titleTextModifier, text =  "Conecciones")
-                HeroConnections(modifier = Modifier.fillMaxWidth(),heroConnections = dataHero.connections)
+                // DebugSensorData(data = data)
+                HeroData(modifier = Modifier.fillMaxWidth(), dataHero = dataHero)
             }
         }
     }
 }
 
+@Composable
+private fun HeroData(
+    modifier: Modifier = Modifier,
+    dataHero: DataHero = DataHero()
+) {
+    val titleTextModifier = Modifier
+        .padding(8.dp)
+        .fillMaxWidth()
+    Column(
+        modifier = modifier
+    ) {
+        HeroText(
+            modifier = titleTextModifier,
+            text = "${dataHero.id} ${dataHero.name}"
+        )
+        HeroText(
+            modifier = titleTextModifier,
+            text = "Stats"
+        )
+        HeroStats(
+            modifier = Modifier.fillMaxWidth(),
+            stats = dataHero.powerstats
+        )
+        HeroText(
+            modifier = titleTextModifier,
+            text = "Biografia"
+        )
+        HeroBiography(
+            modifier = Modifier.fillMaxWidth(),
+            biography = dataHero.biography
+        )
+        HeroText(
+            modifier = titleTextModifier,
+            text = "Apariencia"
+        )
+        HeroAppearance(
+            modifier = Modifier.fillMaxWidth(),
+            heroAppearance = dataHero.appearance
+        )
+        HeroText(
+            modifier = titleTextModifier,
+            text = "Profesion"
+        )
+        HeroWork(
+            modifier = Modifier.fillMaxWidth(),
+            heroWork = dataHero.work
+        )
+        HeroText(
+            modifier = titleTextModifier,
+            text = "Conecciones"
+        )
+        HeroConnections(
+            modifier = Modifier.fillMaxWidth(),
+            heroConnections = dataHero.connections
+        )
+    }
+}
