@@ -68,6 +68,11 @@ class SensorDataManager @Inject constructor(private val sensorManager: SensorMan
             SensorManager.SENSOR_DELAY_UI
         )
         if (isAccelerometerNotSuccessful || isMagnetometerNotSuccessful) {
+            Log.d(
+                "SensorDataManager",
+                "accelerometer: ${!isAccelerometerNotSuccessful}" +
+                    " magnetometer: ${!isMagnetometerNotSuccessful}"
+            )
             cancel()
             /*
             throw SensorDataManagerException(
