@@ -60,10 +60,14 @@ import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroItem
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroPlayerCard
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
-
 @Preview(showBackground = true)
 @Composable
-fun WinnerScreen(modifier: Modifier = Modifier, winner: Winner = Winner.NONE, playerScore:Int = 0, adversaryScore:Int = 0) {
+fun WinnerScreen(
+    modifier: Modifier = Modifier,
+    winner: Winner = Winner.NONE,
+    playerScore: Int = 0,
+    adversaryScore: Int = 0
+) {
     val offset = Offset(6.0f, 4.0f)
 
     Column(
@@ -96,7 +100,6 @@ fun WinnerScreen(modifier: Modifier = Modifier, winner: Winner = Winner.NONE, pl
     }
 }
 
-
 @Composable
 fun HeroDuelScreen(
     modifier: Modifier = Modifier,
@@ -111,9 +114,9 @@ fun HeroDuelScreen(
     )
 
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle(initialValue = true)
-    if(isLoading) {
+    if (isLoading) {
         CircularProgressIndicator(modifier = Modifier.fillMaxSize())
-    }else {
+    } else {
         val showSelectCardScreen by viewModel.showSelectCardScreen.collectAsStateWithLifecycle(
             initialValue = false
         )
@@ -151,7 +154,7 @@ fun HeroDuelScreen(
             initialValue = true
         )
 
-        if(showSelectCardScreen) {
+        if (showSelectCardScreen) {
             SelectCard(
                 modifier = modifier,
                 playerDeck = playerDeck,
@@ -161,7 +164,7 @@ fun HeroDuelScreen(
             )
         }
 
-        if(showHeroDuelScreen) {
+        if (showHeroDuelScreen) {
             HeroDuel(
                 modifier = modifier,
                 currentPlayerCard = currentPlayerCard,
@@ -175,7 +178,7 @@ fun HeroDuelScreen(
             )
         }
 
-        if(showWinnerScreen) {
+        if (showWinnerScreen) {
             WinnerScreen(
                 modifier = modifier,
                 winner = winner,
@@ -192,12 +195,12 @@ fun HeroDuel(
     modifier: Modifier = Modifier,
     currentPlayerCard: DataHero = DataHero(),
     currentAdversaryCard: DataHero = DataHero(),
-    playerScore:Int = 0,
-    adversaryScore:Int = 0,
-    onClickSelectedStat:(Stat) -> Unit = {},
-    canMultix2BeUsed:Boolean = true,
-    useMultiplierX2:(Boolean) -> Unit = {},
-    onFightClick:() -> Unit = {}
+    playerScore: Int = 0,
+    adversaryScore: Int = 0,
+    onClickSelectedStat: (Stat) -> Unit = {},
+    canMultix2BeUsed: Boolean = true,
+    useMultiplierX2: (Boolean) -> Unit = {},
+    onFightClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier,
@@ -237,8 +240,8 @@ fun HeroDuel(
 @Composable
 fun GameScore(
     modifier: Modifier = Modifier,
-    playerScore:Int = 0,
-    adversaryScore:Int = 0
+    playerScore: Int = 0,
+    adversaryScore: Int = 0
 ) {
     Row(
         modifier = modifier,
@@ -246,14 +249,14 @@ fun GameScore(
     ) {
         IndividualScore(
             modifier = Modifier
-                .border(1.dp,color = Color.Black),
+                .border(1.dp, color = Color.Black),
             score = playerScore,
             text = "Jugador:",
             backgroundColor = Color(0xFF16A0E8)
         )
         IndividualScore(
             modifier = Modifier
-                .border(1.dp,color = Color.Black),
+                .border(1.dp, color = Color.Black),
             score = adversaryScore,
             text = "Adversario:",
             backgroundColor = Color(0xFFFA1404),
@@ -266,8 +269,8 @@ fun GameScore(
 @Composable
 fun IndividualScore(
     modifier: Modifier = Modifier,
-    score:Int = 0,
-    text:String = "Jugador o adversario:",
+    score: Int = 0,
+    text: String = "Jugador o adversario:",
     backgroundColor: Color = Color.White,
     textColor: Color = Color.Black
 ) {
@@ -285,8 +288,8 @@ fun IndividualScore(
 @Composable
 fun ActionMenu(
     modifier: Modifier = Modifier,
-    onClickSelectedStat:(Stat) -> Unit = {},
-    canMultix2BeUsed:Boolean = true,
+    onClickSelectedStat: (Stat) -> Unit = {},
+    canMultix2BeUsed: Boolean = true,
     useMultiplierX2: (Boolean) -> Unit = {},
     onFightClick: () -> Unit = {}
 ) {
@@ -295,7 +298,7 @@ fun ActionMenu(
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        SelectStat(modifier = Modifier.width(160.dp),onClick = onClickSelectedStat)
+        SelectStat(modifier = Modifier.width(160.dp), onClick = onClickSelectedStat)
         Spacer(modifier = Modifier.size(8.dp))
         SelectMultiplier(
             useMultiplierX2 = useMultiplierX2,
@@ -320,14 +323,12 @@ fun ActionMenu(
     }
 }
 
-
-
 @Preview(showBackground = true)
 @Composable
 fun SelectMultiplier(
     modifier: Modifier = Modifier,
-    canMultix2BeUsed:Boolean = true,
-    useMultiplierX2:(Boolean) -> Unit = {}
+    canMultix2BeUsed: Boolean = true,
+    useMultiplierX2: (Boolean) -> Unit = {}
 ) {
     val offset = Offset(6.0f, 4.0f)
     var checked by rememberSaveable {
@@ -349,7 +350,7 @@ fun SelectMultiplier(
             )
         )
         Checkbox(
-            checked = if(canMultix2BeUsed) checked else false,
+            checked = if (canMultix2BeUsed) checked else false,
             onCheckedChange = {
                 checked = !checked
                 useMultiplierX2(checked)
@@ -366,9 +367,9 @@ fun SelectCard(
         DataHero(id = "1", name = "test 1"),
         DataHero(id = "2", name = "test 2")
     ),
-    cardSelectedIndex:Int = 0,
-    onPlayCardClick:() -> Unit = {},
-    onPlayerCardClick:(Int) -> Unit = {},
+    cardSelectedIndex: Int = 0,
+    onPlayCardClick: () -> Unit = {},
+    onPlayerCardClick: (Int) -> Unit = {},
 ) {
     if (playerDeck.isEmpty()) {
         InCaseOfError("SelectCard composable.")
@@ -376,7 +377,7 @@ fun SelectCard(
         var setDefaults by rememberSaveable {
             mutableStateOf(true)
         }
-        if(setDefaults) {
+        if (setDefaults) {
             onPlayerCardClick(0)
             setDefaults = false
         }
@@ -393,7 +394,7 @@ fun SelectCard(
                     .padding(8.dp)
                     .shadow(9.dp),
                 hero = playerDeck[cardSelectedIndex],
-                cardColors = CardDefaults.cardColors(Color(0xFF16A0E8)) //hay que guardar el color en ui.theme.Color.kt
+                cardColors = CardDefaults.cardColors(Color(0xFF16A0E8)) // hay que guardar el color en ui.theme.Color.kt
             )
             PlayerDeck(
                 modifier = Modifier,
@@ -408,7 +409,7 @@ fun SelectCard(
 @Composable
 fun JugarCartaButton(
     modifier: Modifier = Modifier,
-    onPlayCardClick:() -> Unit = {}
+    onPlayCardClick: () -> Unit = {}
 ) {
     Button(
         colors = ButtonDefaults.buttonColors(Color.DarkGray),
@@ -417,7 +418,7 @@ fun JugarCartaButton(
             onPlayCardClick()
         }
     ) {
-        Text(modifier = Modifier,color = Color.White, text = "Jugar Carta")
+        Text(modifier = Modifier, color = Color.White, text = "Jugar Carta")
     }
 }
 
@@ -425,8 +426,8 @@ fun JugarCartaButton(
 @Composable
 fun PlayerDeck(
     modifier: Modifier = Modifier,
-    playerDeck:List<DataHero> = listOf(DataHero(), DataHero(), DataHero()),
-    onPlayerCardClick:(Int) -> Unit = {}
+    playerDeck: List<DataHero> = listOf(DataHero(), DataHero(), DataHero()),
+    onPlayerCardClick: (Int) -> Unit = {}
 ) {
     if (playerDeck.isNotEmpty()) {
         LazyColumn(
@@ -445,13 +446,13 @@ fun PlayerDeck(
                 }
             }
         )
-    }else {
+    } else {
         InCaseOfError(place = "PlayerDeck composable")
     }
 }
 
 @Composable
-fun InCaseOfError(place:String = "En algún lugar") {
+fun InCaseOfError(place: String = "En algún lugar") {
     val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -472,7 +473,7 @@ fun InCaseOfError(place:String = "En algún lugar") {
 @Composable
 fun SelectStat(
     modifier: Modifier = Modifier,
-    statList:List<Stat> = listOf(
+    statList: List<Stat> = listOf(
         Stat.POWER,
         Stat.DURABILITY,
         Stat.STRENGTH,
@@ -480,7 +481,7 @@ fun SelectStat(
         Stat.COMBAT,
         Stat.INTELLIGENCE
     ),
-    onClick:(Stat) -> Unit = {}
+    onClick: (Stat) -> Unit = {}
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     var selectedStat by rememberSaveable { mutableStateOf(Stat.POWER) }
