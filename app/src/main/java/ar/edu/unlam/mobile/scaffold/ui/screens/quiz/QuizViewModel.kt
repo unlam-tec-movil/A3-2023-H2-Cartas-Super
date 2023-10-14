@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.quizrepository.IQuizGameRepository
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizGame
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizOption
-import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorDataManager
+import ar.edu.unlam.mobile.scaffold.domain.sensor.OrientationDataManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,12 +16,12 @@ import javax.inject.Inject
 @HiltViewModel
 class QuizViewModel @Inject constructor(
     private val repo: IQuizGameRepository,
-    private val sensorDataManager: SensorDataManager
+    private val orientationDataManager: OrientationDataManager
 ) : ViewModel() {
 
     private lateinit var game: QuizGame
 
-    val sensorData = sensorDataManager.sensorData
+    val sensorData = orientationDataManager.sensorData
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
@@ -101,10 +101,10 @@ class QuizViewModel @Inject constructor(
     }
 
     fun cancelSensorDataFlow() {
-        sensorDataManager.cancel()
+        orientationDataManager.cancel()
     }
     override fun onCleared() {
         super.onCleared()
-        sensorDataManager.cancel()
+        orientationDataManager.cancel()
     }
 }

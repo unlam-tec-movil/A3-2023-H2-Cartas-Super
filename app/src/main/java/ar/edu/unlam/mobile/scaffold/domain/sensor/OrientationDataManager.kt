@@ -11,16 +11,17 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 
 /*
-class SensorDataManager(context: Context) : SensorEventListener {
+class OrientationDataManager(context: Context) : SensorEventListener {
 
     private val sensorManager by lazy {
         context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
  */
-class SensorDataManager @Inject constructor(private val sensorManager: SensorManager) : SensorEventListener {
+class OrientationDataManager @Inject constructor(private val sensorManager: SensorManager) : SensorEventListener {
 
     private var gravity: FloatArray? = null
     private var geomagnetic: FloatArray? = null
+    private var rotationVector: FloatArray? = null
 
     private val data: Channel<SensorData> = Channel(Channel.UNLIMITED)
 
@@ -49,7 +50,28 @@ class SensorDataManager @Inject constructor(private val sensorManager: SensorMan
             emulado por software usando otros sensores.
      */
     private fun init() {
-        Log.d("SensorDataManager", "init")
+        Log.d("OrientationDataManager", "init")
+        val sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL)
+        var sensor = sensorList.find { it.type == Sensor.TYPE_ROTATION_VECTOR }
+        if (sensor != null) {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+        } else {
+            return
+        }
+        val isRegisterListenerNotSuccessful = !sensorManager.registerListener(
+            this,
+            sensor,
+            SensorManager.SENSOR_DELAY_UI
+        )
+        if (isRegisterListenerNotSuccessful) {
+            Log.d(
+                "OrientationDataManager",
+                "el registro de escucha del sensor de tipo vector de rotación no fue exitoso"
+            )
+            cancel()
+        }
+
+        /*
         var accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
         if (accelerometer == null) {
             accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -69,19 +91,44 @@ class SensorDataManager @Inject constructor(private val sensorManager: SensorMan
         )
         if (isAccelerometerNotSuccessful || isMagnetometerNotSuccessful) {
             Log.d(
-                "SensorDataManager",
+                "OrientationDataManager",
                 "accelerometer: ${!isAccelerometerNotSuccessful}" +
                     " magnetometer: ${!isMagnetometerNotSuccessful}"
             )
             cancel()
             /*
-            throw SensorDataManagerException(
+            throw OrientationDataManagerException(
                 message = "El sensor acelerómetro no está disponible en este dispositivo."
             )*/
         }
+
+         */
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
+        if (event?.sensor?.type == Sensor.TYPE_ROTATION_VECTOR) {
+            rotationVector = event.values
+        }
+        if (rotationVector != null) {
+            val rotationMatrix = FloatArray(16)
+            SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVector)
+            val remappedRotationMatrix = FloatArray(16)
+            SensorManager.remapCoordinateSystem(
+                rotationMatrix,
+                SensorManager.AXIS_X,
+                SensorManager.AXIS_Z,
+                remappedRotationMatrix
+            )
+            val orientation = FloatArray(3)
+            SensorManager.getOrientation(remappedRotationMatrix, orientation)
+            data.trySend(
+                SensorData(
+                    roll = orientation[2], // Roll (rotation around the y-axis)
+                    pitch = orientation[1] // Pitch (rotation around the x-axis)
+                )
+            )
+        }
+        /*
         if (event?.sensor?.type == Sensor.TYPE_GRAVITY || event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
             gravity = event.values
         }
@@ -106,10 +153,12 @@ class SensorDataManager @Inject constructor(private val sensorManager: SensorMan
                 )
             }
         }
+
+         */
     }
 
     fun cancel() {
-        Log.d("SensorDataManager", "cancel")
+        Log.d("OrientationDataManager", "cancel")
         sensorManager.unregisterListener(this)
     }
 

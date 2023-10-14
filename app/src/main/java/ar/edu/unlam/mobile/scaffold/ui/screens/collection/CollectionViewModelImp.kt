@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorDataManager
+import ar.edu.unlam.mobile.scaffold.domain.sensor.OrientationDataManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,10 +16,10 @@ import javax.inject.Inject
 @HiltViewModel
 class CollectionViewModelImp @Inject constructor(
     private val repo: IHeroRepository,
-    private val sensorDataManager: SensorDataManager
+    private val orientationDataManager: OrientationDataManager
 ) : ViewModel() {
 
-    val sensorData = sensorDataManager.sensorData
+    val sensorData = orientationDataManager.sensorData
 
     private val _heroList = MutableStateFlow<List<DataHero>>(emptyList())
     val heroList = _heroList.asStateFlow()
@@ -38,11 +38,11 @@ class CollectionViewModelImp @Inject constructor(
     }
 
     fun cancelSensorDataFlow() {
-        sensorDataManager.cancel()
+        orientationDataManager.cancel()
     }
 
     override fun onCleared() {
         super.onCleared()
-        sensorDataManager.cancel()
+        orientationDataManager.cancel()
     }
 }

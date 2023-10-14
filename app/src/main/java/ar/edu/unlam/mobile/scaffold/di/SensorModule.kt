@@ -2,7 +2,7 @@ package ar.edu.unlam.mobile.scaffold.di
 
 import android.content.Context
 import android.hardware.SensorManager
-import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorDataManager
+import ar.edu.unlam.mobile.scaffold.domain.sensor.OrientationDataManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,7 +25,7 @@ object SensorModule {
 
     @ViewModelScoped
     @Provides
-    fun providesSensorDataManager(sensorManager: SensorManager): SensorDataManager {
-        return SensorDataManager(sensorManager = sensorManager)
+    fun providesSensorDataManager(sensorManager: SensorManager): OrientationDataManager {
+        return OrientationDataManager(sensorManager = sensorManager)
     }
 }
