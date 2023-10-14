@@ -2,7 +2,6 @@ package ar.edu.unlam.mobile.scaffold.domain.sensor
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
 import kotlinx.coroutines.channels.Channel
@@ -17,7 +16,7 @@ class OrientationDataManager(context: Context) : SensorEventListener {
         context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
  */
-class OrientationDataManager @Inject constructor(private val sensorManager: SensorManager) : SensorEventListener {
+class OrientationDataManager @Inject constructor(private val sensorManager: SensorManager) : IOrientationDataManager {
 
     private var gravity: FloatArray? = null
     private var geomagnetic: FloatArray? = null
@@ -25,7 +24,7 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
 
     private val data: Channel<SensorData> = Channel(Channel.UNLIMITED)
 
-    val sensorData = flow {
+    override val sensorData = flow {
         init()
         data.receiveAsFlow().collect {
             emit(it)
@@ -52,9 +51,9 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
     private fun init() {
         Log.d("OrientationDataManager", "init")
         val sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL)
-        var sensor = sensorList.find { it.type == Sensor.TYPE_ROTATION_VECTOR }
+        var sensor = sensorList.find { it.type == Sensor.TYPE_GAME_ROTATION_VECTOR }
         if (sensor != null) {
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR)
         } else {
             return
         }
@@ -106,7 +105,7 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        if (event?.sensor?.type == Sensor.TYPE_ROTATION_VECTOR) {
+        if (event?.sensor?.type == Sensor.TYPE_GAME_ROTATION_VECTOR) {
             rotationVector = event.values
         }
         if (rotationVector != null) {
@@ -157,7 +156,7 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
          */
     }
 
-    fun cancel() {
+    override fun cancel() {
         Log.d("OrientationDataManager", "cancel")
         sensorManager.unregisterListener(this)
     }
