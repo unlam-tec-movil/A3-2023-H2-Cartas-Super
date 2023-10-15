@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class SensorFactory @Inject constructor(private val sensorManager: SensorManager) {
 
-    private var availableSensor = AvailableSensor.NONE
+    private var availableSensor: AvailableSensor
 
     init {
         val sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL).map { it.type }
@@ -33,7 +33,7 @@ class SensorFactory @Inject constructor(private val sensorManager: SensorManager
     }
 
     fun getOrientationDataManager(): IOrientationDataManager {
-        return when(availableSensor) {
+        return when (availableSensor) {
             AvailableSensor.GAME_VECTOR -> GameRotationVectorSensorManager(sensorManager)
             AvailableSensor.ROTATION_VECTOR -> RotationVectorSensorManager(sensorManager)
             AvailableSensor.GRAVITY_AND_MAGNETIC_FIELD -> OrientationDataManager(sensorManager)

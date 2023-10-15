@@ -3,7 +3,7 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
-import ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager.OrientationDataManager
+import ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager.IOrientationDataManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewmodel @Inject constructor(
     private val repo: IHeroRepository,
-    private val orientationDataManager: OrientationDataManager
+    private val orientationDataManager: IOrientationDataManager
 ) : ViewModel() {
 
     val sensorData = orientationDataManager.sensorData
