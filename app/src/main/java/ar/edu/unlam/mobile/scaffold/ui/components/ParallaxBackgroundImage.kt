@@ -14,7 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import ar.edu.unlam.mobile.scaffold.R
-import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorData
+import ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager.SensorData
 
 @SuppressLint("UnrememberedMutableState")
 @Preview

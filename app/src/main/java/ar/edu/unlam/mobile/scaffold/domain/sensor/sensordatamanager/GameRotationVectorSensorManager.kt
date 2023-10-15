@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.domain.sensor
+package ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -75,5 +75,7 @@ class GameRotationVectorSensorManager @Inject constructor(
         }
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // do nothing
+    }
 }

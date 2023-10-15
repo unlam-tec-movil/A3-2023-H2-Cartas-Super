@@ -20,7 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorData
+import ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager.SensorData
 import ar.edu.unlam.mobile.scaffold.ui.components.HeroText
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxHeroImage

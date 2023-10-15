@@ -1,9 +1,10 @@
-package ar.edu.unlam.mobile.scaffold.domain.sensor
+package ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import android.util.Log
+import ar.edu.unlam.mobile.scaffold.domain.sensor.OrientationDataManagerException
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -16,11 +17,11 @@ class OrientationDataManager(context: Context) : SensorEventListener {
         context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
  */
-class OrientationDataManager @Inject constructor(private val sensorManager: SensorManager) : IOrientationDataManager {
+class OrientationDataManager @Inject constructor(private val sensorManager: SensorManager) :
+    IOrientationDataManager {
 
     private var gravity: FloatArray? = null
     private var geomagnetic: FloatArray? = null
-    private var rotationVector: FloatArray? = null
 
     private val data: Channel<SensorData> = Channel(Channel.UNLIMITED)
 
@@ -37,7 +38,7 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
         Computes the acceleration in m/s2 applied on all three axes (x, y and z),
         including the force of gravity.
 
-        TYPE_GRAVITY
+        TYPE_GRAVITY es lo mismo que type_accelerometer pero nomas mide la gravedad
         Type: Software or Hardware
         Computes the gravitational force in m/s2 applied on all three axes (x, y and z).
 
@@ -50,31 +51,7 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
      */
     private fun init() {
         Log.d("OrientationDataManager", "init")
-        val sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL)
-        var sensor = sensorList.find { it.type == Sensor.TYPE_GAME_ROTATION_VECTOR }
-        if (sensor != null) {
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR)
-        } else {
-            return
-        }
-        val isRegisterListenerNotSuccessful = !sensorManager.registerListener(
-            this,
-            sensor,
-            SensorManager.SENSOR_DELAY_UI
-        )
-        if (isRegisterListenerNotSuccessful) {
-            Log.d(
-                "OrientationDataManager",
-                "el registro de escucha del sensor de tipo vector de rotación no fue exitoso"
-            )
-            cancel()
-        }
-
-        /*
-        var accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
-        if (accelerometer == null) {
-            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        }
+        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
 
         val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
@@ -95,39 +72,13 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
                     " magnetometer: ${!isMagnetometerNotSuccessful}"
             )
             cancel()
-            /*
             throw OrientationDataManagerException(
                 message = "El sensor acelerómetro no está disponible en este dispositivo."
-            )*/
+            )
         }
-
-         */
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        if (event?.sensor?.type == Sensor.TYPE_GAME_ROTATION_VECTOR) {
-            rotationVector = event.values
-        }
-        if (rotationVector != null) {
-            val rotationMatrix = FloatArray(16)
-            SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVector)
-            val remappedRotationMatrix = FloatArray(16)
-            SensorManager.remapCoordinateSystem(
-                rotationMatrix,
-                SensorManager.AXIS_X,
-                SensorManager.AXIS_Z,
-                remappedRotationMatrix
-            )
-            val orientation = FloatArray(3)
-            SensorManager.getOrientation(remappedRotationMatrix, orientation)
-            data.trySend(
-                SensorData(
-                    roll = orientation[2], // Roll (rotation around the y-axis)
-                    pitch = orientation[1] // Pitch (rotation around the x-axis)
-                )
-            )
-        }
-        /*
         if (event?.sensor?.type == Sensor.TYPE_GRAVITY || event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
             gravity = event.values
         }
@@ -152,8 +103,6 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
                 )
             }
         }
-
-         */
     }
 
     override fun cancel() {
@@ -161,10 +110,12 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
         sensorManager.unregisterListener(this)
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // do nothing
+    }
 }
 
 data class SensorData(
-    val roll: Float, // Roll (rotation around the y-axis)
-    val pitch: Float // Pitch (rotation around the x-axis)
+    val roll: Float = 0f, // Roll (rotation around the y-axis)
+    val pitch: Float = 0f // Pitch (rotation around the x-axis)
 )
