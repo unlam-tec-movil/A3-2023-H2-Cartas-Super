@@ -32,7 +32,9 @@ object SensorModule {
 
     @ViewModelScoped
     @Provides
-    fun providesOrientationDataManager(orientationDataSensorFactory: OrientationDataSensorFactory): IOrientationDataManager {
+    fun providesOrientationDataManager(
+        orientationDataSensorFactory: OrientationDataSensorFactory
+    ): IOrientationDataManager {
         return orientationDataSensorFactory.getOrientationDataManager()
     }
 }
