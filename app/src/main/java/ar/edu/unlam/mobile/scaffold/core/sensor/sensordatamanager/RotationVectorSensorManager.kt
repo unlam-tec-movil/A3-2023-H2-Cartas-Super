@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager
+package ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent

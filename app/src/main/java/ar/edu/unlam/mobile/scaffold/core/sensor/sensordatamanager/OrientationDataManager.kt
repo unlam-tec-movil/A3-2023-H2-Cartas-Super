@@ -1,10 +1,10 @@
-package ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager
+package ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import android.util.Log
-import ar.edu.unlam.mobile.scaffold.domain.sensor.OrientationDataManagerException
+import ar.edu.unlam.mobile.scaffold.core.sensor.OrientationDataManagerException
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow

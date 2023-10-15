@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.quizrepository.IQuizGameRepository
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizGame
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizOption
-import ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager.IOrientationDataManager
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.IOrientationDataManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

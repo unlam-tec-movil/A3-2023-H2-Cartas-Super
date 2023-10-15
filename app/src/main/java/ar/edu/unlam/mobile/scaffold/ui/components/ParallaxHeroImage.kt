@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager.SensorData
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroImage
 
 // For changing offset values, it is always preferred to use .offset { } instead of .offset()

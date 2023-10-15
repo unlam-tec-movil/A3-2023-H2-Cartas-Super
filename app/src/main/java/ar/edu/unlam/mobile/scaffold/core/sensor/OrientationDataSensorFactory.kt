@@ -1,15 +1,15 @@
-package ar.edu.unlam.mobile.scaffold.domain.sensor
+package ar.edu.unlam.mobile.scaffold.core.sensor
 
 import android.hardware.Sensor
 import android.hardware.SensorManager
-import ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager.DefaultDataManager
-import ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager.GameRotationVectorSensorManager
-import ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager.IOrientationDataManager
-import ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager.OrientationDataManager
-import ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager.RotationVectorSensorManager
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.DefaultDataManager
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.GameRotationVectorSensorManager
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.IOrientationDataManager
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.OrientationDataManager
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.RotationVectorSensorManager
 import javax.inject.Inject
 
-class SensorFactory @Inject constructor(private val sensorManager: SensorManager) {
+class OrientationDataSensorFactory @Inject constructor(private val sensorManager: SensorManager) {
 
     private var availableSensor: AvailableSensor
 

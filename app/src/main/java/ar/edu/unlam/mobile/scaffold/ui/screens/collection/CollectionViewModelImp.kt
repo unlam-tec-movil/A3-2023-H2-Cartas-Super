@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.sensor.sensordatamanager.IOrientationDataManager
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.IOrientationDataManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
