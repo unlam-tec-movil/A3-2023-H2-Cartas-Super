@@ -1,15 +1,14 @@
 package ar.edu.unlam.mobile.scaffold.cardgame
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
+import ar.edu.unlam.mobile.scaffold.data.network.model.Powerstats
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
-import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.model.Powerstats
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import com.google.common.truth.Truth.*
 import io.mockk.junit4.MockKRule
 import org.junit.Before
 import org.junit.Rule
-
 import org.junit.Test
 
 class CardGameTest {
@@ -39,7 +38,7 @@ class CardGameTest {
      */
 
     private val playerDeck = listOf(
-        DataHero(
+        HeroApiModel(
             powerstats = Powerstats(
                 combat = "1",
                 durability = "1",
@@ -50,7 +49,7 @@ class CardGameTest {
             ),
             id = "1"
         ),
-        DataHero(
+        HeroApiModel(
             powerstats = Powerstats(
                 combat = "10",
                 durability = "10",
@@ -61,7 +60,7 @@ class CardGameTest {
             ),
             id = "10"
         ),
-        DataHero(
+        HeroApiModel(
             powerstats = Powerstats(
                 combat = "100",
                 durability = "100",
@@ -75,7 +74,7 @@ class CardGameTest {
     )
 
     private val adversaryDeck = listOf(
-        DataHero(
+        HeroApiModel(
             powerstats = Powerstats(
                 combat = "1",
                 durability = "1",
@@ -86,7 +85,7 @@ class CardGameTest {
             ),
             id = "2"
         ),
-        DataHero(
+        HeroApiModel(
             powerstats = Powerstats(
                 combat = "10",
                 durability = "10",
@@ -97,7 +96,7 @@ class CardGameTest {
             ),
             id = "22"
         ),
-        DataHero(
+        HeroApiModel(
             powerstats = Powerstats(
                 combat = "100",
                 durability = "100",
@@ -123,11 +122,11 @@ class CardGameTest {
     @Test
     fun `que el puntaje del jugador sea correcto cuando su carta gana una pelea sin el multiplicador x2`() {
         val expectedScore = playerDeck[2].powerstats.combat.toInt() -
-                adversaryDeck[0].powerstats.combat.toInt()
+            adversaryDeck[0].powerstats.combat.toInt()
         val useMultix2 = false
 
-        game.playerPlayCard(id = 100,stat = Stat.COMBAT,useMultix2 = useMultix2)
-        val playerScore:Int = game.playerScore.value
+        game.playerPlayCard(id = 100, stat = Stat.COMBAT, useMultix2 = useMultix2)
+        val playerScore: Int = game.playerScore.value
 
         assertThat(playerScore).isEqualTo(expectedScore)
         assertThat(game.adversaryScore.value).isEqualTo(0)
@@ -136,13 +135,13 @@ class CardGameTest {
     @Test
     fun `que el puntaje del jugador sea correcto cuando su carta gana una pelea con el multiplicador x2`() {
         val expectedPlayerScore = (playerDeck[2].powerstats.combat.toInt() * 2) -
-                adversaryDeck[0].powerstats.combat.toInt()
+            adversaryDeck[0].powerstats.combat.toInt()
         val expectedAdversaryScore = 0
         val useMultix2 = true
         val stat = Stat.COMBAT
 
-        game.playerPlayCard(id = 100,stat = stat,useMultix2 = useMultix2)
-        val playerScore:Int = game.playerScore.value
+        game.playerPlayCard(id = 100, stat = stat, useMultix2 = useMultix2)
+        val playerScore: Int = game.playerScore.value
         val adversaryScore = game.adversaryScore.value
 
         assertThat(playerScore).isEqualTo(expectedPlayerScore)
@@ -152,13 +151,13 @@ class CardGameTest {
     @Test
     fun `que el puntaje del adversario sea correcto cuando su carta gana una pelea y el jugador no usa el multi x2`() {
         val expectedAdversaryScore = adversaryDeck[0].powerstats.intelligence.toInt() -
-                playerDeck[0].powerstats.intelligence.toInt()
+            playerDeck[0].powerstats.intelligence.toInt()
         val expectedPlayerScore = 0
         val stat = Stat.INTELLIGENCE
         val useMultix2 = false
 
-        game.playerPlayCard(id = 1,stat = stat,useMultix2 = useMultix2)
-        val playerScore:Int = game.playerScore.value
+        game.playerPlayCard(id = 1, stat = stat, useMultix2 = useMultix2)
+        val playerScore: Int = game.playerScore.value
         val adversaryScore = game.adversaryScore.value
 
         assertThat(playerScore).isEqualTo(expectedPlayerScore)
@@ -168,12 +167,12 @@ class CardGameTest {
     @Test
     fun `que el puntaje del adversario sea correcto cuando su carta gana una pelea y el jugador usa el multi x2`() {
         val expectedAdversaryScore = adversaryDeck[0].powerstats.intelligence.toInt() -
-                (playerDeck[0].powerstats.intelligence.toInt() * 2)
+            (playerDeck[0].powerstats.intelligence.toInt() * 2)
         val expectedPlayerScore = 0
         val stat = Stat.INTELLIGENCE
         val useMultix2 = true
 
-        game.playerPlayCard(id = 1,stat = stat,useMultix2 = useMultix2)
+        game.playerPlayCard(id = 1, stat = stat, useMultix2 = useMultix2)
         val playerScore = game.playerScore.value
         val adversaryScore = game.adversaryScore.value
 

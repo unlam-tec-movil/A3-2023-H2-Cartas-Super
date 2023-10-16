@@ -2,8 +2,9 @@ package ar.edu.unlam.mobile.scaffold.heroDetail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.MainDispatcherRule
+import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
-import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorDataManager
 import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailViewModelImp
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -47,18 +48,21 @@ class HeroDetailViewModelImpTest {
     @RelaxedMockK
     lateinit var repo: IHeroRepository
 
+    @RelaxedMockK
+    lateinit var orientationDataManager: SensorDataManager
+
     lateinit var viewModel: HeroDetailViewModelImp
 
     @Before
     fun setUp() {
-        viewModel = HeroDetailViewModelImp(repo)
+        viewModel = HeroDetailViewModelImp(repo, orientationDataManager)
     }
 
     // runTest es una corutina para testing, lo que permite usar funciones suspend
     // coEvery es lo mismo que un Every pero permite dar comportamiento a funciones suspend
     @Test
     fun whenPassingAnId_returnTheCorrectHero() = runTest {
-        val expectedHero = DataHero(id = "1", name = "Mr. Test")
+        val expectedHero = HeroApiModel(id = "1", name = "Mr. Test")
         coEvery { repo.getHero(1) } returns expectedHero
 
         viewModel.getHero(1)

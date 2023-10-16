@@ -8,11 +8,11 @@ import androidx.test.filters.SmallTest
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.AppearanceEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.BiographyEntity
+import ar.edu.unlam.mobile.scaffold.data.database.entities.ConnectionsEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
-import ar.edu.unlam.mobile.scaffold.domain.model.Connections
-import ar.edu.unlam.mobile.scaffold.domain.model.Image
-import ar.edu.unlam.mobile.scaffold.domain.model.Powerstats
-import ar.edu.unlam.mobile.scaffold.domain.model.Work
+import ar.edu.unlam.mobile.scaffold.data.database.entities.ImageEntity
+import ar.edu.unlam.mobile.scaffold.data.database.entities.PowerstatsEntity
+import ar.edu.unlam.mobile.scaffold.data.database.entities.WorkEntity
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -56,14 +56,13 @@ class HeroDatabaseTest {
     fun insertHeroEntity() = runTest {
         val heroEntity = HeroEntity(
             id = 1,
-            powerstats = Powerstats(),
-            isFavorite = false,
-            connections = Connections(),
+            powerstats = PowerstatsEntity(),
+            connections = ConnectionsEntity(),
             appearance = AppearanceEntity(),
             biography = BiographyEntity(),
-            image = Image(),
+            image = ImageEntity(),
             name = "Mr. Test",
-            work = Work()
+            work = WorkEntity()
         )
 
         dao.insertHero(hero = heroEntity)
@@ -75,5 +74,4 @@ class HeroDatabaseTest {
         assertThat(allHeroes).hasSize(1)
         assertThat(allHeroes).isNotEmpty()
     }
-
 }

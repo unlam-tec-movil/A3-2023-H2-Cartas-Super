@@ -4,9 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
+import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.HeroRepository
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.HeroRepositoryException
-import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -56,7 +56,7 @@ class HeroRepositoryTest {
 
     @Test
     fun getHeroFromApiWhenRoomDoesntHaveIt() = runTest {
-        val expectedHero = DataHero(id = "1", name = "Mr. Test")
+        val expectedHero = HeroApiModel(id = "1", name = "Mr. Test")
         coEvery { api.getHero(1) } returns expectedHero
         coEvery { db.getHero(1) } returns null
 
@@ -69,8 +69,8 @@ class HeroRepositoryTest {
     @Test
     fun getHeroFromDatabaseWhenItHasIt() = runTest {
         val expectedHeroEntity = HeroEntity(id = 1, name = "Mr. Test")
-        val expectedHero = DataHero(id = "1", name = "Mr. Test")
-        coEvery { api.getHero(1) } returns DataHero(id = "2")
+        val expectedHero = HeroApiModel(id = "1", name = "Mr. Test")
+        coEvery { api.getHero(1) } returns HeroApiModel(id = "2")
         coEvery { db.getHero(1) } returns expectedHeroEntity
 
         val repo = HeroRepository(api, db)
@@ -105,7 +105,7 @@ class HeroRepositoryTest {
     fun whenDatabaseHasZeroEntriesGetEverythingFromApi() = runTest {
         coEvery { db.getAll() } returns emptyList()
         for (i in 1..731) {
-            coEvery { api.getHero(i) } returns DataHero(id = i.toString(), name = "Test $i")
+            coEvery { api.getHero(i) } returns HeroApiModel(id = i.toString(), name = "Test $i")
         }
         val heroList = HeroRepository(api, db).getAllHero()
         for (i in 1..731) {
@@ -122,7 +122,7 @@ class HeroRepositoryTest {
         val expectedSize = 4
         coEvery { db.getAll() } returns emptyList()
         for (i in 1..731) {
-            coEvery { api.getHero(i) } returns DataHero(id = i.toString(), name = "Test $i")
+            coEvery { api.getHero(i) } returns HeroApiModel(id = i.toString(), name = "Test $i")
         }
         val heroDeck = HeroRepository(api, db).getRandomPlayerDeck(expectedSize)
         assertThat(heroDeck.size).isEqualTo(expectedSize)
@@ -132,7 +132,7 @@ class HeroRepositoryTest {
     fun whenPreloadingHeroCacheEmitValuesBetweenZeroAndOne() = runTest {
         coEvery { db.getAll() } returns emptyList()
         for (i in 1..731) {
-            coEvery { api.getHero(i) } returns DataHero(id = i.toString(), name = "Test $i")
+            coEvery { api.getHero(i) } returns HeroApiModel(id = i.toString(), name = "Test $i")
         }
         val emissionList = HeroRepository(api, db).preloadHeroCache().toList()
         val iterator = emissionList.iterator()

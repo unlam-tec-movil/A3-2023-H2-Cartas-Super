@@ -11,13 +11,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ar.edu.unlam.mobile.scaffold.domain.model.Appearance
+import ar.edu.unlam.mobile.scaffold.data.network.model.Appearance
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
-
 
 @Preview(showBackground = true)
 @Composable
-fun HeroAppearance(modifier: Modifier = Modifier, heroAppearance: Appearance = Appearance() ) {
+fun HeroAppearance(modifier: Modifier = Modifier, heroAppearance: Appearance = Appearance()) {
     Column(
         modifier = modifier
             .background(
@@ -36,7 +35,7 @@ fun HeroAppearance(modifier: Modifier = Modifier, heroAppearance: Appearance = A
 }
 
 @Composable
-fun AppearanceText(modifier: Modifier = Modifier, text:String = "Raza", value:String = "White") {
+fun AppearanceText(modifier: Modifier = Modifier, text: String = "Raza", value: String = "White") {
     Text(
         modifier = modifier,
         text = "$text: $value",

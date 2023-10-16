@@ -1,15 +1,15 @@
 package ar.edu.unlam.mobile.scaffold.data.repository
 
+import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
+import ar.edu.unlam.mobile.scaffold.data.network.model.Powerstats
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
-import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.model.Powerstats
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class HeroRepositoryManualTest @Inject constructor() : IHeroRepository {
 
-    private fun heroListTest1(): List<DataHero> {
-        val hero1 = DataHero(
+    private fun heroListTest1(): List<HeroApiModel> {
+        val hero1 = HeroApiModel(
             name = "test1",
             powerstats = Powerstats(
                 combat = "10",
@@ -20,7 +20,7 @@ class HeroRepositoryManualTest @Inject constructor() : IHeroRepository {
                 strength = "60"
             )
         )
-        val hero2 = DataHero(
+        val hero2 = HeroApiModel(
             name = "test2",
             powerstats = Powerstats(
                 combat = "100",
@@ -31,7 +31,7 @@ class HeroRepositoryManualTest @Inject constructor() : IHeroRepository {
                 strength = "600"
             )
         )
-        val hero3 = DataHero(
+        val hero3 = HeroApiModel(
             name = "test3",
             powerstats = Powerstats(
                 combat = "1",
@@ -44,8 +44,8 @@ class HeroRepositoryManualTest @Inject constructor() : IHeroRepository {
         )
         return listOf(hero1, hero2, hero3)
     }
-    private fun heroListTest2(): List<DataHero> {
-        val hero1 = DataHero(
+    private fun heroListTest2(): List<HeroApiModel> {
+        val hero1 = HeroApiModel(
             name = "test4",
             powerstats = Powerstats(
                 combat = "800",
@@ -56,7 +56,7 @@ class HeroRepositoryManualTest @Inject constructor() : IHeroRepository {
                 strength = "60"
             )
         )
-        val hero2 = DataHero(
+        val hero2 = HeroApiModel(
             name = "test5",
             powerstats = Powerstats(
                 combat = "900",
@@ -67,7 +67,7 @@ class HeroRepositoryManualTest @Inject constructor() : IHeroRepository {
                 strength = "10"
             )
         )
-        val hero3 = DataHero(
+        val hero3 = HeroApiModel(
             name = "test6",
             powerstats = Powerstats(
                 combat = "999",
@@ -81,26 +81,26 @@ class HeroRepositoryManualTest @Inject constructor() : IHeroRepository {
         return listOf(hero1, hero2, hero3)
     }
 
-    override suspend fun getAdversaryDeck(size: Int): List<DataHero> {
+    override suspend fun getAdversaryDeck(size: Int): List<HeroApiModel> {
         return heroListTest2()
     }
 
-    override suspend fun getRandomPlayerDeck(size: Int): List<DataHero> {
+    override suspend fun getRandomPlayerDeck(size: Int): List<HeroApiModel> {
         return heroListTest1()
     }
 
-    override suspend fun getHero(heroId: Int): DataHero {
-        return DataHero(id = heroId.toString())
+    override suspend fun getHero(heroId: Int): HeroApiModel {
+        return HeroApiModel(id = heroId.toString())
     }
 
-    override suspend fun getAllHero(): List<DataHero> {
-        val dataHeroTestList = mutableListOf<DataHero>()
+    override suspend fun getAllHero(): List<HeroApiModel> {
+        val heroApiModelTestList = mutableListOf<HeroApiModel>()
         for (i in 1..731) {
-            dataHeroTestList.add(
-                DataHero(name = "Test $i", id = "$i", isFavorite = i % 3 == 0)
+            heroApiModelTestList.add(
+                HeroApiModel(name = "Test $i", id = "$i")
             )
         }
-        return dataHeroTestList
+        return heroApiModelTestList
     }
 
     override fun preloadHeroCache(): Flow<Float> {

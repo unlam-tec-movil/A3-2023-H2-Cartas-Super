@@ -2,9 +2,9 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.heroduel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 import ar.edu.unlam.mobile.scaffold.data.repository.GameRepository
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
-import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) : ViewModel() {
 
-    private val _currentPlayerCard = MutableStateFlow(DataHero())
+    private val _currentPlayerCard = MutableStateFlow(HeroApiModel())
     val currentPlayerCard = _currentPlayerCard.asStateFlow()
 
     private val _cardSelectedIndex = MutableStateFlow(0)
@@ -50,10 +50,10 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
     lateinit var adversaryScore: StateFlow<Int>
         private set
 
-    lateinit var currentPlayerDeck: StateFlow<List<DataHero>>
+    lateinit var currentPlayerDeck: StateFlow<List<HeroApiModel>>
         private set
 
-    lateinit var currentAdversaryCard: StateFlow<DataHero>
+    lateinit var currentAdversaryCard: StateFlow<HeroApiModel>
         private set
 
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
@@ -94,12 +94,12 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
         currentPlayerDeck = game.currentPlayerDeck.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = listOf(DataHero(), DataHero(), DataHero())
+            initialValue = listOf(HeroApiModel(), HeroApiModel(), HeroApiModel())
         )
         currentAdversaryCard = game.currentAdversaryCard.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = DataHero()
+            initialValue = HeroApiModel()
         )
     }
 

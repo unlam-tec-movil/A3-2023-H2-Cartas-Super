@@ -4,13 +4,13 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ar.edu.unlam.mobile.scaffold.domain.model.Appearance
-import ar.edu.unlam.mobile.scaffold.domain.model.Biography
-import ar.edu.unlam.mobile.scaffold.domain.model.Connections
-import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.model.Image
-import ar.edu.unlam.mobile.scaffold.domain.model.Powerstats
-import ar.edu.unlam.mobile.scaffold.domain.model.Work
+import ar.edu.unlam.mobile.scaffold.data.network.model.Appearance
+import ar.edu.unlam.mobile.scaffold.data.network.model.Biography
+import ar.edu.unlam.mobile.scaffold.data.network.model.Connections
+import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
+import ar.edu.unlam.mobile.scaffold.data.network.model.Image
+import ar.edu.unlam.mobile.scaffold.data.network.model.Powerstats
+import ar.edu.unlam.mobile.scaffold.data.network.model.Work
 
 @Entity(tableName = "hero_table")
 data class HeroEntity(
@@ -25,8 +25,8 @@ data class HeroEntity(
     @ColumnInfo("quantity") val quantity: Int = 0
 )
 
-fun HeroEntity.toHeroModel(): DataHero {
-    return DataHero(
+fun HeroEntity.toHeroModel(): HeroApiModel {
+    return HeroApiModel(
         appearance = appearanceEntityToAppearance(this.appearance),
         biography = biographyEntityToBiography(this.biography),
         id = this.id.toString(),

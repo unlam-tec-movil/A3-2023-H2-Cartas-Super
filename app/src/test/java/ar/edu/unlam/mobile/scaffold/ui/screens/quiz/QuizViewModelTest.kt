@@ -2,10 +2,11 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.quiz
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.MainDispatcherRule
+import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
+import ar.edu.unlam.mobile.scaffold.data.network.model.Image
 import ar.edu.unlam.mobile.scaffold.data.repository.quizrepository.IQuizGameRepository
-import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.model.Image
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizGame
+import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorDataManager
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -49,19 +50,22 @@ class QuizViewModelTest {
     @RelaxedMockK
     lateinit var quizRepo: IQuizGameRepository
 
+    @RelaxedMockK
+    lateinit var orientationDataManager: SensorDataManager
+
     private lateinit var viewModel: QuizViewModel
 
     private val heroList = listOf(
-        DataHero(id = "1", name = "Mr test 1", image = Image("https://loremflickr.com/400/400/cat?lock=1")),
-        DataHero(id = "2", name = "Mr test 2", image = Image("https://loremflickr.com/400/400/dog?lock=1")),
-        DataHero(id = "3", name = "Mr test 3", image = Image("https://loremflickr.com/400/400/mouse?lock=1")),
-        DataHero(id = "4", name = "Mr test 4", image = Image("https://loremflickr.com/400/400/cow?lock=1"))
+        HeroApiModel(id = "1", name = "Mr test 1", image = Image("https://loremflickr.com/400/400/cat?lock=1")),
+        HeroApiModel(id = "2", name = "Mr test 2", image = Image("https://loremflickr.com/400/400/dog?lock=1")),
+        HeroApiModel(id = "3", name = "Mr test 3", image = Image("https://loremflickr.com/400/400/mouse?lock=1")),
+        HeroApiModel(id = "4", name = "Mr test 4", image = Image("https://loremflickr.com/400/400/cow?lock=1"))
     )
 
     @Before
     fun setUp() {
         coEvery { quizRepo.getNewQuizGame() } returns QuizGame(heroList)
-        viewModel = QuizViewModel(quizRepo)
+        viewModel = QuizViewModel(quizRepo, orientationDataManager)
     }
 
     @After

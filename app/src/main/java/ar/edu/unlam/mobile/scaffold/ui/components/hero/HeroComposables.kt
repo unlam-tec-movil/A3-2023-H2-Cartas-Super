@@ -29,17 +29,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
+import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 
-
-//player card color = Color(0xFF16A0E8)
-//adversary card color = Color(0xFFFA1404)
-//color amarillo = 0xFFF9DB07
+// player card color = Color(0xFF16A0E8)
+// adversary card color = Color(0xFFFA1404)
+// color amarillo = 0xFFF9DB07
 @Preview(showBackground = true)
 @Composable
 fun HeroPlayerCard(
     modifier: Modifier = Modifier,
-    hero: DataHero = DataHero(),
+    hero: HeroApiModel = HeroApiModel(),
     cardColors: CardColors = CardDefaults.cardColors(containerColor = Color(0xFF16A0E8))
 ) {
     HeroCard(
@@ -61,9 +60,9 @@ fun HeroPlayerCard(
 @Composable
 fun HeroCard(
     modifier: Modifier = Modifier,
-    hero: DataHero = DataHero(),
+    hero: HeroApiModel = HeroApiModel(),
     cardColors: CardColors = CardDefaults.cardColors(containerColor = Color(0xFFFA1404)),
-    content:@Composable (ColumnScope.() -> Unit) = {}
+    content: @Composable (ColumnScope.() -> Unit) = {}
 ) {
     Card(
         modifier = modifier
@@ -90,12 +89,13 @@ fun HeroCard(
         }
     }
 }
+
 /*
     orden: padding.shadow, usarlos cuando llame a estos composables
  */
 @Preview(showBackground = true)
 @Composable
-fun HeroItem(modifier: Modifier = Modifier, hero: DataHero = DataHero()) {
+fun HeroItem(modifier: Modifier = Modifier, hero: HeroApiModel = HeroApiModel()) {
     val brush = Brush.horizontalGradient(
         colors = listOf(
             Color(0xFFFA1404),
@@ -110,7 +110,8 @@ fun HeroItem(modifier: Modifier = Modifier, hero: DataHero = DataHero()) {
         modifier = modifier
             .background(brush = brush)
             .border(width = 2.dp, color = Color.Black, shape = RectangleShape),
-        shape = RectangleShape, colors = CardDefaults.cardColors(Color(0x00000000))
+        shape = RectangleShape,
+        colors = CardDefaults.cardColors(Color(0x00000000))
     ) {
         Row(
             modifier = Modifier
@@ -138,7 +139,7 @@ fun HeroItem(modifier: Modifier = Modifier, hero: DataHero = DataHero()) {
 @Composable
 fun HeroGallery(
     modifier: Modifier = Modifier,
-    heroList: List<DataHero>,
+    heroList: List<HeroApiModel>,
     itemSize: Dp = 125.dp,
     onItemClick: (Int) -> Unit
 ) {
@@ -146,9 +147,9 @@ fun HeroGallery(
         modifier = modifier,
         columns = GridCells.Adaptive(itemSize),
         content = {
-            items(heroList.size) {i ->
+            items(heroList.size) { i ->
                 GalleryItem(
-                    dataHero = heroList[i],
+                    heroApiModel = heroList[i],
                     onItemClick = onItemClick
                 )
             }
@@ -159,13 +160,13 @@ fun HeroGallery(
 @Composable
 fun GalleryItem(
     modifier: Modifier = Modifier,
-    dataHero: DataHero = DataHero(),
-    onItemClick : (Int) -> Unit,
+    heroApiModel: HeroApiModel = HeroApiModel(),
+    onItemClick: (Int) -> Unit,
 ) {
     TextButton(
         modifier = modifier,
         shape = RectangleShape,
-        onClick = { onItemClick(dataHero.id.toInt()) }
+        onClick = { onItemClick(heroApiModel.id.toInt()) }
     ) {
         Box(
             modifier = Modifier
@@ -174,9 +175,10 @@ fun GalleryItem(
             Column {
                 HeroImage(
                     modifier = Modifier.padding(4.dp),
-                    url = dataHero.image.url
+                    url = heroApiModel.image.url
                 )
-                Text(dataHero.name,
+                Text(
+                    heroApiModel.name,
                     modifier = Modifier
                         .padding(bottom = 4.dp, start = 4.dp, end = 4.dp)
                         .align(Alignment.CenterHorizontally),
@@ -185,7 +187,7 @@ fun GalleryItem(
                 )
             }
             Text(
-                text = dataHero.id,
+                text = heroApiModel.id,
                 modifier = Modifier.padding(8.dp),
                 color = Color.Black
             )

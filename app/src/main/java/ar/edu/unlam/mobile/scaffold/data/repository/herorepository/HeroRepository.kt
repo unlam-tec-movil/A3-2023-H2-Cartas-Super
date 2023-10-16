@@ -4,9 +4,9 @@ import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.toHeroModel
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
-import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.model.Powerstats
-import ar.edu.unlam.mobile.scaffold.domain.model.toHeroEntityModel
+import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
+import ar.edu.unlam.mobile.scaffold.data.network.model.Powerstats
+import ar.edu.unlam.mobile.scaffold.data.network.model.toHeroEntityModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -29,12 +29,12 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
         }
     }
 
-    override suspend fun getAdversaryDeck(size: Int): List<DataHero> {
+    override suspend fun getAdversaryDeck(size: Int): List<HeroApiModel> {
         return getRandomPlayerDeck(size)
     }
 
-    override suspend fun getRandomPlayerDeck(size: Int): List<DataHero> {
-        val list = mutableListOf<DataHero>()
+    override suspend fun getRandomPlayerDeck(size: Int): List<HeroApiModel> {
+        val list = mutableListOf<HeroApiModel>()
         return withContext(Dispatchers.IO) {
             for (i in 1..size) {
                 var randomId = (1..COLLECTION_MAX_SIZE).random()
@@ -48,14 +48,14 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
             list
         }
     }
-    private fun formatDataHero(h: DataHero): DataHero {
+    private fun formatDataHero(h: HeroApiModel): HeroApiModel {
         return if (isPowerStatsNull(h)) convertNullPowerstatsToNotNull(h) else h
     }
-    private fun isPowerStatsNull(h: DataHero): Boolean {
+    private fun isPowerStatsNull(h: HeroApiModel): Boolean {
         return h.powerstats.power == "null"
     }
 
-    private fun convertNullPowerstatsToNotNull(h: DataHero): DataHero {
+    private fun convertNullPowerstatsToNotNull(h: HeroApiModel): HeroApiModel {
         return h.copy(
             powerstats = Powerstats(
                 combat = "1",
@@ -68,7 +68,7 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
         )
     }
 
-    override suspend fun getHero(heroId: Int): DataHero {
+    override suspend fun getHero(heroId: Int): HeroApiModel {
         if (heroId < 1 || heroId > COLLECTION_MAX_SIZE) {
             throw HeroRepositoryException("Hero id outside of range [1,$COLLECTION_MAX_SIZE].")
         }
@@ -85,9 +85,9 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
         }
     }
 
-    override suspend fun getAllHero(): List<DataHero> {
+    override suspend fun getAllHero(): List<HeroApiModel> {
         val dbList = dataBase.getAll()
-        val heroList = mutableListOf<DataHero>()
+        val heroList = mutableListOf<HeroApiModel>()
         val saveToDbList = mutableListOf<HeroEntity>()
 
         if (dbList.isNotEmpty()) {

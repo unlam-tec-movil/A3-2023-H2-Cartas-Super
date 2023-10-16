@@ -2,8 +2,8 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.herodetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
-import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
 import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorDataManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +21,7 @@ class HeroDetailViewModelImp @Inject constructor(
 
     val sensorData = sensorDataManager.sensorData
 
-    private val _hero = MutableStateFlow(DataHero())
+    private val _hero = MutableStateFlow(HeroApiModel())
     val hero = _hero.asStateFlow()
 
     private val _isLoading = MutableStateFlow(true)

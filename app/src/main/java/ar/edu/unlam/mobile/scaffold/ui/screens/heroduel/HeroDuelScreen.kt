@@ -52,7 +52,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.MainActivity
 import ar.edu.unlam.mobile.scaffold.R
-import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
+import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroCard
@@ -127,7 +127,7 @@ fun HeroDuelScreen(
             initialValue = false
         )
         val playerDeck by viewModel.currentPlayerDeck.collectAsStateWithLifecycle(
-            initialValue = listOf(DataHero())
+            initialValue = listOf(HeroApiModel())
         )
         val cardSelectedIndex by viewModel.cardSelectedIndex.collectAsStateWithLifecycle(
             initialValue = 0
@@ -135,10 +135,10 @@ fun HeroDuelScreen(
         val onPlayCardClick = viewModel::onPlayCardClick
         val onPlayerCardClick = viewModel::onPlayerCardClick
         val currentPlayerCard by viewModel.currentPlayerCard.collectAsStateWithLifecycle(
-            initialValue = DataHero()
+            initialValue = HeroApiModel()
         )
         val currentAdversaryCard by viewModel.currentAdversaryCard.collectAsStateWithLifecycle(
-            initialValue = DataHero()
+            initialValue = HeroApiModel()
         )
         val playerScore by viewModel.playerScore.collectAsStateWithLifecycle(
             initialValue = 0
@@ -193,8 +193,8 @@ fun HeroDuelScreen(
 @Composable
 fun HeroDuel(
     modifier: Modifier = Modifier,
-    currentPlayerCard: DataHero = DataHero(),
-    currentAdversaryCard: DataHero = DataHero(),
+    currentPlayerCard: HeroApiModel = HeroApiModel(),
+    currentAdversaryCard: HeroApiModel = HeroApiModel(),
     playerScore: Int = 0,
     adversaryScore: Int = 0,
     onClickSelectedStat: (Stat) -> Unit = {},
@@ -363,9 +363,9 @@ fun SelectMultiplier(
 @Composable
 fun SelectCard(
     modifier: Modifier = Modifier,
-    playerDeck: List<DataHero> = listOf(
-        DataHero(id = "1", name = "test 1"),
-        DataHero(id = "2", name = "test 2")
+    playerDeck: List<HeroApiModel> = listOf(
+        HeroApiModel(id = "1", name = "test 1"),
+        HeroApiModel(id = "2", name = "test 2")
     ),
     cardSelectedIndex: Int = 0,
     onPlayCardClick: () -> Unit = {},
@@ -426,7 +426,7 @@ fun JugarCartaButton(
 @Composable
 fun PlayerDeck(
     modifier: Modifier = Modifier,
-    playerDeck: List<DataHero> = listOf(DataHero(), DataHero(), DataHero()),
+    playerDeck: List<HeroApiModel> = listOf(HeroApiModel(), HeroApiModel(), HeroApiModel()),
     onPlayerCardClick: (Int) -> Unit = {}
 ) {
     if (playerDeck.isNotEmpty()) {
