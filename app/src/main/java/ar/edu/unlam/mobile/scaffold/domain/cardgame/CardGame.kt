@@ -1,7 +1,7 @@
 package ar.edu.unlam.mobile.scaffold.domain.cardgame
 
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
+import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.Powerstats
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
 import kotlinx.coroutines.flow.MutableStateFlow

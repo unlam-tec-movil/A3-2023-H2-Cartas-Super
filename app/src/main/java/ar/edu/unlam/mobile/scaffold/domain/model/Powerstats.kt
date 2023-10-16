@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.domain.hero
+package ar.edu.unlam.mobile.scaffold.domain.model
 
 import com.google.gson.annotations.SerializedName
 

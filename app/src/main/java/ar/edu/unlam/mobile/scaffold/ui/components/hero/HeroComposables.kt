@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
 
 
 //player card color = Color(0xFF16A0E8)

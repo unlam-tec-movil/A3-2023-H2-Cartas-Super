@@ -1,6 +1,6 @@
 package ar.edu.unlam.mobile.scaffold.domain.quiz
 
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
 
 class QuizGame(private val heroList: List<DataHero>) {
     lateinit var correctAnswer: DataHero

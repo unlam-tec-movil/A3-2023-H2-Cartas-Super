@@ -9,10 +9,10 @@ import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.AppearanceEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.BiographyEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
-import ar.edu.unlam.mobile.scaffold.domain.hero.Connections
-import ar.edu.unlam.mobile.scaffold.domain.hero.Image
-import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
-import ar.edu.unlam.mobile.scaffold.domain.hero.Work
+import ar.edu.unlam.mobile.scaffold.domain.model.Connections
+import ar.edu.unlam.mobile.scaffold.domain.model.Image
+import ar.edu.unlam.mobile.scaffold.domain.model.Powerstats
+import ar.edu.unlam.mobile.scaffold.domain.model.Work
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
 import org.junit.After

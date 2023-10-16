@@ -3,8 +3,8 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.quiz
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.MainDispatcherRule
 import ar.edu.unlam.mobile.scaffold.data.repository.quizrepository.IQuizGameRepository
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.hero.Image
+import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.Image
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizGame
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery

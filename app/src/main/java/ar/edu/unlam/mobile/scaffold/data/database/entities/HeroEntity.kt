@@ -4,13 +4,13 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ar.edu.unlam.mobile.scaffold.domain.hero.Appearance
-import ar.edu.unlam.mobile.scaffold.domain.hero.Biography
-import ar.edu.unlam.mobile.scaffold.domain.hero.Connections
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.hero.Image
-import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
-import ar.edu.unlam.mobile.scaffold.domain.hero.Work
+import ar.edu.unlam.mobile.scaffold.domain.model.Appearance
+import ar.edu.unlam.mobile.scaffold.domain.model.Biography
+import ar.edu.unlam.mobile.scaffold.domain.model.Connections
+import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.Image
+import ar.edu.unlam.mobile.scaffold.domain.model.Powerstats
+import ar.edu.unlam.mobile.scaffold.domain.model.Work
 
 @Entity(tableName = "hero_table")
 data class HeroEntity(

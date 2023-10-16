@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.GameRepository
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
 import dagger.hilt.android.lifecycle.HiltViewModel

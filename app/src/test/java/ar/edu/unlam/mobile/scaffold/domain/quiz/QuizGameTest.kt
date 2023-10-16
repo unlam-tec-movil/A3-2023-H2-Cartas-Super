@@ -1,7 +1,7 @@
 package ar.edu.unlam.mobile.scaffold.domain.quiz
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
 import com.google.common.truth.Truth.assertThat
 import io.mockk.junit4.MockKRule
 import io.mockk.unmockkAll

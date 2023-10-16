@@ -2,7 +2,7 @@ package ar.edu.unlam.mobile.scaffold.data.repository
 
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

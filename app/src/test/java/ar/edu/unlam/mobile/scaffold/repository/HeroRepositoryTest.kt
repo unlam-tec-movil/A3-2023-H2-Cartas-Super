@@ -6,7 +6,7 @@ import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.HeroRepository
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.HeroRepositoryException
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK

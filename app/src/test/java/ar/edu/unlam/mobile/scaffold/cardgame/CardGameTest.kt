@@ -2,8 +2,8 @@ package ar.edu.unlam.mobile.scaffold.cardgame
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
+import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.Powerstats
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import com.google.common.truth.Truth.*
 import io.mockk.junit4.MockKRule

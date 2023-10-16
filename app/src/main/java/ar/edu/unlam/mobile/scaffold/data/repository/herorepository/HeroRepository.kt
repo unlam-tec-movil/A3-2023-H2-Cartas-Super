@@ -4,9 +4,9 @@ import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.toHeroModel
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
-import ar.edu.unlam.mobile.scaffold.domain.hero.toHeroEntityModel
+import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.Powerstats
+import ar.edu.unlam.mobile.scaffold.domain.model.toHeroEntityModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

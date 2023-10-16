@@ -1,6 +1,6 @@
 package ar.edu.unlam.mobile.scaffold.data.repository.herorepository
 
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
 import kotlinx.coroutines.flow.Flow
 
 interface IHeroRepository {

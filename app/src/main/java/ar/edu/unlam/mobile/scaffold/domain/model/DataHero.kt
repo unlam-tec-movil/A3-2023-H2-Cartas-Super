@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.domain.hero
+package ar.edu.unlam.mobile.scaffold.domain.model
 
 import ar.edu.unlam.mobile.scaffold.data.database.entities.AppearanceEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.BiographyEntity

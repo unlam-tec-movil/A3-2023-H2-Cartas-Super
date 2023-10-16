@@ -1,8 +1,8 @@
 package ar.edu.unlam.mobile.scaffold.data.repository
 
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
+import ar.edu.unlam.mobile.scaffold.domain.model.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.Powerstats
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
+import ar.edu.unlam.mobile.scaffold.domain.model.Powerstats
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 
