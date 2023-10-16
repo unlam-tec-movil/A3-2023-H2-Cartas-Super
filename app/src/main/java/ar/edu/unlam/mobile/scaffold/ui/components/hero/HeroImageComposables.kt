@@ -60,7 +60,8 @@ fun HeroImage(
     url: String = "https://loremflickr.com/400/400/cat?lock=1",
     contentScale: ContentScale = ContentScale.Fit,
     alignment: Alignment = Alignment.Center,
-    context: Context = LocalContext.current
+    context: Context = LocalContext.current,
+    alpha: Float = 1.0f
 ) {
     val imageRequest = subcomposeImageRequestBuilder(context, url)
 
@@ -78,7 +79,8 @@ fun HeroImage(
             )
         },
         contentScale = contentScale,
-        alignment = alignment
+        alignment = alignment,
+        alpha = alpha
     )
 }
 
