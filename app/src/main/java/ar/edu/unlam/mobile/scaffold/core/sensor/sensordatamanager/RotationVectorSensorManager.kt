@@ -55,6 +55,7 @@ class RotationVectorSensorManager @Inject constructor(
             rotationVector = event.values
         }
         if (rotationVector != null) {
+            limitRotationVectorRange(rotationVector!!)
             val rotationMatrix = FloatArray(16)
             SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVector)
             val orientation = FloatArray(3)
