@@ -32,7 +32,8 @@ fun ParallaxHeroImage(
     modifier: Modifier = Modifier,
     depthMultiplier: Int = 20,
     imageUrl: String = "https://loremflickr.com/400/400/cat?lock=1",
-    data: SensorData = SensorData(0f, 0f)
+    data: SensorData = SensorData(0f, 0f),
+    alpha: Float = 0.8f
 ) {
     val roll by derivedStateOf { data.roll * depthMultiplier }
     val pitch by derivedStateOf { data.pitch * depthMultiplier }
@@ -53,7 +54,8 @@ fun ParallaxHeroImage(
                 .height(311.dp)
                 .align(Alignment.Center)
                 .blur(radius = 24.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            alpha = alpha
         )
 
         // Edge (used to give depth to card when tilted)

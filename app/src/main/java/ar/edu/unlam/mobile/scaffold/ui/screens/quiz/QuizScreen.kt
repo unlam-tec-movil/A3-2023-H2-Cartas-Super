@@ -195,7 +195,9 @@ fun QuizUi(
                 )
                 ParallaxHeroImage(
                     modifier = Modifier
-                        .testTag("hero image"),
+                        .testTag("hero image")
+                        .fillMaxWidth()
+                        .padding(all = 25.dp),
                     imageUrl = imageUrl,
                     data = sensorData
                 )
