@@ -24,7 +24,7 @@ class RotationVectorSensorManager @Inject constructor(
     private var rotationVector: FloatArray? = null
 
     private fun init() {
-        Log.d("OrientationDataManager", "init")
+        Log.d("RotationVectorSensorManager", "init")
         val sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL)
         var sensor = sensorList.find { it.type == Sensor.TYPE_ROTATION_VECTOR }
         if (sensor != null) {
@@ -39,7 +39,7 @@ class RotationVectorSensorManager @Inject constructor(
         )
         if (isRegisterListenerNotSuccessful) {
             Log.d(
-                "OrientationDataManager",
+                "RotationVectorSensorManager",
                 "el registro de escucha del sensor de tipo vector de rotación no fue exitoso"
             )
             cancel()
@@ -50,7 +50,7 @@ class RotationVectorSensorManager @Inject constructor(
     }
 
     override fun cancel() {
-        Log.d("OrientationDataManager", "cancel")
+        Log.d("RotationVectorSensorManager", "cancel")
         sensorManager.unregisterListener(this)
     }
 
