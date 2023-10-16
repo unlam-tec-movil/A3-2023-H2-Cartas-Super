@@ -75,5 +75,4 @@ class HeroDatabaseTest {
         assertThat(allHeroes).hasSize(1)
         assertThat(allHeroes).isNotEmpty()
     }
-
 }
