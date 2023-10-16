@@ -73,7 +73,7 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
             )
             cancel()
             throw OrientationDataManagerException(
-                message = "El sensor acelerómetro no está disponible en este dispositivo."
+                message = "El sensor acelerómetro o el magnetómetro no está disponible en este dispositivo."
             )
         }
     }
@@ -88,19 +88,21 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
         }
 
         if (gravity != null && geomagnetic != null) {
-            var rotationMatrix = FloatArray(9)
-            var i = FloatArray(9)
+            val rotationMatrix = FloatArray(9)
+            val i = FloatArray(9)
 
             if (SensorManager.getRotationMatrix(rotationMatrix, i, gravity, geomagnetic)) {
-                var orientation = FloatArray(3)
+                val orientation = FloatArray(3)
                 SensorManager.getOrientation(rotationMatrix, orientation)
 
-                data.trySend(
-                    SensorData(
-                        roll = orientation[2], // Roll (rotation around the y-axis)
-                        pitch = orientation[1] // Pitch (rotation around the x-axis)
+                if (!orientation[1].isNaN() || !orientation[2].isNaN()) {
+                    data.trySend(
+                        SensorData(
+                            roll = orientation[2], // Roll (rotation around the y-axis)
+                            pitch = orientation[1] // Pitch (rotation around the x-axis)
+                        )
                     )
-                )
+                }
             }
         }
     }

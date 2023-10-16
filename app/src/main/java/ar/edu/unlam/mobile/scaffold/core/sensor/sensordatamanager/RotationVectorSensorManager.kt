@@ -4,6 +4,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import android.util.Log
+import ar.edu.unlam.mobile.scaffold.core.sensor.OrientationDataManagerException
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -42,6 +43,9 @@ class RotationVectorSensorManager @Inject constructor(
                 "el registro de escucha del sensor de tipo vector de rotación no fue exitoso"
             )
             cancel()
+            throw OrientationDataManagerException(
+                message = "el registro de escucha del sensor de tipo vector de rotación no fue exitoso"
+            )
         }
     }
 
@@ -60,12 +64,14 @@ class RotationVectorSensorManager @Inject constructor(
             SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVector)
             val orientation = FloatArray(3)
             SensorManager.getOrientation(rotationMatrix, orientation)
-            data.trySend(
-                SensorData(
-                    roll = orientation[2], // Roll (rotation around the y-axis)
-                    pitch = orientation[1] // Pitch (rotation around the x-axis)
+            if (!orientation[1].isNaN() || !orientation[2].isNaN()) {
+                data.trySend(
+                    SensorData(
+                        roll = orientation[2], // Roll (rotation around the y-axis)
+                        pitch = orientation[1] // Pitch (rotation around the x-axis)
+                    )
                 )
-            )
+            }
         }
     }
 

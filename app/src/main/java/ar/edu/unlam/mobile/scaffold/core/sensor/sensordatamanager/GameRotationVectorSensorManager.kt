@@ -4,6 +4,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import android.util.Log
+import ar.edu.unlam.mobile.scaffold.core.sensor.OrientationDataManagerException
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -23,7 +24,7 @@ class GameRotationVectorSensorManager @Inject constructor(
     private var rotationVector: FloatArray? = null
 
     private fun init() {
-        Log.d("OrientationDataManager", "init")
+        Log.d("GameRotationVectorSensorManager", "init")
         val sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL)
         var sensor = sensorList.find { it.type == Sensor.TYPE_GAME_ROTATION_VECTOR }
         if (sensor != null) {
@@ -38,15 +39,18 @@ class GameRotationVectorSensorManager @Inject constructor(
         )
         if (isRegisterListenerNotSuccessful) {
             Log.d(
-                "OrientationDataManager",
+                "GameRotationVectorSensorManager",
                 "el registro de escucha del sensor de tipo vector de rotación no fue exitoso"
             )
             cancel()
+            throw OrientationDataManagerException(
+                message = "el registro de escucha del sensor de tipo vector de rotación no fue exitoso."
+            )
         }
     }
 
     override fun cancel() {
-        Log.d("OrientationDataManager", "cancel")
+        Log.d("GameRotationVectorSensorManager", "cancel")
         sensorManager.unregisterListener(this)
     }
 
@@ -60,12 +64,14 @@ class GameRotationVectorSensorManager @Inject constructor(
             SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVector)
             val orientation = FloatArray(3)
             SensorManager.getOrientation(rotationMatrix, orientation)
-            data.trySend(
-                SensorData(
-                    roll = orientation[2], // Roll (rotation around the y-axis)
-                    pitch = orientation[1] // Pitch (rotation around the x-axis)
+            if (!orientation[1].isNaN() || !orientation[2].isNaN()) {
+                data.trySend(
+                    SensorData(
+                        roll = orientation[2], // Roll (rotation around the y-axis)
+                        pitch = orientation[1] // Pitch (rotation around the x-axis)
+                    )
                 )
-            )
+            }
         }
     }
 
