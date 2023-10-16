@@ -57,15 +57,8 @@ class GameRotationVectorSensorManager @Inject constructor(
         if (rotationVector != null) {
             val rotationMatrix = FloatArray(16)
             SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVector)
-            val remappedRotationMatrix = FloatArray(16)
-            SensorManager.remapCoordinateSystem(
-                rotationMatrix,
-                SensorManager.AXIS_X,
-                SensorManager.AXIS_Z,
-                remappedRotationMatrix
-            )
             val orientation = FloatArray(3)
-            SensorManager.getOrientation(remappedRotationMatrix, orientation)
+            SensorManager.getOrientation(rotationMatrix, orientation)
             data.trySend(
                 SensorData(
                     roll = orientation[2], // Roll (rotation around the y-axis)
