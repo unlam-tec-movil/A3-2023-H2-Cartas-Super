@@ -17,12 +17,12 @@ data class HeroEntity(
     @ColumnInfo("id") @PrimaryKey(autoGenerate = false) val id: Int = 0,
     @Embedded val appearance: AppearanceEntity = AppearanceEntity(),
     @Embedded val biography: BiographyEntity = BiographyEntity(),
-    @Embedded val connections: Connections = Connections(),
-    @Embedded val image: Image = Image(),
+    @Embedded val connections: ConnectionsEntity = ConnectionsEntity(),
+    @Embedded val image: ImageEntity = ImageEntity(),
     @ColumnInfo("name") val name: String = "NA",
-    @Embedded val powerstats: Powerstats = Powerstats(),
-    @Embedded val work: Work = Work(),
-    @ColumnInfo("isFavorite") val isFavorite: Boolean = false
+    @Embedded val powerstats: PowerstatsEntity = PowerstatsEntity(),
+    @Embedded val work: WorkEntity = WorkEntity(),
+    @ColumnInfo("quantity") val quantity: Int = 0
 )
 
 fun HeroEntity.toHeroModel(): DataHero {
@@ -30,12 +30,38 @@ fun HeroEntity.toHeroModel(): DataHero {
         appearance = appearanceEntityToAppearance(this.appearance),
         biography = biographyEntityToBiography(this.biography),
         id = this.id.toString(),
-        connections = this.connections,
-        image = this.image,
+        connections = connectionsEntityToConnections(this.connections),
+        image = imageEntityToImage(this.image),
         name = this.name,
-        powerstats = this.powerstats,
-        work = this.work,
-        isFavorite = this.isFavorite
+        powerstats = powerstatsEntityToPowerstats(this.powerstats),
+        work = workEntityToWork(this.work),
+    )
+}
+
+private fun workEntityToWork(workEntity: WorkEntity): Work {
+    return Work(
+        base = workEntity.base,
+        occupation = workEntity.occupation
+    )
+}
+private fun powerstatsEntityToPowerstats(powerstatsEntity: PowerstatsEntity): Powerstats {
+    return Powerstats(
+        combat = powerstatsEntity.combat,
+        durability = powerstatsEntity.durability,
+        intelligence = powerstatsEntity.intelligence,
+        power = powerstatsEntity.power,
+        speed = powerstatsEntity.speed,
+        strength = powerstatsEntity.strength
+    )
+}
+private fun imageEntityToImage(imageEntity: ImageEntity): Image {
+    return Image(imageEntity.url)
+}
+
+private fun connectionsEntityToConnections(connectionsEntity: ConnectionsEntity): Connections {
+    return Connections(
+        groupAffiliation = connectionsEntity.groupAffiliation,
+        relatives = connectionsEntity.relatives
     )
 }
 
