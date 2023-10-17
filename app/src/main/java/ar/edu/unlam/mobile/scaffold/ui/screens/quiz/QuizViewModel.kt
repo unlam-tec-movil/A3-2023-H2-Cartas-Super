@@ -2,11 +2,11 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.quiz
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.IOrientationDataManager
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import ar.edu.unlam.mobile.scaffold.data.repository.quizrepository.IQuizGameRepository
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizGame
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizOption
-import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.IOrientationDataManager
-import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,10 +56,12 @@ class QuizViewModel @Inject constructor(
     val chosenHero = _chosenHero.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             orientationDataManager.getSensorData().collect {
                 _sensorData.value = it
             }
+        }
+        viewModelScope.launch(Dispatchers.IO) {
             gameInit()
         }
     }

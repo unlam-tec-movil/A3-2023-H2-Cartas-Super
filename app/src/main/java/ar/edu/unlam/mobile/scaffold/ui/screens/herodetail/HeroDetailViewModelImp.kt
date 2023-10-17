@@ -29,11 +29,16 @@ class HeroDetailViewModelImp @Inject constructor(
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
-    fun getHero(id: Int) {
+    init {
         viewModelScope.launch {
             orientationDataManager.getSensorData().collect {
                 _sensorData.value = it
             }
+        }
+    }
+
+    fun getHero(id: Int) {
+        viewModelScope.launch {
             _hero.value = withContext(Dispatchers.IO) {
                 repo.getHero(id)
             }

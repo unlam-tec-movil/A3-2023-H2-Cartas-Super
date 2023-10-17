@@ -2,10 +2,10 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.collection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.IOrientationDataManager
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
+import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
+import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,10 +31,12 @@ class CollectionViewModelImp @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _isLoading.value = true
             orientationDataManager.getSensorData().collect {
                 _sensorData.value = it
             }
+        }
+        viewModelScope.launch {
+            _isLoading.value = true
             _heroList.value = withContext(Dispatchers.IO) {
                 repo.getAllHero()
             }
