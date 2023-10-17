@@ -116,8 +116,3 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
         // do nothing
     }
 }
-
-data class SensorData(
-    val roll: Float = 0f, // Roll (rotation around the y-axis)
-    val pitch: Float = 0f // Pitch (rotation around the x-axis)
-)

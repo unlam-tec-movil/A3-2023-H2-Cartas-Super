@@ -13,3 +13,8 @@ interface IOrientationDataManager : SensorEventListener {
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int)
     fun getSensorData(): Flow<SensorData>
 }
+
+data class SensorData(
+    val roll: Float = 0f, // Roll (rotation around the y-axis)
+    val pitch: Float = 0f // Pitch (rotation around the x-axis)
+)
