@@ -4,9 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.MainDispatcherRule
 import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 import ar.edu.unlam.mobile.scaffold.data.network.model.Image
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.IOrientationDataManager
 import ar.edu.unlam.mobile.scaffold.data.repository.quizrepository.IQuizGameRepository
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizGame
-import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorDataManager
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -51,7 +51,7 @@ class QuizViewModelTest {
     lateinit var quizRepo: IQuizGameRepository
 
     @RelaxedMockK
-    lateinit var orientationDataManager: SensorDataManager
+    lateinit var sensorDataManager: IOrientationDataManager
 
     private lateinit var viewModel: QuizViewModel
 
@@ -65,7 +65,7 @@ class QuizViewModelTest {
     @Before
     fun setUp() {
         coEvery { quizRepo.getNewQuizGame() } returns QuizGame(heroList)
-        viewModel = QuizViewModel(quizRepo, orientationDataManager)
+        viewModel = QuizViewModel(quizRepo, sensorDataManager)
     }
 
     @After

@@ -20,7 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
-import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorData
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import ar.edu.unlam.mobile.scaffold.ui.components.HeroText
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxHeroImage
@@ -75,7 +75,7 @@ fun HeroDetailScreen(
                 ParallaxHeroImage(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 25.dp),
+                        .padding(all = 25.dp),
                     imageUrl = dataHero.image.url,
                     data = sensorData
                 )

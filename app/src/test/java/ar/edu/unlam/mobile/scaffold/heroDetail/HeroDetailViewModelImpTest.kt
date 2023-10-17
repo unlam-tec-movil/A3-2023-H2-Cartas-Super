@@ -3,8 +3,8 @@ package ar.edu.unlam.mobile.scaffold.heroDetail
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.MainDispatcherRule
 import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.IOrientationDataManager
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
-import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorDataManager
 import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailViewModelImp
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -49,13 +49,13 @@ class HeroDetailViewModelImpTest {
     lateinit var repo: IHeroRepository
 
     @RelaxedMockK
-    lateinit var orientationDataManager: SensorDataManager
+    lateinit var sensorDataManager: IOrientationDataManager
 
     lateinit var viewModel: HeroDetailViewModelImp
 
     @Before
     fun setUp() {
-        viewModel = HeroDetailViewModelImp(repo, orientationDataManager)
+        viewModel = HeroDetailViewModelImp(repo, sensorDataManager)
     }
 
     // runTest es una corutina para testing, lo que permite usar funciones suspend

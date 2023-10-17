@@ -35,7 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
-import ar.edu.unlam.mobile.scaffold.domain.sensor.SensorData
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxHeroImage
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
@@ -195,7 +195,9 @@ fun QuizUi(
                 )
                 ParallaxHeroImage(
                     modifier = Modifier
-                        .testTag("hero image"),
+                        .testTag("hero image")
+                        .fillMaxWidth()
+                        .padding(all = 25.dp),
                     imageUrl = imageUrl,
                     data = sensorData
                 )
