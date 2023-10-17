@@ -59,12 +59,11 @@ class GameRotationVectorSensorManager @Inject constructor(
             rotationVector = event.values
         }
         if (rotationVector != null) {
-            limitRotationVectorRange(rotationVector!!)
             val rotationMatrix = FloatArray(16)
             SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVector)
             val orientation = FloatArray(3)
             SensorManager.getOrientation(rotationMatrix, orientation)
-            if (!orientation[1].isNaN() || !orientation[2].isNaN()) {
+            if (!orientation[1].isNaN() && !orientation[2].isNaN()) {
                 data.trySend(
                     SensorData(
                         roll = orientation[2], // Roll (rotation around the y-axis)

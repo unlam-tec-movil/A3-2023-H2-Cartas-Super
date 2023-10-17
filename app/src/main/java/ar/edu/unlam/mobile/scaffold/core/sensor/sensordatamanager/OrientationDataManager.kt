@@ -95,7 +95,7 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
                 val orientation = FloatArray(3)
                 SensorManager.getOrientation(rotationMatrix, orientation)
 
-                if (!orientation[1].isNaN() || !orientation[2].isNaN()) {
+                if (!orientation[1].isNaN() && !orientation[2].isNaN()) {
                     data.trySend(
                         SensorData(
                             roll = orientation[2], // Roll (rotation around the y-axis)
