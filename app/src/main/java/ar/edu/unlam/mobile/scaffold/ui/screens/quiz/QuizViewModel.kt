@@ -6,6 +6,7 @@ import ar.edu.unlam.mobile.scaffold.data.repository.quizrepository.IQuizGameRepo
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizGame
 import ar.edu.unlam.mobile.scaffold.domain.quiz.QuizOption
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.IOrientationDataManager
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +22,8 @@ class QuizViewModel @Inject constructor(
 
     private lateinit var game: QuizGame
 
-    val sensorData = orientationDataManager.sensorData
+    private val _sensorData = MutableStateFlow(SensorData())
+    val sensorData = _sensorData.asStateFlow()
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
@@ -55,6 +57,9 @@ class QuizViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
+            orientationDataManager.getSensorData().collect {
+                _sensorData.value = it
+            }
             gameInit()
         }
     }

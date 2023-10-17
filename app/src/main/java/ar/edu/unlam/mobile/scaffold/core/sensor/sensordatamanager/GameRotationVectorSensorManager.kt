@@ -13,15 +13,16 @@ import javax.inject.Inject
 class GameRotationVectorSensorManager @Inject constructor(
     private val sensorManager: SensorManager,
 ) : IOrientationDataManager {
-    override val sensorData = flow {
+
+    private val data: Channel<SensorData> = Channel(Channel.UNLIMITED)
+    private var rotationVector: FloatArray? = null
+
+    override fun getSensorData() = flow {
         init()
         data.receiveAsFlow().collect {
             emit(it)
         }
     }
-
-    private val data: Channel<SensorData> = Channel(Channel.UNLIMITED)
-    private var rotationVector: FloatArray? = null
 
     private fun init() {
         Log.d("GameRotationVectorSensorManager", "init")

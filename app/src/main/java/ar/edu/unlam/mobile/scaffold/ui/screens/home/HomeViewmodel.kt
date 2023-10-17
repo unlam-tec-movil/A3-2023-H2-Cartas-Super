@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.IOrientationDataManager
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,13 +19,17 @@ class HomeViewmodel @Inject constructor(
     private val orientationDataManager: IOrientationDataManager
 ) : ViewModel() {
 
-    val sensorData = orientationDataManager.sensorData
+    private val _sensorData = MutableStateFlow(SensorData())
+    val sensorData = _sensorData.asStateFlow()
 
     private val _cachingProgress = MutableStateFlow(0.00f)
     val cachingProgress = _cachingProgress.asStateFlow()
 
     init {
         viewModelScope.launch {
+            orientationDataManager.getSensorData().collect {
+                _sensorData.value = it
+            }
             preloadHeroes()
         }
     }

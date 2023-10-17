@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.IOrientationDataManager
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,8 @@ class CollectionViewModelImp @Inject constructor(
     private val orientationDataManager: IOrientationDataManager
 ) : ViewModel() {
 
-    val sensorData = orientationDataManager.sensorData
+    private val _sensorData = MutableStateFlow(SensorData())
+    val sensorData = _sensorData.asStateFlow()
 
     private val _heroList = MutableStateFlow<List<DataHero>>(emptyList())
     val heroList = _heroList.asStateFlow()
@@ -30,6 +32,9 @@ class CollectionViewModelImp @Inject constructor(
     init {
         viewModelScope.launch {
             _isLoading.value = true
+            orientationDataManager.getSensorData().collect {
+                _sensorData.value = it
+            }
             _heroList.value = withContext(Dispatchers.IO) {
                 repo.getAllHero()
             }

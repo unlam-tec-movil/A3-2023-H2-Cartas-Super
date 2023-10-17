@@ -13,7 +13,8 @@ import javax.inject.Inject
 class RotationVectorSensorManager @Inject constructor(
     private val sensorManager: SensorManager,
 ) : IOrientationDataManager {
-    override val sensorData = flow {
+
+    override fun getSensorData() = flow {
         init()
         data.receiveAsFlow().collect {
             emit(it)

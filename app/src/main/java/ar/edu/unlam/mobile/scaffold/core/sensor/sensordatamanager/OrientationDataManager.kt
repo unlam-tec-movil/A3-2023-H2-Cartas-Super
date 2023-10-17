@@ -25,7 +25,7 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
 
     private val data: Channel<SensorData> = Channel(Channel.UNLIMITED)
 
-    override val sensorData = flow {
+    override fun getSensorData() = flow {
         init()
         data.receiveAsFlow().collect {
             emit(it)
