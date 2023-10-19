@@ -23,21 +23,30 @@ import ar.edu.unlam.mobile.scaffold.ui.screens.collection.CollectionScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.heroduel.HeroDuelScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.home.HomeScreen
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.ScreenMap
+import ar.edu.unlam.mobile.scaffold.ui.screens.map.Screen.ScreenMap
 import ar.edu.unlam.mobile.scaffold.ui.screens.qr.QrScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.quiz.QuizScreen
 import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
         setContent {
             ComicWarTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    MainScreen()
+                    MainScreen(fusedLocationProviderClient)
+
+
                 }
             }
         }
@@ -45,7 +54,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(fusedLocationProviderClient: FusedLocationProviderClient) {
     val controller = rememberNavController()
     Scaffold(
         floatingActionButton = {
@@ -96,12 +105,18 @@ fun MainScreen() {
                     controller = controller
                 )
             }
+
             composable("Mapa") {
                 ScreenMap(
                     modifier = Modifier.padding(paddingValue),
-                    controller = controller
+                    controller = controller,
+                    fusedLocationProviderClient = fusedLocationProviderClient
                 )
             }
+
         }
     }
+
+
 }
+
