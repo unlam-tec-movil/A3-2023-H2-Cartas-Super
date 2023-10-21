@@ -2,11 +2,13 @@ package ar.edu.unlam.mobile.scaffold.data.repository.herorepository
 
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
-import ar.edu.unlam.mobile.scaffold.data.database.entities.toHeroApiModel
+import ar.edu.unlam.mobile.scaffold.data.database.entities.toHeroModel
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
 import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 import ar.edu.unlam.mobile.scaffold.data.network.model.Powerstats
 import ar.edu.unlam.mobile.scaffold.data.network.model.toHeroEntityModel
+import ar.edu.unlam.mobile.scaffold.data.network.model.toHeroModel
+import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -29,16 +31,16 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
         }
     }
 
-    override suspend fun getAdversaryDeck(size: Int): List<HeroApiModel> {
+    override suspend fun getAdversaryDeck(size: Int): List<HeroModel> {
         return getRandomPlayerDeck(size)
     }
 
-    override suspend fun getRandomPlayerDeck(size: Int): List<HeroApiModel> {
-        val list = mutableListOf<HeroApiModel>()
+    override suspend fun getRandomPlayerDeck(size: Int): List<HeroModel> {
+        val list = mutableListOf<HeroModel>()
         return withContext(Dispatchers.IO) {
             for (i in 1..size) {
                 var randomId = (1..COLLECTION_MAX_SIZE).random()
-                val isIdInList = { list.isNotEmpty() && (list.find { it.id == randomId.toString() } != null) }
+                val isIdInList = { list.isNotEmpty() && (list.find { it.id == randomId } != null) }
                 while (isIdInList()) {
                     randomId = (1..COLLECTION_MAX_SIZE).random()
                 }
@@ -68,44 +70,44 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
         )
     }
 
-    override suspend fun getHero(heroId: Int): HeroApiModel {
+    override suspend fun getHero(heroId: Int): HeroModel {
         if (heroId < 1 || heroId > COLLECTION_MAX_SIZE) {
             throw HeroRepositoryException("Hero id outside of range [1,$COLLECTION_MAX_SIZE].")
         }
         return withContext(Dispatchers.IO) {
             val heroDB = dataBase.getHero(heroId)
             if (heroDB != null) {
-                heroDB.toHeroApiModel()
+                heroDB.toHeroModel()
             } else {
                 val hero = api.getHero(heroId)
                 val formattedHero = formatDataHero(hero)
                 dataBase.insertHero(formattedHero.toHeroEntityModel())
-                formattedHero
+                formattedHero.toHeroModel()
             }
         }
     }
 
-    override suspend fun getAllHero(): List<HeroApiModel> {
+    override suspend fun getAllHero(): List<HeroModel> {
         val dbList = dataBase.getAll()
-        val heroList = mutableListOf<HeroApiModel>()
+        val heroList = mutableListOf<HeroModel>()
         val saveToDbList = mutableListOf<HeroEntity>()
 
         if (dbList.isNotEmpty()) {
             for (i in 1..COLLECTION_MAX_SIZE) {
                 val heroDb = dbList.find { it.id == i }
                 if (heroDb != null) {
-                    heroList.add(heroDb.toHeroApiModel())
+                    heroList.add(heroDb.toHeroModel())
                 } else {
                     val heroApi = formatDataHero(api.getHero(i))
                     saveToDbList.add(heroApi.toHeroEntityModel())
-                    heroList.add(heroApi)
+                    heroList.add(heroApi.toHeroModel())
                 }
             }
         } else {
             for (i in 1..COLLECTION_MAX_SIZE) {
                 val heroApi = formatDataHero(api.getHero(i))
                 saveToDbList.add(heroApi.toHeroEntityModel())
-                heroList.add(heroApi)
+                heroList.add(heroApi.toHeroModel())
             }
         }
 
