@@ -19,8 +19,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
-import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
+import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.ui.components.HeroText
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxHeroImage
@@ -62,7 +62,7 @@ fun HeroDetailScreen(
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
-            val dataHero by viewModel.hero.collectAsStateWithLifecycle()
+            val hero by viewModel.hero.collectAsStateWithLifecycle()
             ParallaxBackgroundImage(
                 modifier = Modifier.fillMaxSize(),
                 painterResourceId = R.drawable.fondo_coleccion,
@@ -76,7 +76,7 @@ fun HeroDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(all = 25.dp),
-                    imageUrl = dataHero.image.url,
+                    imageUrl = hero.image.url,
                     data = sensorData
                 )
                 NavigationButton(
@@ -87,7 +87,7 @@ fun HeroDetailScreen(
                     controller.navigate(route = "qr")
                 }
                 // DebugSensorData(data = data)
-                HeroData(modifier = Modifier.fillMaxWidth(), heroApiModel = dataHero)
+                HeroData(modifier = Modifier.fillMaxWidth(), heroModel = hero)
             }
         }
     }
@@ -96,7 +96,7 @@ fun HeroDetailScreen(
 @Composable
 private fun HeroData(
     modifier: Modifier = Modifier,
-    heroApiModel: HeroApiModel = HeroApiModel()
+    heroModel: HeroModel = HeroModel()
 ) {
     val titleTextModifier = Modifier
         .padding(8.dp)
@@ -106,7 +106,7 @@ private fun HeroData(
     ) {
         HeroText(
             modifier = titleTextModifier,
-            text = "${heroApiModel.id} ${heroApiModel.name}"
+            text = "${heroModel.id} ${heroModel.name}"
         )
         HeroText(
             modifier = titleTextModifier,
@@ -114,7 +114,7 @@ private fun HeroData(
         )
         HeroStats(
             modifier = Modifier.fillMaxWidth(),
-            stats = heroApiModel.powerstats
+            stats = heroModel.stats
         )
         HeroText(
             modifier = titleTextModifier,
@@ -122,7 +122,7 @@ private fun HeroData(
         )
         HeroBiography(
             modifier = Modifier.fillMaxWidth(),
-            biography = heroApiModel.biography
+            biography = heroModel.biography
         )
         HeroText(
             modifier = titleTextModifier,
@@ -130,7 +130,7 @@ private fun HeroData(
         )
         HeroAppearance(
             modifier = Modifier.fillMaxWidth(),
-            heroAppearance = heroApiModel.appearance
+            heroAppearance = heroModel.appearance
         )
         HeroText(
             modifier = titleTextModifier,
@@ -138,7 +138,7 @@ private fun HeroData(
         )
         HeroWork(
             modifier = Modifier.fillMaxWidth(),
-            heroWork = heroApiModel.work
+            heroWork = heroModel.work
         )
         HeroText(
             modifier = titleTextModifier,
@@ -146,7 +146,7 @@ private fun HeroData(
         )
         HeroConnections(
             modifier = Modifier.fillMaxWidth(),
-            heroConnections = heroApiModel.connections
+            heroConnections = heroModel.connections
         )
     }
 }

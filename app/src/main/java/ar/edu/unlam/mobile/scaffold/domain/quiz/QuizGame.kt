@@ -1,17 +1,17 @@
 package ar.edu.unlam.mobile.scaffold.domain.quiz
 
-import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
+import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 
-class QuizGame(private val heroList: List<HeroApiModel>) {
-    lateinit var correctAnswer: HeroApiModel
+class QuizGame(private val heroList: List<HeroModel>) {
+    lateinit var correctAnswer: HeroModel
         private set
-    lateinit var option1: HeroApiModel
+    lateinit var option1: HeroModel
         private set
-    lateinit var option2: HeroApiModel
+    lateinit var option2: HeroModel
         private set
-    lateinit var option3: HeroApiModel
+    lateinit var option3: HeroModel
         private set
-    lateinit var option4: HeroApiModel
+    lateinit var option4: HeroModel
         private set
 
     var selectedAnswer = "Hero name"

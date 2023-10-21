@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
+import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 
 // player card color = Color(0xFF16A0E8)
 // adversary card color = Color(0xFFFA1404)
@@ -38,7 +38,7 @@ import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 @Composable
 fun HeroPlayerCard(
     modifier: Modifier = Modifier,
-    hero: HeroApiModel = HeroApiModel(),
+    hero: HeroModel = HeroModel(),
     cardColors: CardColors = CardDefaults.cardColors(containerColor = Color(0xFF16A0E8))
 ) {
     HeroCard(
@@ -48,7 +48,7 @@ fun HeroPlayerCard(
     ) {
         HeroStats(
             modifier = Modifier.border(width = 1.dp, color = Color.Black, shape = RectangleShape),
-            stats = hero.powerstats,
+            stats = hero.stats,
             brush = SolidColor(Color(0xFFF9DB07)),
             alpha = 1f,
             textColor = Color.Black
@@ -60,7 +60,7 @@ fun HeroPlayerCard(
 @Composable
 fun HeroCard(
     modifier: Modifier = Modifier,
-    hero: HeroApiModel = HeroApiModel(),
+    hero: HeroModel = HeroModel(),
     cardColors: CardColors = CardDefaults.cardColors(containerColor = Color(0xFFFA1404)),
     content: @Composable (ColumnScope.() -> Unit) = {}
 ) {
@@ -95,7 +95,7 @@ fun HeroCard(
  */
 @Preview(showBackground = true)
 @Composable
-fun HeroItem(modifier: Modifier = Modifier, hero: HeroApiModel = HeroApiModel()) {
+fun HeroItem(modifier: Modifier = Modifier, hero: HeroModel = HeroModel()) {
     val brush = Brush.horizontalGradient(
         colors = listOf(
             Color(0xFFFA1404),
@@ -139,7 +139,7 @@ fun HeroItem(modifier: Modifier = Modifier, hero: HeroApiModel = HeroApiModel())
 @Composable
 fun HeroGallery(
     modifier: Modifier = Modifier,
-    heroList: List<HeroApiModel>,
+    heroList: List<HeroModel>,
     itemSize: Dp = 125.dp,
     onItemClick: (Int) -> Unit
 ) {
@@ -149,7 +149,7 @@ fun HeroGallery(
         content = {
             items(heroList.size) { i ->
                 GalleryItem(
-                    heroApiModel = heroList[i],
+                    heroModel = heroList[i],
                     onItemClick = onItemClick
                 )
             }
@@ -160,13 +160,13 @@ fun HeroGallery(
 @Composable
 fun GalleryItem(
     modifier: Modifier = Modifier,
-    heroApiModel: HeroApiModel = HeroApiModel(),
+    heroModel: HeroModel = HeroModel(),
     onItemClick: (Int) -> Unit,
 ) {
     TextButton(
         modifier = modifier,
         shape = RectangleShape,
-        onClick = { onItemClick(heroApiModel.id.toInt()) }
+        onClick = { onItemClick(heroModel.id) }
     ) {
         Box(
             modifier = Modifier
@@ -175,10 +175,10 @@ fun GalleryItem(
             Column {
                 HeroImage(
                     modifier = Modifier.padding(4.dp),
-                    url = heroApiModel.image.url
+                    url = heroModel.image.url
                 )
                 Text(
-                    heroApiModel.name,
+                    heroModel.name,
                     modifier = Modifier
                         .padding(bottom = 4.dp, start = 4.dp, end = 4.dp)
                         .align(Alignment.CenterHorizontally),
@@ -187,7 +187,7 @@ fun GalleryItem(
                 )
             }
             Text(
-                text = heroApiModel.id,
+                text = heroModel.id.toString(),
                 modifier = Modifier.padding(8.dp),
                 color = Color.Black
             )

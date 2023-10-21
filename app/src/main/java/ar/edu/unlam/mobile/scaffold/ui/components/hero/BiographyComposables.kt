@@ -11,12 +11,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ar.edu.unlam.mobile.scaffold.data.network.model.Biography
+import ar.edu.unlam.mobile.scaffold.domain.model.BiographyModel
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Preview(showBackground = true)
 @Composable
-fun HeroBiography(modifier: Modifier = Modifier, biography: Biography = Biography()) {
+fun HeroBiography(modifier: Modifier = Modifier, biography: BiographyModel = BiographyModel()) {
     Column(
         modifier = modifier
             .background(
@@ -28,7 +28,7 @@ fun HeroBiography(modifier: Modifier = Modifier, biography: Biography = Biograph
     ) {
         BiographyText(text = "Nombre", value = biography.fullName)
         BiographyText(text = "Alter-Egos", value = biography.alterEgos)
-        BiographyText(text = "Apodos", value = biography.aliases.toString())
+        BiographyText(text = "Apodos", value = biography.aliases)
         BiographyText(text = "Lugar de nacimiento", value = biography.placeOfBirth)
         BiographyText(text = "Primera aparicion", value = biography.firstAppearance)
         BiographyText(text = "Editorial", value = biography.publisher)

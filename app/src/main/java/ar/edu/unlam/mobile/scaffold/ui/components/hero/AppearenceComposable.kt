@@ -11,12 +11,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ar.edu.unlam.mobile.scaffold.data.network.model.Appearance
+import ar.edu.unlam.mobile.scaffold.domain.model.AppearanceModel
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Preview(showBackground = true)
 @Composable
-fun HeroAppearance(modifier: Modifier = Modifier, heroAppearance: Appearance = Appearance()) {
+fun HeroAppearance(modifier: Modifier = Modifier, heroAppearance: AppearanceModel = AppearanceModel()) {
     Column(
         modifier = modifier
             .background(
@@ -27,8 +27,8 @@ fun HeroAppearance(modifier: Modifier = Modifier, heroAppearance: Appearance = A
     ) {
         AppearanceText(text = "Genero biologico", value = heroAppearance.gender)
         AppearanceText(text = "Raza", value = heroAppearance.race)
-        AppearanceText(text = "Altura", value = heroAppearance.height.toString())
-        AppearanceText(text = "Peso", value = heroAppearance.weight.toString())
+        AppearanceText(text = "Altura", value = heroAppearance.height)
+        AppearanceText(text = "Peso", value = heroAppearance.weight)
         AppearanceText(text = "Color de ojos", value = heroAppearance.eyeColor)
         AppearanceText(text = "Color de cabello", value = heroAppearance.hairColor)
     }

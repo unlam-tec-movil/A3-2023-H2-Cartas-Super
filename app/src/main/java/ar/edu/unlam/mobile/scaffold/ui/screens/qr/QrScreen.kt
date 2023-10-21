@@ -39,7 +39,7 @@ fun QrScreen(
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
-            val dataHero by viewModel.hero.collectAsStateWithLifecycle()
+            val hero by viewModel.hero.collectAsStateWithLifecycle()
             val titleTextModifier = Modifier.padding(8.dp).fillMaxWidth()
             Image(
                 painter = painterResource(id = R.drawable.fondo_coleccion),
@@ -56,10 +56,10 @@ fun QrScreen(
                         .padding(8.dp)
                         .align(Alignment.CenterHorizontally)
                         .size(300.dp),
-                    url = dataHero.image.url,
+                    url = hero.image.url,
                     contentScale = ContentScale.FillWidth
                 )
-                HeroText(modifier = titleTextModifier, text = "${dataHero.id} ${dataHero.name}")
+                HeroText(modifier = titleTextModifier, text = "${hero.id} ${hero.name}")
 
                 Image(
                     painter = painterResource(id = R.drawable.qr),
