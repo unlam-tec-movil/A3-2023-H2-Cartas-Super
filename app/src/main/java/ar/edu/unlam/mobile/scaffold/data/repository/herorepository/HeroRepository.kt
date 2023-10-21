@@ -2,7 +2,7 @@ package ar.edu.unlam.mobile.scaffold.data.repository.herorepository
 
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
-import ar.edu.unlam.mobile.scaffold.data.database.entities.toHeroModel
+import ar.edu.unlam.mobile.scaffold.data.database.entities.toHeroApiModel
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
 import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 import ar.edu.unlam.mobile.scaffold.data.network.model.Powerstats
@@ -75,7 +75,7 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
         return withContext(Dispatchers.IO) {
             val heroDB = dataBase.getHero(heroId)
             if (heroDB != null) {
-                heroDB.toHeroModel()
+                heroDB.toHeroApiModel()
             } else {
                 val hero = api.getHero(heroId)
                 val formattedHero = formatDataHero(hero)
@@ -94,7 +94,7 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
             for (i in 1..COLLECTION_MAX_SIZE) {
                 val heroDb = dbList.find { it.id == i }
                 if (heroDb != null) {
-                    heroList.add(heroDb.toHeroModel())
+                    heroList.add(heroDb.toHeroApiModel())
                 } else {
                     val heroApi = formatDataHero(api.getHero(i))
                     saveToDbList.add(heroApi.toHeroEntityModel())

@@ -64,8 +64,8 @@ private fun connectionsApiModelToConnectionsEntity(connections: Connections): Co
 
 private fun appearanceToAppearanceEntity(app: Appearance): AppearanceEntity {
     return AppearanceEntity(
-        height = app.height.toString(),
-        weight = app.weight.toString(),
+        height = listOfStringsToString(app.height),
+        weight = listOfStringsToString(app.weight),
         eyeColor = app.eyeColor,
         gender = app.gender,
         hairColor = app.hairColor,
@@ -73,9 +73,19 @@ private fun appearanceToAppearanceEntity(app: Appearance): AppearanceEntity {
     )
 }
 
+private fun listOfStringsToString(list: List<String>): String {
+    val size = list.size
+    var string = list[0]
+    for (i in 1..<(size)) {
+        string += ", ${list[i]}"
+    }
+    string += "."
+    return string
+}
+
 fun biographyToBiographyEntity(bio: Biography): BiographyEntity {
     return BiographyEntity(
-        aliases = bio.aliases.toString(),
+        aliases = listOfStringsToString(bio.aliases),
         alignment = bio.alignment,
         alterEgos = bio.alterEgos,
         firstAppearance = bio.firstAppearance,

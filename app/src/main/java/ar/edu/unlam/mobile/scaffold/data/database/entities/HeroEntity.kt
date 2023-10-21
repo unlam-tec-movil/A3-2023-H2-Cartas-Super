@@ -11,6 +11,13 @@ import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 import ar.edu.unlam.mobile.scaffold.data.network.model.Image
 import ar.edu.unlam.mobile.scaffold.data.network.model.Powerstats
 import ar.edu.unlam.mobile.scaffold.data.network.model.Work
+import ar.edu.unlam.mobile.scaffold.domain.model.AppearanceModel
+import ar.edu.unlam.mobile.scaffold.domain.model.BiographyModel
+import ar.edu.unlam.mobile.scaffold.domain.model.ConnectionsModel
+import ar.edu.unlam.mobile.scaffold.domain.model.Hero
+import ar.edu.unlam.mobile.scaffold.domain.model.ImageModel
+import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
+import ar.edu.unlam.mobile.scaffold.domain.model.WorkModel
 
 @Entity(tableName = "hero_table")
 data class HeroEntity(
@@ -25,7 +32,7 @@ data class HeroEntity(
     @ColumnInfo(name = "quantity") val quantity: Int = 0
 )
 
-fun HeroEntity.toHeroModel(): HeroApiModel {
+fun HeroEntity.toHeroApiModel(): HeroApiModel {
     return HeroApiModel(
         appearance = appearanceEntityToAppearance(this.appearance),
         biography = biographyEntityToBiography(this.biography),
@@ -35,6 +42,50 @@ fun HeroEntity.toHeroModel(): HeroApiModel {
         name = this.name,
         powerstats = powerstatsEntityToPowerstats(this.powerstats),
         work = workEntityToWork(this.work),
+    )
+}
+
+fun HeroEntity.toHero(): Hero {
+    return Hero(
+        id = this.id,
+        appearance = AppearanceModel(
+            eyeColor = this.appearance.eyeColor,
+            gender = this.appearance.gender,
+            hairColor = this.appearance.hairColor,
+            height = this.appearance.height,
+            race = this.appearance.race,
+            weight = this.appearance.weight
+        ),
+        biography = BiographyModel(
+            aliases = this.biography.aliases,
+            alignment = this.biography.alignment,
+            alterEgos = this.biography.alterEgos,
+            firstAppearance = this.biography.firstAppearance,
+            fullName = this.biography.fullName,
+            placeOfBirth = this.biography.placeOfBirth,
+            publisher = this.biography.publisher
+        ),
+        connections = ConnectionsModel(
+            groupAffiliation = this.connections.groupAffiliation,
+            relatives = this.connections.relatives
+        ),
+        image = ImageModel(
+            url = this.image.url
+        ),
+        name = this.name,
+        stats = StatModel(
+            combat = this.powerstats.combat,
+            durability = this.powerstats.durability,
+            intelligence = this.powerstats.intelligence,
+            power = this.powerstats.power,
+            speed = this.powerstats.speed,
+            strength = this.powerstats.strength
+        ),
+        work = WorkModel(
+            base = this.work.base,
+            occupation = this.work.occupation
+        ),
+        quantity = this.quantity
     )
 }
 
