@@ -25,7 +25,7 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
 
     private val data: Channel<SensorData> = Channel(Channel.UNLIMITED)
 
-    override val sensorData = flow {
+    override fun getSensorData() = flow {
         init()
         data.receiveAsFlow().collect {
             emit(it)
@@ -95,7 +95,7 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
                 val orientation = FloatArray(3)
                 SensorManager.getOrientation(rotationMatrix, orientation)
 
-                if (!orientation[1].isNaN() || !orientation[2].isNaN()) {
+                if (!orientation[1].isNaN() && !orientation[2].isNaN()) {
                     data.trySend(
                         SensorData(
                             roll = orientation[2], // Roll (rotation around the y-axis)
@@ -116,8 +116,3 @@ class OrientationDataManager @Inject constructor(private val sensorManager: Sens
         // do nothing
     }
 }
-
-data class SensorData(
-    val roll: Float = 0f, // Roll (rotation around the y-axis)
-    val pitch: Float = 0f // Pitch (rotation around the x-axis)
-)

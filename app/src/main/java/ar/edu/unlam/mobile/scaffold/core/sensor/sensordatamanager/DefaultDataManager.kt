@@ -8,15 +8,18 @@ import javax.inject.Inject
 
 class DefaultDataManager @Inject constructor() : IOrientationDataManager {
 
-    override val sensorData = flow {
+    override fun getSensorData() = flow {
         emit(
             SensorData()
         )
     }
 
     init {
-        Log.d("OrientationDataManager", "Default orientation data manager initiated. " +
-        "The app doesn't find the sensors needed to work properly.")
+        Log.d(
+            "OrientationDataManager",
+            "Default orientation data manager initiated. " +
+                "The app doesn't find the sensors needed to work properly."
+        )
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
