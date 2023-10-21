@@ -7,6 +7,13 @@ import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.ImageEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.PowerstatsEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.WorkEntity
+import ar.edu.unlam.mobile.scaffold.domain.model.AppearanceModel
+import ar.edu.unlam.mobile.scaffold.domain.model.BiographyModel
+import ar.edu.unlam.mobile.scaffold.domain.model.ConnectionsModel
+import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
+import ar.edu.unlam.mobile.scaffold.domain.model.ImageModel
+import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
+import ar.edu.unlam.mobile.scaffold.domain.model.WorkModel
 import com.google.gson.annotations.SerializedName
 
 data class HeroApiModel(
@@ -31,6 +38,49 @@ fun HeroApiModel.toHeroEntityModel(): HeroEntity {
         name = this.name,
         powerstats = powerstatsApiModelToPowerstatsEntity(this.powerstats),
         work = workApiModelToWorkEntity(this.work)
+    )
+}
+
+fun HeroApiModel.toHeroModel(): HeroModel {
+    return HeroModel(
+        id = this.id.toInt(),
+        appearance = AppearanceModel(
+            eyeColor = this.appearance.eyeColor,
+            gender = this.appearance.gender,
+            hairColor = this.appearance.hairColor,
+            height = listOfStringsToString(this.appearance.height),
+            race = this.appearance.race,
+            weight = listOfStringsToString(this.appearance.weight)
+        ),
+        biography = BiographyModel(
+            aliases = listOfStringsToString(this.biography.aliases),
+            alignment = this.biography.alignment,
+            alterEgos = this.biography.alterEgos,
+            firstAppearance = this.biography.firstAppearance,
+            fullName = this.biography.fullName,
+            placeOfBirth = this.biography.placeOfBirth,
+            publisher = this.biography.publisher
+        ),
+        connections = ConnectionsModel(
+            groupAffiliation = this.connections.groupAffiliation,
+            relatives = this.connections.relatives
+        ),
+        image = ImageModel(
+            url = this.image.url
+        ),
+        name = this.name,
+        stats = StatModel(
+            combat = this.powerstats.combat.toInt(),
+            durability = this.powerstats.durability.toInt(),
+            intelligence = this.powerstats.intelligence.toInt(),
+            power = this.powerstats.power.toInt(),
+            speed = this.powerstats.speed.toInt(),
+            strength = this.powerstats.strength.toInt()
+        ),
+        work = WorkModel(
+            base = this.work.base,
+            occupation = this.work.occupation
+        )
     )
 }
 

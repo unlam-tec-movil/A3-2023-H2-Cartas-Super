@@ -14,7 +14,7 @@ import ar.edu.unlam.mobile.scaffold.data.network.model.Work
 import ar.edu.unlam.mobile.scaffold.domain.model.AppearanceModel
 import ar.edu.unlam.mobile.scaffold.domain.model.BiographyModel
 import ar.edu.unlam.mobile.scaffold.domain.model.ConnectionsModel
-import ar.edu.unlam.mobile.scaffold.domain.model.Hero
+import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.domain.model.ImageModel
 import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
 import ar.edu.unlam.mobile.scaffold.domain.model.WorkModel
@@ -45,8 +45,8 @@ fun HeroEntity.toHeroApiModel(): HeroApiModel {
     )
 }
 
-fun HeroEntity.toHero(): Hero {
-    return Hero(
+fun HeroEntity.toHero(): HeroModel {
+    return HeroModel(
         id = this.id,
         appearance = AppearanceModel(
             eyeColor = this.appearance.eyeColor,

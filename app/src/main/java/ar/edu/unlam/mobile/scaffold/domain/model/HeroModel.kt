@@ -1,6 +1,6 @@
 package ar.edu.unlam.mobile.scaffold.domain.model
 
-data class Hero(
+data class HeroModel(
     val id: Int = 0,
     val appearance: AppearanceModel = AppearanceModel(),
     val biography: BiographyModel = BiographyModel(),
