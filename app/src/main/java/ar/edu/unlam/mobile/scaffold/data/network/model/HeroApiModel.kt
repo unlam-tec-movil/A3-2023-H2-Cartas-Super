@@ -129,7 +129,6 @@ private fun listOfStringsToString(list: List<String>): String {
     for (i in 1..<(size)) {
         string += ", ${list[i]}"
     }
-    string += "."
     return string
 }
 

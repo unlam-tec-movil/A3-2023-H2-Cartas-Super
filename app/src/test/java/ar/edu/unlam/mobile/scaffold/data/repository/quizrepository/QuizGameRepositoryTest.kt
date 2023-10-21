@@ -1,8 +1,8 @@
 package ar.edu.unlam.mobile.scaffold.data.repository.quizrepository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
+import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -46,10 +46,10 @@ class QuizGameRepositoryTest {
     lateinit var quizRepo: IQuizGameRepository
 
     private val heroList = listOf(
-        HeroApiModel(id = "1", name = "Mr test 1"),
-        HeroApiModel(id = "2", name = "Mr test 2"),
-        HeroApiModel(id = "3", name = "Mr test 3"),
-        HeroApiModel(id = "4", name = "Mr test 4")
+        HeroModel(id = 1, name = "Mr test 1"),
+        HeroModel(id = 2, name = "Mr test 2"),
+        HeroModel(id = 3, name = "Mr test 3"),
+        HeroModel(id = 4, name = "Mr test 4")
     )
 
     @Before

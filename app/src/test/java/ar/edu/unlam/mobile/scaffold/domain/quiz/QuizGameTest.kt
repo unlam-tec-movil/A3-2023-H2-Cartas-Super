@@ -1,7 +1,7 @@
 package ar.edu.unlam.mobile.scaffold.domain.quiz
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
+import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import com.google.common.truth.Truth.assertThat
 import io.mockk.junit4.MockKRule
 import io.mockk.unmockkAll
@@ -50,20 +50,20 @@ class QuizGameTest {
     }
 
     private val heroList = listOf(
-        HeroApiModel(
-            id = "1",
+        HeroModel(
+            id = 1,
             name = "Test 1"
         ),
-        HeroApiModel(
-            id = "2",
+        HeroModel(
+            id = 2,
             name = "Test 2"
         ),
-        HeroApiModel(
-            id = "3",
+        HeroModel(
+            id = 3,
             name = "Test 3"
         ),
-        HeroApiModel(
-            id = "4",
+        HeroModel(
+            id = 4,
             name = "Test 4"
         )
     )

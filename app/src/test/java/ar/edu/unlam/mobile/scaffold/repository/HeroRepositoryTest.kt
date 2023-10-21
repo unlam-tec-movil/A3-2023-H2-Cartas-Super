@@ -7,6 +7,7 @@ import ar.edu.unlam.mobile.scaffold.data.network.HeroService
 import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.HeroRepository
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.HeroRepositoryException
+import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -56,8 +57,9 @@ class HeroRepositoryTest {
 
     @Test
     fun getHeroFromApiWhenRoomDoesntHaveIt() = runTest {
-        val expectedHero = HeroApiModel(id = "1", name = "Mr. Test")
-        coEvery { api.getHero(1) } returns expectedHero
+        val apiHero = HeroApiModel(id = "1", name = "Mr. Test")
+        val expectedHero = HeroModel(id = 1, name = "Mr. Test")
+        coEvery { api.getHero(1) } returns apiHero
         coEvery { db.getHero(1) } returns null
 
         val repo = HeroRepository(api = api, dataBase = db)
@@ -68,10 +70,10 @@ class HeroRepositoryTest {
 
     @Test
     fun getHeroFromDatabaseWhenItHasIt() = runTest {
-        val expectedHeroEntity = HeroEntity(id = 1, name = "Mr. Test")
-        val expectedHero = HeroApiModel(id = "1", name = "Mr. Test")
+        val heroEntity = HeroEntity(id = 1, name = "Mr. Test")
+        val expectedHero = HeroModel(id = 1, name = "Mr. Test")
         coEvery { api.getHero(1) } returns HeroApiModel(id = "2")
-        coEvery { db.getHero(1) } returns expectedHeroEntity
+        coEvery { db.getHero(1) } returns heroEntity
 
         val repo = HeroRepository(api, db)
         val hero = repo.getHero(1)
@@ -111,7 +113,7 @@ class HeroRepositoryTest {
         for (i in 1..731) {
             val hero = heroList[i - 1]
             val name = hero.name
-            val id = hero.id.toInt()
+            val id = hero.id
             assertThat(name).isEqualTo("Test $i")
             assertThat(id).isEqualTo(i)
         }

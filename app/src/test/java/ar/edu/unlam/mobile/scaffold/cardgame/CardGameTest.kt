@@ -1,11 +1,11 @@
 package ar.edu.unlam.mobile.scaffold.cardgame
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
-import ar.edu.unlam.mobile.scaffold.data.network.model.Powerstats
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
-import com.google.common.truth.Truth.*
+import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
+import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
+import com.google.common.truth.Truth.assertThat
 import io.mockk.junit4.MockKRule
 import org.junit.Before
 import org.junit.Rule
@@ -38,74 +38,74 @@ class CardGameTest {
      */
 
     private val playerDeck = listOf(
-        HeroApiModel(
-            powerstats = Powerstats(
-                combat = "1",
-                durability = "1",
-                intelligence = "1",
-                power = "1",
-                speed = "1",
-                strength = "1"
+        HeroModel(
+            stats = StatModel(
+                combat = 1,
+                durability = 1,
+                intelligence = 1,
+                power = 1,
+                speed = 1,
+                strength = 1
             ),
-            id = "1"
+            id = 1
         ),
-        HeroApiModel(
-            powerstats = Powerstats(
-                combat = "10",
-                durability = "10",
-                intelligence = "10",
-                power = "10",
-                speed = "10",
-                strength = "10"
+        HeroModel(
+            stats = StatModel(
+                combat = 10,
+                durability = 10,
+                intelligence = 10,
+                power = 10,
+                speed = 10,
+                strength = 10
             ),
-            id = "10"
+            id = 10
         ),
-        HeroApiModel(
-            powerstats = Powerstats(
-                combat = "100",
-                durability = "100",
-                intelligence = "100",
-                power = "100",
-                speed = "100",
-                strength = "100"
+        HeroModel(
+            stats = StatModel(
+                combat = 100,
+                durability = 100,
+                intelligence = 100,
+                power = 100,
+                speed = 100,
+                strength = 100
             ),
-            id = "100"
+            id = 100
         )
     )
 
     private val adversaryDeck = listOf(
-        HeroApiModel(
-            powerstats = Powerstats(
-                combat = "1",
-                durability = "1",
-                intelligence = "300",
-                power = "1",
-                speed = "1",
-                strength = "1"
+        HeroModel(
+            stats = StatModel(
+                combat = 1,
+                durability = 1,
+                intelligence = 300,
+                power = 1,
+                speed = 1,
+                strength = 1
             ),
-            id = "2"
+            id = 2
         ),
-        HeroApiModel(
-            powerstats = Powerstats(
-                combat = "10",
-                durability = "10",
-                intelligence = "10",
-                power = "10",
-                speed = "10",
-                strength = "10"
+        HeroModel(
+            stats = StatModel(
+                combat = 10,
+                durability = 10,
+                intelligence = 10,
+                power = 10,
+                speed = 10,
+                strength = 10
             ),
-            id = "22"
+            id = 22
         ),
-        HeroApiModel(
-            powerstats = Powerstats(
-                combat = "100",
-                durability = "100",
-                intelligence = "100",
-                power = "100",
-                speed = "100",
-                strength = "100"
+        HeroModel(
+            stats = StatModel(
+                combat = 100,
+                durability = 100,
+                intelligence = 100,
+                power = 100,
+                speed = 100,
+                strength = 100
             ),
-            id = "222"
+            id = 222
         )
     )
 
@@ -121,8 +121,8 @@ class CardGameTest {
 
     @Test
     fun `que el puntaje del jugador sea correcto cuando su carta gana una pelea sin el multiplicador x2`() {
-        val expectedScore = playerDeck[2].powerstats.combat.toInt() -
-            adversaryDeck[0].powerstats.combat.toInt()
+        val expectedScore = playerDeck[2].stats.combat -
+            adversaryDeck[0].stats.combat
         val useMultix2 = false
 
         game.playerPlayCard(id = 100, stat = Stat.COMBAT, useMultix2 = useMultix2)
@@ -134,8 +134,8 @@ class CardGameTest {
 
     @Test
     fun `que el puntaje del jugador sea correcto cuando su carta gana una pelea con el multiplicador x2`() {
-        val expectedPlayerScore = (playerDeck[2].powerstats.combat.toInt() * 2) -
-            adversaryDeck[0].powerstats.combat.toInt()
+        val expectedPlayerScore = (playerDeck[2].stats.combat * 2) -
+            adversaryDeck[0].stats.combat
         val expectedAdversaryScore = 0
         val useMultix2 = true
         val stat = Stat.COMBAT
@@ -150,8 +150,8 @@ class CardGameTest {
 
     @Test
     fun `que el puntaje del adversario sea correcto cuando su carta gana una pelea y el jugador no usa el multi x2`() {
-        val expectedAdversaryScore = adversaryDeck[0].powerstats.intelligence.toInt() -
-            playerDeck[0].powerstats.intelligence.toInt()
+        val expectedAdversaryScore = adversaryDeck[0].stats.intelligence -
+            playerDeck[0].stats.intelligence
         val expectedPlayerScore = 0
         val stat = Stat.INTELLIGENCE
         val useMultix2 = false
@@ -166,8 +166,8 @@ class CardGameTest {
 
     @Test
     fun `que el puntaje del adversario sea correcto cuando su carta gana una pelea y el jugador usa el multi x2`() {
-        val expectedAdversaryScore = adversaryDeck[0].powerstats.intelligence.toInt() -
-            (playerDeck[0].powerstats.intelligence.toInt() * 2)
+        val expectedAdversaryScore = adversaryDeck[0].stats.intelligence -
+            (playerDeck[0].stats.intelligence * 2)
         val expectedPlayerScore = 0
         val stat = Stat.INTELLIGENCE
         val useMultix2 = true
