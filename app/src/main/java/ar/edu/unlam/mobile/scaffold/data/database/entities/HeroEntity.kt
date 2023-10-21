@@ -14,15 +14,15 @@ import ar.edu.unlam.mobile.scaffold.data.network.model.Work
 
 @Entity(tableName = "hero_table")
 data class HeroEntity(
-    @ColumnInfo("id") @PrimaryKey(autoGenerate = false) val id: Int = 0,
-    @Embedded val appearance: AppearanceEntity = AppearanceEntity(),
-    @Embedded val biography: BiographyEntity = BiographyEntity(),
-    @Embedded val connections: ConnectionsEntity = ConnectionsEntity(),
-    @Embedded val image: ImageEntity = ImageEntity(),
-    @ColumnInfo("name") val name: String = "NA",
-    @Embedded val powerstats: PowerstatsEntity = PowerstatsEntity(),
-    @Embedded val work: WorkEntity = WorkEntity(),
-    @ColumnInfo("quantity") val quantity: Int = 0
+    @ColumnInfo(name = "id", typeAffinity = ColumnInfo.INTEGER) @PrimaryKey(autoGenerate = false) val id: Int = 0,
+    @Embedded(prefix = "app") val appearance: AppearanceEntity = AppearanceEntity(),
+    @Embedded(prefix = "bio") val biography: BiographyEntity = BiographyEntity(),
+    @Embedded(prefix = "conn") val connections: ConnectionsEntity = ConnectionsEntity(),
+    @Embedded(prefix = "image") val image: ImageEntity = ImageEntity(),
+    @ColumnInfo(name = "name") val name: String = "NA",
+    @Embedded(prefix = "stat") val powerstats: PowerstatsEntity = PowerstatsEntity(),
+    @Embedded(prefix = "work") val work: WorkEntity = WorkEntity(),
+    @ColumnInfo(name = "quantity") val quantity: Int = 0
 )
 
 fun HeroEntity.toHeroModel(): HeroApiModel {
@@ -46,12 +46,12 @@ private fun workEntityToWork(workEntity: WorkEntity): Work {
 }
 private fun powerstatsEntityToPowerstats(powerstatsEntity: PowerstatsEntity): Powerstats {
     return Powerstats(
-        combat = powerstatsEntity.combat,
-        durability = powerstatsEntity.durability,
-        intelligence = powerstatsEntity.intelligence,
-        power = powerstatsEntity.power,
-        speed = powerstatsEntity.speed,
-        strength = powerstatsEntity.strength
+        combat = powerstatsEntity.combat.toString(),
+        durability = powerstatsEntity.durability.toString(),
+        intelligence = powerstatsEntity.intelligence.toString(),
+        power = powerstatsEntity.power.toString(),
+        speed = powerstatsEntity.speed.toString(),
+        strength = powerstatsEntity.strength.toString()
     )
 }
 private fun imageEntityToImage(imageEntity: ImageEntity): Image {

@@ -42,12 +42,12 @@ private fun workApiModelToWorkEntity(work: Work): WorkEntity {
 }
 private fun powerstatsApiModelToPowerstatsEntity(powerstats: Powerstats): PowerstatsEntity {
     return PowerstatsEntity(
-        combat = powerstats.combat,
-        durability = powerstats.durability,
-        intelligence = powerstats.intelligence,
-        power = powerstats.power,
-        speed = powerstats.speed,
-        strength = powerstats.strength
+        combat = powerstats.combat.toInt(),
+        durability = powerstats.durability.toInt(),
+        intelligence = powerstats.intelligence.toInt(),
+        power = powerstats.power.toInt(),
+        speed = powerstats.speed.toInt(),
+        strength = powerstats.strength.toInt()
     )
 }
 private fun imageApiModelToImageEntity(image: Image): ImageEntity {
