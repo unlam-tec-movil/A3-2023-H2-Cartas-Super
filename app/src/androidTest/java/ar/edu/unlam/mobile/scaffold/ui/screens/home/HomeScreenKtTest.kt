@@ -2,18 +2,16 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.home
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
-@HiltAndroidTest
+@RunWith(AndroidJUnit4::class)
 class HomeScreenKtTest {
     @get: Rule
     val composeTestRule = createComposeRule()
-
-    @get:Rule val hiltRule = HiltAndroidRule(this)
 
     @Test
     fun whenHavingDefaultStatesInHomeUi_VerifyIfAllViewsExists() {
@@ -26,16 +24,22 @@ class HomeScreenKtTest {
         composeTestRule.onNodeWithTag("nav duel button").assertExists()
         composeTestRule.onNodeWithTag("nav quiz button").assertExists()
         composeTestRule.onNodeWithTag("nav map button").assertExists()
-        composeTestRule.onNodeWithTag("nav collection button").assertExists()
         composeTestRule.onNodeWithTag(testTag = "progress bar", useUnmergedTree = true).assertExists()
-        composeTestRule.onNodeWithTag(testTag = "nav collection button", useUnmergedTree = true).assertExists()
+        composeTestRule.onNodeWithTag(testTag = "nav collection button", useUnmergedTree = true).assertDoesNotExist()
     }
 
     @Test
-    fun whenHavingDefaultStatesInHomeScreen_VerifyHomeUiExists() {
+    fun whenThePrecachingFinishes_VerifyIfAllViewsExists() {
         composeTestRule.setContent {
             ComicWarTheme {
+                HomeUi(cacheProgress = { 1f })
             }
         }
+        composeTestRule.onNodeWithTag("background").assertExists()
+        composeTestRule.onNodeWithTag("nav duel button").assertExists()
+        composeTestRule.onNodeWithTag("nav quiz button").assertExists()
+        composeTestRule.onNodeWithTag("nav map button").assertExists()
+        composeTestRule.onNodeWithTag(testTag = "progress bar", useUnmergedTree = true).assertDoesNotExist()
+        composeTestRule.onNodeWithTag(testTag = "nav collection button", useUnmergedTree = true).assertExists()
     }
 }
