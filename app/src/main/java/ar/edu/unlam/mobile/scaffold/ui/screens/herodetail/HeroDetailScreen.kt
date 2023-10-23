@@ -78,7 +78,7 @@ fun HeroDetailScreen(
                         .fillMaxWidth()
                         .padding(all = 25.dp),
                     imageUrl = hero.image.url,
-                    data = sensorData
+                    data = { sensorData }
                 )
                 CustomButton(
                     modifier = navButtonModifier,

@@ -21,11 +21,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomTitle
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxHeroImage
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
@@ -140,7 +138,7 @@ fun QuizScreen(
         chosenHero = chosenHero,
         onClickPlayAgain = onNewGame,
         onClickMainMenu = onClickMainMenu,
-        sensorData = sensorData
+        sensorData = { sensorData }
     )
 }
 
@@ -164,7 +162,7 @@ fun QuizUi(
     chosenHero: String = "Chosen Hero",
     onClickPlayAgain: () -> Unit = {},
     onClickMainMenu: () -> Unit = {},
-    sensorData: SensorData = SensorData(0f, 0f)
+    sensorData: () -> SensorData = { SensorData(0f, 0f) }
 ) {
     Box(modifier = modifier) {
         ParallaxBackgroundImage(
@@ -173,7 +171,7 @@ fun QuizUi(
                 .testTag("background image"),
             contentDescription = "Pantalla Coleccion",
             painterResourceId = R.drawable.fondo_coleccion,
-            data = { sensorData }
+            data = sensorData
         )
 
         if (isLoading) {
@@ -188,10 +186,11 @@ fun QuizUi(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                QuizTitle(
+                CustomTitle(
                     modifier = Modifier
                         .padding(18.dp)
-                        .testTag("title")
+                        .testTag("title"),
+                    text = { "¿Quien es este heroe?" }
                 )
                 ParallaxHeroImage(
                     modifier = Modifier
@@ -227,30 +226,6 @@ fun QuizUi(
             onClickMainMenu = onClickMainMenu
         )
     }
-}
-
-@Composable
-fun QuizTitle(
-    modifier: Modifier = Modifier,
-    shadowOffset: Offset = Offset(6.0f, 4.0f),
-    shadowColor: Color = Color.Black,
-    text: String = "¿Quien es este heroe?"
-) {
-    Text(
-        text = text,
-        color = Color.White,
-        fontFamily = shaka_pow,
-        fontSize = 30.sp,
-        modifier = modifier,
-        style = TextStyle(
-            fontSize = 18.sp,
-            shadow = Shadow(
-                color = shadowColor,
-                offset = shadowOffset,
-                blurRadius = 4f
-            )
-        )
-    )
 }
 
 @Preview(showBackground = true, widthDp = 600)

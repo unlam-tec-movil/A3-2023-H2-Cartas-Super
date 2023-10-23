@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Preview
 @Composable
@@ -29,7 +28,7 @@ fun CustomButton(
         Text(
             modifier = Modifier.testTag(tag = "label"),
             text = label(),
-            fontFamily = shaka_pow,
+            style = MaterialTheme.typography.labelMedium, // fontFamily = shaka_pow,
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
