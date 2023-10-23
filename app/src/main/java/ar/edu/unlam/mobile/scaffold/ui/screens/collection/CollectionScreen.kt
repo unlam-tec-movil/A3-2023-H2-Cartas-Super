@@ -36,7 +36,7 @@ fun CollectionScreen(
             modifier = Modifier.fillMaxSize(),
             contentDescription = "Pantalla Coleccion",
             painterResourceId = R.drawable.fondo_coleccion,
-            data = sensorData
+            data = { sensorData }
         )
 
         val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()

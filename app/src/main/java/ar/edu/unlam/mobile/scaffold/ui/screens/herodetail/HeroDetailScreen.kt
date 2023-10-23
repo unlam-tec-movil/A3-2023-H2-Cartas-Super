@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
 import ar.edu.unlam.mobile.scaffold.ui.components.HeroText
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxHeroImage
@@ -29,7 +30,7 @@ import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroBiography
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroConnections
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroStats
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroWork
-import ar.edu.unlam.mobile.scaffold.ui.screens.home.NavigationButton
+
 /*
 @Composable
 private fun DebugSensorData(data: SensorData?) {
@@ -54,7 +55,7 @@ fun HeroDetailScreen(
 
     val navButtonModifier = Modifier
         .wrapContentSize()
-        .padding(16.dp)
+        .padding(8.dp)
     viewModel.getHero(heroID)
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
@@ -66,7 +67,7 @@ fun HeroDetailScreen(
             ParallaxBackgroundImage(
                 modifier = Modifier.fillMaxSize(),
                 painterResourceId = R.drawable.fondo_coleccion,
-                data = sensorData
+                data = { sensorData }
             )
             Column(
                 modifier = Modifier
@@ -79,13 +80,12 @@ fun HeroDetailScreen(
                     imageUrl = dataHero.image.url,
                     data = sensorData
                 )
-                NavigationButton(
-                    modifier = navButtonModifier
-                        .align(Alignment.CenterHorizontally),
-                    text = "Intercambio"
-                ) {
-                    controller.navigate(route = "qr")
-                }
+                CustomButton(
+                    modifier = navButtonModifier,
+                    onClick = { controller.navigate(route = "qr") },
+                    label = { "Intercambio" }
+                )
+
                 // DebugSensorData(data = data)
                 HeroData(modifier = Modifier.fillMaxWidth(), dataHero = dataHero)
             }

@@ -173,7 +173,7 @@ fun QuizUi(
                 .testTag("background image"),
             contentDescription = "Pantalla Coleccion",
             painterResourceId = R.drawable.fondo_coleccion,
-            data = sensorData
+            data = { sensorData }
         )
 
         if (isLoading) {
