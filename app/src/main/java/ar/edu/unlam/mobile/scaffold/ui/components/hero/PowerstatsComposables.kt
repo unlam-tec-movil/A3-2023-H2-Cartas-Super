@@ -13,17 +13,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
+import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
-
 
 @Preview(showBackground = true)
 @Composable
 fun HeroStats(
     modifier: Modifier = Modifier,
-    stats: Powerstats = Powerstats(),
+    stats: StatModel = StatModel(),
     brush: Brush = SolidColor(Color.Black),
-    alpha:Float = 0.8f,
+    alpha: Float = 0.8f,
     textColor: Color = Color.White
 ) {
     Row(
@@ -55,8 +54,8 @@ fun HeroStats(
 @Composable
 fun StatComposable(
     modifier: Modifier = Modifier,
-    statName:String = "Inteligencia",
-    statValue:String = "000",
+    statName: String = "Inteligencia",
+    statValue: Int = 1,
     color: Color = Color.Black
 ) {
     Text(
