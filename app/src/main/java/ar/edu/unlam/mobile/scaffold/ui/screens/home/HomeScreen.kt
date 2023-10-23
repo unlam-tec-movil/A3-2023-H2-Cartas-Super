@@ -11,6 +11,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -52,7 +53,7 @@ fun HomeScreen(
 
 @Preview
 @Composable
-private fun HomeUi(
+fun HomeUi(
     modifier: Modifier = Modifier,
     sensorData: () -> SensorData = { SensorData() },
     navDuel: () -> Unit = { },
@@ -67,7 +68,7 @@ private fun HomeUi(
 
     Box(modifier = modifier) {
         ParallaxBackgroundImage(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.testTag("background").fillMaxSize(),
             contentDescription = "Pantalla Coleccion",
             painterResourceId = R.drawable.pantalla_principal,
             data = sensorData
@@ -81,19 +82,19 @@ private fun HomeUi(
             verticalArrangement = Arrangement.Bottom
         ) {
             CustomButton(
-                modifier = navButtonModifier,
+                modifier = navButtonModifier.testTag("nav duel button"),
                 onClick = navDuel,
                 label = { "Duelo" }
             )
 
             CustomButton(
-                modifier = navButtonModifier,
+                modifier = navButtonModifier.testTag("nav quiz button"),
                 onClick = navQuiz,
                 label = { "Quiz" }
             )
 
             CustomButton(
-                modifier = navButtonModifier,
+                modifier = navButtonModifier.testTag("nav map button"),
                 onClick = navMap,
                 label = { "Mapa" }
             )
@@ -114,10 +115,10 @@ private fun CollectionButton(
     navCollection: () -> Unit = { }
 ) {
     if (cacheProgress() < 1f) {
-        CustomProgressBarWithDots(modifier = modifier, progress = cacheProgress())
+        CustomProgressBarWithDots(modifier = modifier.testTag("progress bar"), progress = cacheProgress())
     } else {
         CustomButton(
-            modifier = modifier,
+            modifier = modifier.testTag("nav collection button"),
             onClick = navCollection,
             label = { "Coleccion" }
         )
