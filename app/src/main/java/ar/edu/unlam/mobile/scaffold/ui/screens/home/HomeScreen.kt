@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
@@ -27,7 +26,10 @@ import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewmodel = hiltViewModel(),
-    controller: NavHostController
+    navDuel: () -> Unit = { },
+    navQuiz: () -> Unit = { },
+    navMap: () -> Unit = { },
+    navCollection: () -> Unit = { }
 ) {
     val cacheProgress by viewModel.cachingProgress.collectAsStateWithLifecycle()
 
@@ -41,12 +43,12 @@ fun HomeScreen(
     }
 
     HomeUi(
-        modifier = modifier,
+        modifier = modifier.testTag("home ui"),
         sensorData = { sensorData },
-        navDuel = { controller.navigate(route = "duel") },
-        navQuiz = { controller.navigate(route = "quiz") },
-        navMap = { controller.navigate(route = "Mapa") },
-        navCollection = { controller.navigate(route = "collection") },
+        navDuel = navDuel,
+        navQuiz = navQuiz,
+        navMap = navMap,
+        navCollection = navCollection,
         cacheProgress = { cacheProgress }
     )
 }

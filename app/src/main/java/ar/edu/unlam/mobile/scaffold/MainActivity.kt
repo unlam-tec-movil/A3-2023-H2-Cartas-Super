@@ -58,7 +58,10 @@ fun MainScreen() {
             composable("home") {
                 HomeScreen(
                     modifier = Modifier.padding(paddingValue),
-                    controller = controller
+                    navDuel = { controller.navigate(route = "duel") },
+                    navQuiz = { controller.navigate(route = "quiz") },
+                    navMap = { controller.navigate(route = "Mapa") },
+                    navCollection = { controller.navigate(route = "collection") }
                 )
             }
             composable("collection") {
