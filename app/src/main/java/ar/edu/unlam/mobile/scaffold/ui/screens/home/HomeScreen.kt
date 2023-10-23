@@ -11,6 +11,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -49,9 +50,10 @@ fun HomeScreen(
     )
 }
 
+@Preview
 @Composable
 private fun HomeUi(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     sensorData: () -> SensorData = { SensorData() },
     navDuel: () -> Unit = { },
     navQuiz: () -> Unit = { },
