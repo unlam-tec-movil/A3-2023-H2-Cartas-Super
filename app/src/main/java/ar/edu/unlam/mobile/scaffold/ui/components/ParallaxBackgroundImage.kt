@@ -27,8 +27,9 @@ fun ParallaxBackgroundImage(
     strength: Int = 20,
     scale: Float = 1.15f
 ) {
-    val roll by derivedStateOf { (data().roll) }
-    val pitch by derivedStateOf { (data().pitch) }
+    val sensorData = data()
+    val roll by derivedStateOf { (sensorData.roll) }
+    val pitch by derivedStateOf { (sensorData.pitch) }
     Box(modifier = modifier) {
         Image(
             modifier = Modifier
