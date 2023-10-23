@@ -7,10 +7,10 @@ import androidx.navigation.NavHostController
 import com.google.maps.android.compose.GoogleMap
 
 @Composable
-fun ScreenMap(modifier: Modifier = Modifier,
-              controller: NavHostController
-){
+fun ScreenMap(
+    modifier: Modifier = Modifier,
+    controller: NavHostController
+) {
     GoogleMap(modifier = Modifier.fillMaxSize()) {
-
     }
 }

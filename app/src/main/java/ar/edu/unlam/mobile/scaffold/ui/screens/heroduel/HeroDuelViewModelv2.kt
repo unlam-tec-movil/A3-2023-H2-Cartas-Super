@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.GameRepository
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
+import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) : ViewModel() {
 
-    private val _currentPlayerCard = MutableStateFlow(DataHero())
+    private val _currentPlayerCard = MutableStateFlow(HeroModel())
     val currentPlayerCard = _currentPlayerCard.asStateFlow()
 
     private val _cardSelectedIndex = MutableStateFlow(0)
@@ -50,10 +50,10 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
     lateinit var adversaryScore: StateFlow<Int>
         private set
 
-    lateinit var currentPlayerDeck: StateFlow<List<DataHero>>
+    lateinit var currentPlayerDeck: StateFlow<List<HeroModel>>
         private set
 
-    lateinit var currentAdversaryCard: StateFlow<DataHero>
+    lateinit var currentAdversaryCard: StateFlow<HeroModel>
         private set
 
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
@@ -94,12 +94,12 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
         currentPlayerDeck = game.currentPlayerDeck.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = listOf(DataHero(), DataHero(), DataHero())
+            initialValue = listOf(HeroModel(), HeroModel(), HeroModel())
         )
         currentAdversaryCard = game.currentAdversaryCard.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = DataHero()
+            initialValue = HeroModel()
         )
     }
 
@@ -122,7 +122,7 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
     }
 
     fun onFightClick() {
-        val cardId = _currentPlayerCard.value.id.toInt()
+        val cardId = _currentPlayerCard.value.id
         game.playerPlayCard(cardId, selectedStat, useMultix2)
         useMultix2 = false
         if (winner.value == Winner.NONE) {
