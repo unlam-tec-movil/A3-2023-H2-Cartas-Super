@@ -85,7 +85,7 @@ fun QuizResultPopup(
 @Composable
 fun QuizScreen(
     modifier: Modifier = Modifier,
-    controller: NavHostController,
+    returnHomeScreen: () -> Unit = {},
     viewModel: QuizViewModel = hiltViewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
@@ -104,9 +104,7 @@ fun QuizScreen(
     val chosenHero by viewModel.chosenHero.collectAsStateWithLifecycle()
 
     val onNewGame = viewModel::newGame
-    val onClickMainMenu = {
-        controller.navigate(route = "home")
-    }
+
     val sensorData by viewModel.sensorData
         .collectAsStateWithLifecycle(initialValue = SensorData(0f, 0f))
 
@@ -133,7 +131,7 @@ fun QuizScreen(
         correctHeroName = { correctAnswer },
         chosenHero = { chosenHero },
         onClickPlayAgain = onNewGame,
-        onClickMainMenu = onClickMainMenu,
+        onClickMainMenu = returnHomeScreen,
         sensorData = { sensorData }
     )
 }

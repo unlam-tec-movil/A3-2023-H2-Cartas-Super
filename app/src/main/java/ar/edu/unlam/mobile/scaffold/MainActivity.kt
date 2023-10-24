@@ -84,7 +84,7 @@ fun MainScreen() {
             composable("quiz") {
                 QuizScreen(
                     modifier = Modifier.padding(paddingValue),
-                    controller = controller
+                    returnHomeScreen = { controller.navigate(route = "home") }
                 )
             }
             composable("duel") {
