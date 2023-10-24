@@ -46,7 +46,7 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     ),
     titleLarge = TextStyle(
-        color = Color.White,
+        color = md_theme_light_onPrimary,
         shadow = Shadow(
             color = Color.Black,
             offset = Offset(6.0f, 4.0f),

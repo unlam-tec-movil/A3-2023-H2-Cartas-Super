@@ -12,8 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -29,6 +28,9 @@ import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextBodyLarge
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextButton
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextLabelMedium
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomTitle
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxHeroImage
@@ -52,30 +54,29 @@ fun QuizResultPopup(
     if (show()) {
         AlertDialog(
             modifier = modifier.testTag("alert dialog"),
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
             onDismissRequest = {},
-            title = { Text("Resultado") },
+            title = { CustomTextLabelMedium(text = { "Resultado" }) },
             text = {
-                Text(
+                CustomTextBodyLarge(
                     modifier = Modifier.testTag("body"),
-                    text = textToShow
+                    text = { textToShow }
                 )
             },
             confirmButton = {
-                TextButton(
+                CustomTextButton(
                     modifier = Modifier.testTag("play again button"),
-                    onClick = onClickPlayAgain
-                ) {
-                    Text("Jugar de nuevo".uppercase())
-                }
+                    onClick = onClickPlayAgain,
+                    label = { "JUGAR DE NUEVO" }
+                )
             },
             properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
             dismissButton = {
-                TextButton(
+                CustomTextButton(
                     modifier = Modifier.testTag("return to main menu button"),
-                    onClick = onClickMainMenu
-                ) {
-                    Text("Menú principal".uppercase())
-                }
+                    onClick = onClickMainMenu,
+                    label = { "MENU PRINCIPAL" }
+                )
             }
         )
     }
