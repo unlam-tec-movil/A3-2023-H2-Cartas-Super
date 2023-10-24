@@ -11,13 +11,24 @@ class CustomButtonKtTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun whenHavingDefaultStates_VerifyIfAllViewsExists() {
+    fun whenHavingDefaultStatesInCustomButton_VerifyIfAllViewsExists() {
         composeTestRule.setContent {
             ComicWarTheme {
                 CustomButton()
             }
         }
         composeTestRule.onNodeWithTag(testTag = "elevated button").assertExists()
+        composeTestRule.onNodeWithTag(testTag = "label", useUnmergedTree = true).assertExists()
+    }
+
+    @Test
+    fun whenHavingDefaultStatesInCustomTextButton_VerifyIfAllViewsExists() {
+        composeTestRule.setContent {
+            ComicWarTheme {
+                CustomTextButton()
+            }
+        }
+        composeTestRule.onNodeWithTag("text button").assertExists()
         composeTestRule.onNodeWithTag(testTag = "label", useUnmergedTree = true).assertExists()
     }
 }

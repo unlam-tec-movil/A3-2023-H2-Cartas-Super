@@ -51,7 +51,7 @@ class QuizScreenKtTest {
             ComicWarTheme {
                 QuizUi(
                     modifier = Modifier.fillMaxSize(),
-                    showPopup = true
+                    showPopup = { true }
                 )
             }
         }
@@ -63,7 +63,7 @@ class QuizScreenKtTest {
         composeTestRule.setContent {
             ComicWarTheme {
                 QuizResultPopup(
-                    show = true
+                    show = { true }
                 )
             }
         }

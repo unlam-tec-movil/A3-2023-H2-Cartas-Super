@@ -39,10 +39,11 @@ fun CustomTextButton(
     onClick: () -> Unit = { }
 ) {
     TextButton(
-        modifier = modifier,
+        modifier = modifier.testTag("text button"),
         onClick = onClick
     ) {
         CustomTextLabelMedium(
+            modifier = modifier.testTag("label"),
             text = label
         )
     }
