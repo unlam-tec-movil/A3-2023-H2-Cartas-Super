@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.LocationUtils
@@ -92,9 +94,10 @@ private fun MyGoogleMap(
             state = MarkerState(position = LocationUtils.getPosition(currentLocation)),
             title = "Posicion Actual"
         )
-    }
 
-    //GpsIconButton(onIconClick = onGpsIconClick)
+    }
+    GpsIconButton(onIconClick = onGpsIconClick)
+
 
     //DebugOverlay(cameraPositionState)
 }
@@ -114,7 +117,7 @@ private fun GpsIconButton(onIconClick: () -> Unit) {
             IconButton(onClick = onIconClick) {
                 Icon(
                     modifier = Modifier.padding(bottom = 100.dp, end = 20.dp),
-                    painter = painterResource(id = R.drawable.qr),
+                    painter = painterResource(id = R.drawable.ic_gps_fixed),
                     contentDescription = null
                 )
             }
@@ -125,7 +128,7 @@ private fun GpsIconButton(onIconClick: () -> Unit) {
     }
 
 
-/*@Composable
+@Composable
 private fun DebugOverlay(
     cameraPositionState: CameraPositionState,
 ) {
@@ -145,5 +148,5 @@ private fun DebugOverlay(
             color = Color.DarkGray)
     }
 }
-*/
+
 
