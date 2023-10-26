@@ -1,15 +1,15 @@
 package ar.edu.unlam.mobile.scaffold.domain.cardgame
 
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
-import ar.edu.unlam.mobile.scaffold.domain.hero.Powerstats
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
+import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
+import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class CardGame(
-    val playerDeck:List<DataHero>,
-    val adversaryDeck:List<DataHero>
+    val playerDeck: List<HeroModel>,
+    val adversaryDeck: List<HeroModel>
 ) {
     private val _winner = MutableStateFlow(Winner.NONE)
     val winner = _winner.asStateFlow()
@@ -29,21 +29,21 @@ class CardGame(
     private val _lastCardFightWinner = MutableStateFlow(Winner.NONE)
     val lastCardFightWinner = _lastCardFightWinner.asStateFlow()
 
-    private var currentAdversaryDeck:MutableList<DataHero> = adversaryDeck.toMutableList()
+    private var currentAdversaryDeck: MutableList<HeroModel> = adversaryDeck.toMutableList()
 
     private val _currentAdversaryCard = MutableStateFlow(adversaryDeck[0])
     val currentAdversaryCard = _currentAdversaryCard.asStateFlow()
 
-    fun playerPlayCard(id: Int, stat: Stat, useMultix2:Boolean) {
-        val playerCard = _currentPlayerDeck.value.find { it.id.toInt() == id }
-        var playerCardStat = getStat(powerStats = playerCard!!.powerstats,stat = stat)
-        val adversaryCardStat = getStat(powerStats = _currentAdversaryCard.value.powerstats,stat = stat)
+    fun playerPlayCard(id: Int, stat: Stat, useMultix2: Boolean) {
+        val playerCard = _currentPlayerDeck.value.find { it.id == id }
+        var playerCardStat = getStat(stats = playerCard!!.stats, stat = stat)
+        val adversaryCardStat = getStat(stats = _currentAdversaryCard.value.stats, stat = stat)
 
-        playerCardStat = applyMultiply(playerCardStat,useMultix2)
+        playerCardStat = applyMultiply(playerCardStat, useMultix2)
 
         if (playerCardStat > adversaryCardStat) {
-            playerCardWon(playerCardStat,adversaryCardStat)
-        }else {
+            playerCardWon(playerCardStat, adversaryCardStat)
+        } else {
             adversaryCardWon(
                 playerCardId = id,
                 playerCardStat = playerCardStat,
@@ -58,49 +58,49 @@ class CardGame(
         currentAdversaryDeck.remove(_currentAdversaryCard.value)
         if (currentAdversaryDeck.isEmpty()) {
             calculateWinner()
-        }else{
+        } else {
             _currentAdversaryCard.value = currentAdversaryDeck[0]
         }
     }
 
     private fun applyMultiply(playerCardStat: Int, useMultix2: Boolean): Int {
-        return if(useMultix2 && _canMultix2BeUsed.value) {
+        return if (useMultix2 && _canMultix2BeUsed.value) {
             _canMultix2BeUsed.value = false
             playerCardStat * 2
-        }else{
+        } else {
             playerCardStat
         }
     }
 
     private fun adversaryCardWon(
-        playerCardId:Int,
+        playerCardId: Int,
         playerCardStat: Int,
         adversaryCardStat: Int
     ) {
         _lastCardFightWinner.value = Winner.ADVERSARY
         _adversaryScore.value += adversaryCardStat - playerCardStat
-        _currentPlayerDeck.value = _currentPlayerDeck.value.filter { it.id.toInt() != playerCardId}
+        _currentPlayerDeck.value = _currentPlayerDeck.value.filter { it.id != playerCardId }
         if (_currentPlayerDeck.value.isEmpty()) {
             calculateWinner()
         }
     }
 
     private fun calculateWinner() {
-        _winner.value = if(_playerScore.value > _adversaryScore.value) {
+        _winner.value = if (_playerScore.value > _adversaryScore.value) {
             Winner.PLAYER
-        }else{
+        } else {
             Winner.ADVERSARY
         }
     }
 
-    private fun getStat(powerStats: Powerstats, stat: Stat): Int {
-        return when(stat) {
-            Stat.COMBAT -> powerStats.combat.toInt()
-            Stat.DURABILITY -> powerStats.durability.toInt()
-            Stat.INTELLIGENCE -> powerStats.intelligence.toInt()
-            Stat.POWER -> powerStats.power.toInt()
-            Stat.SPEED -> powerStats.speed.toInt()
-            Stat.STRENGTH -> powerStats.strength.toInt()
+    private fun getStat(stats: StatModel, stat: Stat): Int {
+        return when (stat) {
+            Stat.COMBAT -> stats.combat
+            Stat.DURABILITY -> stats.durability
+            Stat.INTELLIGENCE -> stats.intelligence
+            Stat.POWER -> stats.power
+            Stat.SPEED -> stats.speed
+            Stat.STRENGTH -> stats.strength
         }
     }
 }

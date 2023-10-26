@@ -3,16 +3,13 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.qr
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -42,7 +39,7 @@ fun QrScreen(
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
-            val dataHero by viewModel.hero.collectAsStateWithLifecycle()
+            val hero by viewModel.hero.collectAsStateWithLifecycle()
             val titleTextModifier = Modifier.padding(8.dp).fillMaxWidth()
             Image(
                 painter = painterResource(id = R.drawable.fondo_coleccion),
@@ -59,10 +56,10 @@ fun QrScreen(
                         .padding(8.dp)
                         .align(Alignment.CenterHorizontally)
                         .size(300.dp),
-                    url = dataHero.image.url,
+                    url = hero.image.url,
                     contentScale = ContentScale.FillWidth
                 )
-                HeroText(modifier = titleTextModifier, text = "${dataHero.id} ${dataHero.name}")
+                HeroText(modifier = titleTextModifier, text = "${hero.id} ${hero.name}")
 
                 Image(
                     painter = painterResource(id = R.drawable.qr),
@@ -74,9 +71,6 @@ fun QrScreen(
 
                 )
             }
-
         }
-
     }
-
 }

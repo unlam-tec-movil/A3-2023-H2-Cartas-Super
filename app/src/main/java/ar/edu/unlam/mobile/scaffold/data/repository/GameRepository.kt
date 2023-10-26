@@ -2,7 +2,7 @@ package ar.edu.unlam.mobile.scaffold.data.repository
 
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
-import ar.edu.unlam.mobile.scaffold.domain.hero.DataHero
+import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -22,8 +22,8 @@ class GameRepository @Inject constructor(private val repo: IHeroRepository) {
      */
 
     suspend fun getNewCardGame(): CardGame {
-        var playerDeck: List<DataHero> = listOf()
-        var adversaryDeck: List<DataHero> = listOf()
+        var playerDeck: List<HeroModel> = listOf()
+        var adversaryDeck: List<HeroModel> = listOf()
 
         CoroutineScope(Dispatchers.IO).launch {
             val playerDeckJob = async { repo.getRandomPlayerDeck(DEFAULT_DECK_SIZE) }
