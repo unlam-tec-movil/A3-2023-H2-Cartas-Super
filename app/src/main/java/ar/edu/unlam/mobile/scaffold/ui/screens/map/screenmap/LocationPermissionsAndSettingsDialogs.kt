@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.ui.screens.map.Screen
+package ar.edu.unlam.mobile.scaffold.ui.screens.map.screenmap
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
