@@ -1,9 +1,11 @@
 package ar.edu.unlam.mobile.scaffold
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -36,20 +38,16 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         setContent {
             ComicWarTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    MainScreen(fusedLocationProviderClient)
+                    MainScreen()
 
 
                 }
@@ -58,8 +56,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun MainScreen(fusedLocationProviderClient: FusedLocationProviderClient) {
+fun MainScreen() {
     val controller = rememberNavController()
     Scaffold(
         floatingActionButton = {
