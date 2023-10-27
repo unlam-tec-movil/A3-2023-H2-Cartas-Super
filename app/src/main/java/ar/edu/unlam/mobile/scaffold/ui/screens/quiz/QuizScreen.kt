@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
@@ -115,7 +114,7 @@ fun QuizScreen(
     }
 
     QuizUi(
-        modifier = modifier,
+        modifier = modifier.testTag("ui"),
         isLoading = isLoading,
         imageUrl = imageUrl,
         option1Text = { option1Text },

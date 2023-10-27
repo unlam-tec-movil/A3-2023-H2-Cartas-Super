@@ -6,7 +6,7 @@ import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
 import org.junit.Rule
 import org.junit.Test
 
-class CustomButtonKtTest {
+class CustomButtonTest {
     @get: Rule
     val composeTestRule = createComposeRule()
 
