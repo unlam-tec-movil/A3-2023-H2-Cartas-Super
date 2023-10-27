@@ -187,6 +187,9 @@ fun ScreenMap(modifier: Modifier,
 @Composable
 fun MainScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
     val marker = LatLng(currentPosition.latitude, currentPosition.longitude)
+    val puntoEncuentro1 = LatLng(-34.63333,-58.56667)
+    val puntoEncuentro2 = LatLng(-34.7,-58.58333)
+    
     GoogleMap(
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraState,
@@ -201,10 +204,9 @@ fun MainScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
             title = "Mi Posición Actual"
 
         )
-        Marker(state = MarkerState(position = LatLng(-34.63333,-58.56667)),
-            title = "Ramos Mejia")
-        Marker(state = MarkerState(position = LatLng(-34.7,-58.58333)),
-            title = "Isidro Casanova")
+       MapMarker(context = LocalContext.current, position = puntoEncuentro1, title = "Punto Encuentro 1" , iconResourceId = R.drawable.comic)
+        MapMarker(context = LocalContext.current, position =puntoEncuentro2 , title ="Punto de Encuentro 2" , iconResourceId = R.drawable.comic_2)
+
     }
 }
 
@@ -249,6 +251,8 @@ private suspend fun CameraPositionState.centerOnLocation(
         location,
         15f
     ),
-    durationMs = 1500
+    durationMs = 999999999
 )
+
+
 
