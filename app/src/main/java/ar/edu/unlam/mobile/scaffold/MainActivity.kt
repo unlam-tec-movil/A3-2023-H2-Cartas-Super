@@ -3,6 +3,7 @@ package ar.edu.unlam.mobile.scaffold
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -23,7 +24,8 @@ import ar.edu.unlam.mobile.scaffold.ui.screens.collection.CollectionScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.heroduel.HeroDuelScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.home.HomeScreen
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.screenmap.ScreenMap
+import ar.edu.unlam.mobile.scaffold.ui.screens.map.ScreenMap
+import ar.edu.unlam.mobile.scaffold.ui.screens.map.presentation.MapViewModel
 import ar.edu.unlam.mobile.scaffold.ui.screens.qr.QrScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.quiz.QuizScreen
 import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
@@ -35,8 +37,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -110,7 +115,9 @@ fun MainScreen(fusedLocationProviderClient: FusedLocationProviderClient) {
                 ScreenMap(
                     modifier = Modifier.padding(paddingValue),
                     controller = controller,
-                    fusedLocationProviderClient = fusedLocationProviderClient
+
+
+
                 )
             }
 
