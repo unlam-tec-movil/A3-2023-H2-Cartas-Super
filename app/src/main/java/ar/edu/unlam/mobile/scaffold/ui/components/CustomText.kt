@@ -33,6 +33,19 @@ fun CustomTextLabelMedium(
 }
 
 @Composable
+fun CustomTextLabelSmall(
+    modifier: Modifier = Modifier,
+    text: () -> String = { "CustomText" }
+) {
+    Text(
+        modifier = modifier,
+        text = text(),
+        style = MaterialTheme.typography.labelSmall,
+        color = MaterialTheme.colorScheme.onPrimaryContainer
+    )
+}
+
+@Composable
 fun CustomTextBodyLarge(
     modifier: Modifier = Modifier,
     text: () -> String = { "Text body large" }

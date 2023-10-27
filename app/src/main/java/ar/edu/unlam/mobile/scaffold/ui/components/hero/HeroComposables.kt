@@ -2,21 +2,25 @@ package ar.edu.unlam.mobile.scaffold.ui.components.hero
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,11 +29,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextLabelSmall
 
 // player card color = Color(0xFF16A0E8)
 // adversary card color = Color(0xFFFA1404)
@@ -140,16 +143,18 @@ fun HeroItem(modifier: Modifier = Modifier, hero: HeroModel = HeroModel()) {
 fun HeroGallery(
     modifier: Modifier = Modifier,
     heroList: List<HeroModel>,
-    itemSize: Dp = 125.dp,
+    columnCount: Int = 3,
     onItemClick: (Int) -> Unit
 ) {
     LazyVerticalGrid(
         modifier = modifier,
-        columns = GridCells.Adaptive(itemSize),
+        columns = GridCells.Fixed(columnCount),
+        contentPadding = PaddingValues(all = 8.dp),
         content = {
             items(heroList.size) { i ->
                 GalleryItem(
-                    heroModel = heroList[i],
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                    hero = heroList[i],
                     onItemClick = onItemClick
                 )
             }
@@ -157,40 +162,41 @@ fun HeroGallery(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryItem(
     modifier: Modifier = Modifier,
-    heroModel: HeroModel = HeroModel(),
+    hero: HeroModel = HeroModel(),
     onItemClick: (Int) -> Unit,
 ) {
-    TextButton(
+    // son libres de cambiar los colores
+    val cardColors = CardDefaults.elevatedCardColors(
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+        disabledContentColor = MaterialTheme.colorScheme.onSecondaryContainer
+    )
+    // el atributo enabled se puede usar para que el usuario no acceda a la info del personaje
+    // a menos de que lo haya obtenido
+    ElevatedCard(
+        // enabled = hero.quantity > 0
         modifier = modifier,
-        shape = RectangleShape,
-        onClick = { onItemClick(heroModel.id) }
+        onClick = { onItemClick(hero.id) },
+        shape = RoundedCornerShape(4.dp),
+        colors = cardColors
     ) {
-        Box(
+        HeroImage(
             modifier = Modifier
-                .background(brush = SolidColor(Color.Black), alpha = 0.25f)
-        ) {
-            Column {
-                HeroImage(
-                    modifier = Modifier.padding(4.dp),
-                    url = heroModel.image.url
-                )
-                Text(
-                    heroModel.name,
-                    modifier = Modifier
-                        .padding(bottom = 4.dp, start = 4.dp, end = 4.dp)
-                        .align(Alignment.CenterHorizontally),
-                    color = Color.Black,
-                    textAlign = TextAlign.Center
-                )
-            }
-            Text(
-                text = heroModel.id.toString(),
-                modifier = Modifier.padding(8.dp),
-                color = Color.Black
-            )
-        }
+                .padding(4.dp)
+                .aspectRatio(ratio = 0.8f),
+            url = hero.image.url,
+            contentScale = ContentScale.Crop
+        )
+        CustomTextLabelSmall(
+            modifier = Modifier
+                .padding(start = 4.dp, end = 4.dp, bottom = 4.dp)
+                .align(alignment = Alignment.CenterHorizontally),
+            text = { "${hero.id} ${hero.name}" }
+        )
     }
 }
