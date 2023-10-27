@@ -201,6 +201,10 @@ fun MainScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
             title = "Mi Posición Actual"
 
         )
+        Marker(state = MarkerState(position = LatLng(-34.63333,-58.56667)),
+            title = "Ramos Mejia")
+        Marker(state = MarkerState(position = LatLng(-34.7,-58.58333)),
+            title = "Isidro Casanova")
     }
 }
 
