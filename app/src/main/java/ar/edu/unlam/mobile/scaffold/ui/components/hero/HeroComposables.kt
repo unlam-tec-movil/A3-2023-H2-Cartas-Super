@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
@@ -147,13 +148,15 @@ fun HeroGallery(
     onItemClick: (Int) -> Unit
 ) {
     LazyVerticalGrid(
-        modifier = modifier,
+        modifier = modifier.testTag("lazy grid"),
         columns = GridCells.Fixed(columnCount),
         contentPadding = PaddingValues(all = 8.dp),
         content = {
             items(heroList.size) { i ->
                 GalleryItem(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                        .testTag("gallery item $i"),
                     hero = heroList[i],
                     onItemClick = onItemClick
                 )
@@ -162,12 +165,13 @@ fun HeroGallery(
     )
 }
 
+@Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryItem(
     modifier: Modifier = Modifier,
     hero: HeroModel = HeroModel(),
-    onItemClick: (Int) -> Unit,
+    onItemClick: (Int) -> Unit = {},
 ) {
     // son libres de cambiar los colores
     val cardColors = CardDefaults.elevatedCardColors(
@@ -188,14 +192,16 @@ fun GalleryItem(
         HeroImage(
             modifier = Modifier
                 .padding(4.dp)
-                .aspectRatio(ratio = 0.8f),
+                .aspectRatio(ratio = 0.8f)
+                .testTag("profile image"),
             url = hero.image.url,
             contentScale = ContentScale.Crop
         )
         CustomTextLabelSmall(
             modifier = Modifier
                 .padding(start = 4.dp, end = 4.dp, bottom = 4.dp)
-                .align(alignment = Alignment.CenterHorizontally),
+                .align(alignment = Alignment.CenterHorizontally)
+                .testTag("id name text"),
             text = { "${hero.id} ${hero.name}" }
         )
     }
