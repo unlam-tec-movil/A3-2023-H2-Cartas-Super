@@ -67,7 +67,7 @@ fun MainScreen() {
             composable("collection") {
                 CollectionScreen(
                     modifier = Modifier.padding(paddingValue),
-                    controller = controller
+                    navigateToHeroDetail = { heroID -> controller.navigate(route = "herodetail/$heroID") }
                 )
             }
             composable(
