@@ -14,6 +14,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,17 +49,35 @@ fun HeroDetailScreen(
 
     viewModel.getHero(heroID)
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val hero by viewModel.hero.collectAsStateWithLifecycle()
 
+    HeroDetailUi(
+        modifier = modifier,
+        sensorData = { sensorData },
+        isLoading = isLoading,
+        hero = { hero },
+        navigateToQR = navigateToQR
+    )
+}
+
+@Preview
+@Composable
+private fun HeroDetailUi(
+    modifier: Modifier = Modifier,
+    sensorData: () -> SensorData = { SensorData() },
+    isLoading: Boolean = false,
+    hero: () -> HeroModel = { HeroModel() },
+    navigateToQR: () -> Unit = { }
+) {
     Box(modifier = modifier) {
         ParallaxBackgroundImage(
             modifier = Modifier.fillMaxSize(),
             painterResourceId = R.drawable.fondo_coleccion,
-            data = { sensorData }
+            data = sensorData
         )
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
-            val hero by viewModel.hero.collectAsStateWithLifecycle()
             val scrollState = rememberScrollState()
             Column(
                 modifier = Modifier
@@ -68,14 +87,14 @@ fun HeroDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(all = 25.dp),
-                    imageUrl = hero.image.url,
-                    data = { sensorData }
+                    imageUrl = hero().image.url,
+                    data = sensorData
                 )
                 CustomTitle(
                     modifier = Modifier
                         .padding(20.dp)
                         .align(alignment = Alignment.CenterHorizontally),
-                    text = { "${hero.id} ${hero.name}" }
+                    text = { "${hero().id} ${hero().name}" }
                 )
                 CustomButton(
                     modifier = Modifier
@@ -99,7 +118,7 @@ fun HeroDetailScreen(
 @Composable
 private fun HeroData(
     modifier: Modifier = Modifier,
-    hero: HeroModel = HeroModel()
+    hero: () -> HeroModel = { HeroModel() }
 ) {
     Column(
         modifier = modifier
@@ -115,7 +134,7 @@ private fun HeroData(
         )
         HeroStats(
             modifier = infoModifier,
-            stats = hero.stats
+            stats = { hero().stats }
         )
         CustomTitle(
             modifier = titleTextModifier,
@@ -123,7 +142,7 @@ private fun HeroData(
         )
         HeroBiography(
             modifier = infoModifier,
-            biography = hero.biography
+            biography = { hero().biography }
         )
         CustomTitle(
             modifier = titleTextModifier,
@@ -131,7 +150,7 @@ private fun HeroData(
         )
         HeroAppearance(
             modifier = infoModifier,
-            heroAppearance = hero.appearance
+            heroAppearance = { hero().appearance }
         )
         CustomTitle(
             modifier = titleTextModifier,
@@ -139,7 +158,7 @@ private fun HeroData(
         )
         HeroWork(
             modifier = infoModifier,
-            heroWork = hero.work
+            heroWork = { hero().work }
         )
         CustomTitle(
             modifier = titleTextModifier,
@@ -147,7 +166,7 @@ private fun HeroData(
         )
         HeroConnections(
             modifier = infoModifier,
-            heroConnections = hero.connections
+            heroConnections = { hero().connections }
         )
     }
 }

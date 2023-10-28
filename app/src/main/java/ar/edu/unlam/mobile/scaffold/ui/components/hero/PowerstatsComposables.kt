@@ -16,7 +16,7 @@ import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextBodyLarge
 @Composable
 fun HeroStats(
     modifier: Modifier = Modifier,
-    stats: StatModel = StatModel(),
+    stats: () -> StatModel = { StatModel() },
 ) {
     CustomCard(
         modifier = modifier
@@ -27,16 +27,16 @@ fun HeroStats(
         ) {
             CustomTextBodyLarge(
                 text = {
-                    "Inteligencia: ${stats.intelligence}\n" +
-                        "Velocidad: ${stats.speed}\n" +
-                        "Durabilidad: ${stats.durability}"
+                    "Inteligencia: ${stats().intelligence}\n" +
+                        "Velocidad: ${stats().speed}\n" +
+                        "Durabilidad: ${stats().durability}"
                 }
             )
             CustomTextBodyLarge(
                 text = {
-                    "Fuerza: ${stats.strength}\n" +
-                        "Poder: ${stats.power}\n" +
-                        "Combate: ${stats.combat}"
+                    "Fuerza: ${stats().strength}\n" +
+                        "Poder: ${stats().power}\n" +
+                        "Combate: ${stats().combat}"
                 }
             )
         }

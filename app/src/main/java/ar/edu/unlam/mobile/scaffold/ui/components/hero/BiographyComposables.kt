@@ -13,7 +13,7 @@ import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextBodyLarge
 @Composable
 fun HeroBiography(
     modifier: Modifier = Modifier,
-    biography: BiographyModel = BiographyModel()
+    biography: () -> BiographyModel = { BiographyModel() }
 ) {
     CustomCard(
         modifier = modifier
@@ -21,13 +21,13 @@ fun HeroBiography(
         CustomTextBodyLarge(
             modifier = Modifier.padding(8.dp),
             text = {
-                "Nombre: ${biography.fullName}\n" +
-                    "Alter-Egos: ${biography.alterEgos}\n" +
-                    "Apodos: ${biography.aliases}\n" +
-                    "Lugar de nacimiento: ${biography.placeOfBirth}\n" +
-                    "Primera aparicion: ${biography.firstAppearance}\n" +
-                    "Editorial: ${biography.publisher}\n" +
-                    "Alineacion: ${biography.alignment}"
+                "Nombre: ${biography().fullName}\n" +
+                    "Alter-Egos: ${biography().alterEgos}\n" +
+                    "Apodos: ${biography().aliases}\n" +
+                    "Lugar de nacimiento: ${biography().placeOfBirth}\n" +
+                    "Primera aparicion: ${biography().firstAppearance}\n" +
+                    "Editorial: ${biography().publisher}\n" +
+                    "Alineacion: ${biography().alignment}"
             }
         )
     }

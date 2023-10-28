@@ -49,7 +49,7 @@ fun HeroPlayerCard(
     ) {
         HeroStats(
             modifier = Modifier.border(width = 1.dp, color = Color.Black, shape = RectangleShape),
-            stats = hero.stats,
+            stats = { hero.stats },
         )
     }
 }
