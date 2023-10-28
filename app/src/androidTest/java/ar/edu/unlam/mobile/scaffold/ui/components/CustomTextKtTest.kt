@@ -12,7 +12,7 @@ class CustomTextKtTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun customTitle() {
+    fun whenProvidingDefaultStateToCustomTitle_VerifyAllViewsExist() {
         composeTestRule.setContent {
             ComicWarTheme {
                 CustomTitle()
@@ -22,7 +22,7 @@ class CustomTextKtTest {
     }
 
     @Test
-    fun customTextLabelMedium() {
+    fun whenProvidingDefaultStateToCustomTextLabelMedium_VerifyAllViewsExist() {
         composeTestRule.setContent {
             ComicWarTheme {
                 CustomTextLabelMedium()
@@ -32,7 +32,7 @@ class CustomTextKtTest {
     }
 
     @Test
-    fun customTextLabelSmall() {
+    fun whenProvidingDefaultStateToCustomTextLabelSmall_VerifyAllViewsExist() {
         composeTestRule.setContent {
             ComicWarTheme {
                 CustomTextLabelSmall()
@@ -42,7 +42,7 @@ class CustomTextKtTest {
     }
 
     @Test
-    fun customTextBodyLarge() {
+    fun whenProvidingDefaultStateToCustomTextBodyLarge_VerifyAllViewsExist() {
         composeTestRule.setContent {
             ComicWarTheme {
                 CustomTextBodyLarge()

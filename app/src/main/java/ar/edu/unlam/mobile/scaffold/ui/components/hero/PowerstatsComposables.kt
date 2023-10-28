@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
@@ -26,6 +27,7 @@ fun HeroStats(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             CustomTextBodyLarge(
+                modifier = Modifier.testTag("Int Speed Durability text"),
                 text = {
                     "Inteligencia: ${stats().intelligence}\n" +
                         "Velocidad: ${stats().speed}\n" +
@@ -33,6 +35,7 @@ fun HeroStats(
                 }
             )
             CustomTextBodyLarge(
+                modifier = Modifier.testTag("Str Power Combat text"),
                 text = {
                     "Fuerza: ${stats().strength}\n" +
                         "Poder: ${stats().power}\n" +
