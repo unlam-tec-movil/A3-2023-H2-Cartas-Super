@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 
 @Preview
@@ -13,7 +14,7 @@ fun CustomTitle(
     text: () -> String = { "Title" }
 ) {
     Text(
-        modifier = modifier,
+        modifier = modifier.testTag("text"),
         text = text(),
         style = MaterialTheme.typography.titleLarge
     )
@@ -25,7 +26,7 @@ fun CustomTextLabelMedium(
     text: () -> String = { "CustomText" }
 ) {
     Text(
-        modifier = modifier,
+        modifier = modifier.testTag("text"),
         text = text(),
         style = MaterialTheme.typography.labelMedium,
         color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -38,7 +39,7 @@ fun CustomTextLabelSmall(
     text: () -> String = { "CustomText" }
 ) {
     Text(
-        modifier = modifier,
+        modifier = modifier.testTag("text"),
         text = text(),
         style = MaterialTheme.typography.labelSmall,
         color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -51,7 +52,7 @@ fun CustomTextBodyLarge(
     text: () -> String = { "Text body large" }
 ) {
     Text(
-        modifier = modifier,
+        modifier = modifier.testTag("text"),
         text = text(),
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onPrimaryContainer
