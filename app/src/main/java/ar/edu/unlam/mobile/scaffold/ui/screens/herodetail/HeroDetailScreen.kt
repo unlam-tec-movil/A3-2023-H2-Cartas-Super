@@ -14,6 +14,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -62,7 +63,7 @@ fun HeroDetailScreen(
 
 @Preview
 @Composable
-private fun HeroDetailUi(
+fun HeroDetailUi(
     modifier: Modifier = Modifier,
     sensorData: () -> SensorData = { SensorData() },
     isLoading: Boolean = false,
@@ -71,12 +72,16 @@ private fun HeroDetailUi(
 ) {
     Box(modifier = modifier) {
         ParallaxBackgroundImage(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().testTag("heroDetailUi background"),
             painterResourceId = R.drawable.fondo_coleccion,
             data = sensorData
         )
         if (isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .testTag("heroDetailUi Loading")
+            )
         } else {
             val scrollState = rememberScrollState()
             Column(
@@ -86,28 +91,32 @@ private fun HeroDetailUi(
                 ParallaxHeroImage(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = 25.dp),
+                        .padding(all = 25.dp)
+                        .testTag("heroDetailUi profile image"),
                     imageUrl = hero().image.url,
                     data = sensorData
                 )
                 CustomTitle(
                     modifier = Modifier
                         .padding(20.dp)
-                        .align(alignment = Alignment.CenterHorizontally),
+                        .align(alignment = Alignment.CenterHorizontally)
+                        .testTag("heroDetailUi character id and name"),
                     text = { "${hero().id} ${hero().name}" }
                 )
                 CustomButton(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .wrapContentSize()
-                        .padding(8.dp),
+                        .padding(8.dp)
+                        .testTag("heroDetailUi navigate to qr button"),
                     onClick = navigateToQR,
                     label = { "Intercambio" }
                 )
                 HeroData(
                     modifier = Modifier
                         .padding(8.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .testTag("heroDetailUi hero data"),
                     hero = hero
                 )
             }
@@ -116,7 +125,7 @@ private fun HeroDetailUi(
 }
 
 @Composable
-private fun HeroData(
+fun HeroData(
     modifier: Modifier = Modifier,
     hero: () -> HeroModel = { HeroModel() }
 ) {
@@ -129,43 +138,43 @@ private fun HeroData(
         val infoModifier = Modifier
             .fillMaxWidth()
         CustomTitle(
-            modifier = titleTextModifier,
+            modifier = titleTextModifier.testTag("title stats"),
             text = { "Stats" }
         )
         HeroStats(
-            modifier = infoModifier,
+            modifier = infoModifier.testTag("stat text"),
             stats = { hero().stats }
         )
         CustomTitle(
-            modifier = titleTextModifier,
+            modifier = titleTextModifier.testTag("title biography"),
             text = { "Biografia" }
         )
         HeroBiography(
-            modifier = infoModifier,
+            modifier = infoModifier.testTag("biography text"),
             biography = { hero().biography }
         )
         CustomTitle(
-            modifier = titleTextModifier,
+            modifier = titleTextModifier.testTag("title appearance"),
             text = { "Apariencia" }
         )
         HeroAppearance(
-            modifier = infoModifier,
+            modifier = infoModifier.testTag("heroData appearance text"),
             heroAppearance = { hero().appearance }
         )
         CustomTitle(
-            modifier = titleTextModifier,
+            modifier = titleTextModifier.testTag("title profession"),
             text = { "Profesion" }
         )
         HeroWork(
-            modifier = infoModifier,
+            modifier = infoModifier.testTag("heroData profession text"),
             heroWork = { hero().work }
         )
         CustomTitle(
-            modifier = titleTextModifier,
+            modifier = titleTextModifier.testTag("title connections"),
             text = { "Conecciones" }
         )
         HeroConnections(
-            modifier = infoModifier,
+            modifier = infoModifier.testTag("heroData text connections"),
             heroConnections = { hero().connections }
         )
     }

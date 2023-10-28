@@ -18,6 +18,6 @@ class BiographyComposablesKtTest {
                 HeroBiography()
             }
         }
-        composeTestRule.onNodeWithTag("biography text").assertExists()
+        composeTestRule.onNodeWithTag("body text").assertExists()
     }
 }

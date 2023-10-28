@@ -20,7 +20,7 @@ fun HeroBiography(
         modifier = modifier
     ) {
         CustomTextBodyLarge(
-            modifier = Modifier.padding(8.dp).testTag("biography text"),
+            modifier = Modifier.padding(8.dp).testTag("body text"),
             text = {
                 "Nombre: ${biography().fullName}\n" +
                     "Alter-Egos: ${biography().alterEgos}\n" +
