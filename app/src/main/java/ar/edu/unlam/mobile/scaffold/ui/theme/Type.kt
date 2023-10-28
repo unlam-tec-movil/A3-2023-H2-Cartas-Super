@@ -57,7 +57,8 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 30.sp,
         lineHeight = 30.sp,
-        letterSpacing = 0.sp
+        letterSpacing = 0.sp,
+        textAlign = TextAlign.Center
     ),
     labelSmall = TextStyle(
         fontFamily = shaka_pow,

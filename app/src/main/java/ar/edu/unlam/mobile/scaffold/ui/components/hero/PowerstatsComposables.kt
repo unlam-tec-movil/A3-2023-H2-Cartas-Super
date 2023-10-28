@@ -1,67 +1,44 @@
 package ar.edu.unlam.mobile.scaffold.ui.components.hero
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
-import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomCard
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextBodyLarge
 
 @Preview(showBackground = true)
 @Composable
 fun HeroStats(
     modifier: Modifier = Modifier,
     stats: StatModel = StatModel(),
-    brush: Brush = SolidColor(Color.Black),
-    alpha: Float = 0.8f,
-    textColor: Color = Color.White
 ) {
-    Row(
+    CustomCard(
         modifier = modifier
-            .background(
-                brush = brush,
-                alpha = alpha
-            ),
-        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Column(
-            modifier = Modifier
-                .padding(8.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            StatComposable(statName = "Inteligencia", statValue = stats.intelligence, color = textColor)
-            StatComposable(statName = "Velocidad", statValue = stats.speed, color = textColor)
-            StatComposable(statName = "Durabilidad", statValue = stats.durability, color = textColor)
-        }
-        Column(
-            modifier = Modifier.padding(8.dp)
-        ) {
-            StatComposable(statName = "Fuerza", statValue = stats.strength, color = textColor)
-            StatComposable(statName = "Poder", statValue = stats.power, color = textColor)
-            StatComposable(statName = "Combate", statValue = stats.combat, color = textColor)
+            CustomTextBodyLarge(
+                text = {
+                    "Inteligencia: ${stats.intelligence}\n" +
+                        "Velocidad: ${stats.speed}\n" +
+                        "Durabilidad: ${stats.durability}"
+                }
+            )
+            CustomTextBodyLarge(
+                text = {
+                    "Fuerza: ${stats.strength}\n" +
+                        "Poder: ${stats.power}\n" +
+                        "Combate: ${stats.combat}"
+                }
+            )
         }
     }
-}
-
-@Composable
-fun StatComposable(
-    modifier: Modifier = Modifier,
-    statName: String = "Inteligencia",
-    statValue: Int = 1,
-    color: Color = Color.Black
-) {
-    Text(
-        modifier = modifier,
-        text = "$statName: $statValue",
-        fontFamily = shaka_pow,
-        color = color
-    )
 }

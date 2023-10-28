@@ -13,13 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,12 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomClickeableCard
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextLabelSmall
 
 // player card color = Color(0xFF16A0E8)
@@ -53,9 +50,6 @@ fun HeroPlayerCard(
         HeroStats(
             modifier = Modifier.border(width = 1.dp, color = Color.Black, shape = RectangleShape),
             stats = hero.stats,
-            brush = SolidColor(Color(0xFFF9DB07)),
-            alpha = 1f,
-            textColor = Color.Black
         )
     }
 }
@@ -158,7 +152,7 @@ fun HeroGallery(
                         .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                         .testTag("gallery item $i"),
                     hero = heroList[i],
-                    onItemClick = onItemClick
+                    onItemClick = { onItemClick(i + 1) }
                 )
             }
         }
@@ -171,23 +165,11 @@ fun HeroGallery(
 fun GalleryItem(
     modifier: Modifier = Modifier,
     hero: HeroModel = HeroModel(),
-    onItemClick: (Int) -> Unit = {},
+    onItemClick: () -> Unit = {},
 ) {
-    // son libres de cambiar los colores
-    val cardColors = CardDefaults.elevatedCardColors(
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-        disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-        disabledContentColor = MaterialTheme.colorScheme.onSecondaryContainer
-    )
-    // el atributo enabled se puede usar para que el usuario no acceda a la info del personaje
-    // a menos de que lo haya obtenido
-    ElevatedCard(
-        // enabled = hero.quantity > 0
+    CustomClickeableCard(
         modifier = modifier,
-        onClick = { onItemClick(hero.id) },
-        shape = RoundedCornerShape(4.dp),
-        colors = cardColors
+        onClick = onItemClick
     ) {
         HeroImage(
             modifier = Modifier

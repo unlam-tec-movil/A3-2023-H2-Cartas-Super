@@ -77,7 +77,7 @@ fun MainScreen() {
                 val heroID = navBackStackEntry.arguments?.getInt("heroid") ?: 1
                 HeroDetailScreen(
                     modifier = Modifier.padding(paddingValue),
-                    controller = controller,
+                    navigateToQR = { controller.navigate(route = "qr") },
                     heroID = heroID
                 )
             }
