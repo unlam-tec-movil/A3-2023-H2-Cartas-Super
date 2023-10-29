@@ -56,6 +56,7 @@ import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
@@ -166,10 +167,12 @@ fun ScreenMap(modifier: Modifier,
                         this.location?.latitude ?: 0.0,
                         this.location?.longitude ?: 0.0
                     )
-                val cameraState = rememberCameraPositionState()
+                val cameraState = rememberCameraPositionState(){
+                    position = CameraPosition.fromLatLngZoom(currentLoc,18f)
+                }
 
                 LaunchedEffect(key1 = currentLoc) {
-                    cameraState.centerOnLocation(currentLoc)
+                    cameraState.position
                 }
 
                 MainScreen(
@@ -244,7 +247,7 @@ fun RationaleAlert(onDismiss: () -> Unit, onConfirm: () -> Unit) {
     }
 }
 
-private suspend fun CameraPositionState.centerOnLocation(
+/*private suspend fun CameraPositionState.centerOnLocation(
     location: LatLng
 ) = animate(
     update = CameraUpdateFactory.newLatLngZoom(
@@ -254,5 +257,5 @@ private suspend fun CameraPositionState.centerOnLocation(
     durationMs = 999999999
 )
 
-
+*/
 
