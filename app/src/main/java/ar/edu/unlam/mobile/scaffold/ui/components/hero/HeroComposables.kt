@@ -16,9 +16,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomClickeableCard
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomHorizontalClickeableCard
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextLabelSmall
 
 // player card color = Color(0xFF16A0E8)
@@ -88,6 +89,31 @@ fun HeroCard(
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun DeckItem(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    hero: () -> HeroModel = { HeroModel() }
+) {
+    CustomHorizontalClickeableCard(
+        modifier = modifier,
+        onClick = onClick
+    ) {
+        HeroImage(
+            modifier = Modifier
+                .size(120.dp)
+                .padding(4.dp)
+                .aspectRatio(ratio = 1f),
+            contentScale = ContentScale.Crop,
+            url = hero().image.url
+        )
+        HeroStats(
+            stats = { hero().stats }
+        )
+    }
+}
+
 /*
     orden: padding.shadow, usarlos cuando llame a estos composables
  */
@@ -141,12 +167,13 @@ fun HeroGallery(
     columnCount: Int = 3,
     onItemClick: (Int) -> Unit
 ) {
+    val listSize = remember(calculation = { heroList.size })
     LazyVerticalGrid(
         modifier = modifier.testTag("lazy grid"),
         columns = GridCells.Fixed(columnCount),
         contentPadding = PaddingValues(all = 8.dp),
         content = {
-            items(heroList.size) { i ->
+            items(listSize) { i ->
                 GalleryItem(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
@@ -160,7 +187,6 @@ fun HeroGallery(
 }
 
 @Preview(showBackground = true)
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryItem(
     modifier: Modifier = Modifier,
