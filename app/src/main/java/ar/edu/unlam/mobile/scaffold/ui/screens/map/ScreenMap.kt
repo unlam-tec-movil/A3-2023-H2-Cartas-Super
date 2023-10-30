@@ -1,48 +1,45 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.map
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -51,11 +48,10 @@ import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.presentation.MapViewModel
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.presentation.PermissionEvent
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.presentation.ViewState
-import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
@@ -63,6 +59,7 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerInfoWindowContent
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
@@ -192,24 +189,87 @@ fun MainScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
     val marker = LatLng(currentPosition.latitude, currentPosition.longitude)
     val puntoEncuentro1 = LatLng(-34.63333,-58.56667)
     val puntoEncuentro2 = LatLng(-34.7,-58.58333)
-    
-    GoogleMap(
-        modifier = Modifier.fillMaxSize(),
-        cameraPositionState = cameraState,
-        properties = MapProperties(
-            isMyLocationEnabled = true,
-            mapType = MapType.NORMAL,
+
+    Box(Modifier.fillMaxSize()) {
+
+        GoogleMap(
+            modifier = Modifier.fillMaxSize(),
+            cameraPositionState = cameraState,
+            properties = MapProperties(
+                isMyLocationEnabled = true,
+                mapType = MapType.NORMAL,
+
+                )
+        ) {
+            Marker(
+                state = MarkerState(position = marker),
+                title = "Mi Posición Actual"
 
             )
-    ) {
-        Marker(
-            state = MarkerState(position = marker),
-            title = "Mi Posición Actual"
 
-        )
-       MapMarker(context = LocalContext.current, position = puntoEncuentro1, title = "Punto Encuentro 1" , iconResourceId = R.drawable.comic)
-        MapMarker(context = LocalContext.current, position =puntoEncuentro2 , title ="Punto de Encuentro 2" , iconResourceId = R.drawable.comic_2)
+            MarkerInfoWindowContent(state = MarkerState(position = puntoEncuentro1), snippet = "Punto de encuentro 1",
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.comic)) {
+                Box(
+                    modifier = Modifier
+                        .height(290.dp)
+                        .width(300.dp)
+                        .background(Color.Green)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.punto_encuentro_1),
+                        contentDescription = null,
+                        contentScale = ContentScale.FillHeight,
+                        modifier = Modifier
+                            .width(500.dp)
+                            .height(250.dp)
+                    )
 
+                    Text(
+                        text = "Punto De Encuentro 1",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .padding(top = 250.dp)
+                            .fillMaxWidth(),
+                        fontSize = 30.sp,
+                        color = Color.Black,
+                        fontFamily = shaka_pow
+                    )
+                }
+
+            }
+
+
+            MarkerInfoWindowContent(state = MarkerState(position = puntoEncuentro2), snippet = "Punto de encuentro 2" ,
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.comic_2)) {
+                Box(
+                    modifier = Modifier
+                        .height(270.dp)
+                        .width(300.dp)
+                        .background(Color.Green)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.punto_encuentro_2),
+                        contentDescription = null,
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier
+                            .width(380.dp)
+                            .height(220.dp)
+                    )
+
+                    Text(
+                        text = "Punto De Encuentro 2",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .padding(top = 230.dp)
+                            .fillMaxWidth(),
+                        fontSize = 30.sp,
+                        color = Color.Black,
+                        fontFamily = shaka_pow
+                    )
+                }
+
+            }
+        }
     }
 }
 

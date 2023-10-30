@@ -1,12 +1,14 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.map.data
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.extension.hasLocationPermission
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -58,6 +60,16 @@ class LocationService @Inject constructor(
 
     override fun requestCurrentLocation(): Flow<LatLng?> {
         TODO("Not yet implemented")
+    }
+
+    fun Context.hasLocationPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
 }
