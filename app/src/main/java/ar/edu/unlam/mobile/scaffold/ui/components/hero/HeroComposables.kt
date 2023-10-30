@@ -1,16 +1,14 @@
 package ar.edu.unlam.mobile.scaffold.ui.components.hero
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
@@ -21,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
@@ -91,72 +88,54 @@ fun HeroCard(
 
 @Preview(showBackground = true)
 @Composable
+fun PlayerDeck(
+    modifier: Modifier = Modifier,
+    playerDeck: List<HeroModel> = listOf(HeroModel(), HeroModel(), HeroModel()),
+    onCardClick: (Int) -> Unit = {}
+) {
+    val deckSize = remember {
+        playerDeck.size
+    }
+    // lazyColumn porque en un futuro un mazo va a tener más de tres cartas.
+    LazyColumn(
+        modifier = modifier,
+        content = {
+            items(deckSize) { i ->
+                DeckItem(
+                    modifier = Modifier.padding(8.dp),
+                    onClick = { onCardClick(i) },
+                    hero = { playerDeck[i] }
+                )
+            }
+        }
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
 fun DeckItem(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     hero: () -> HeroModel = { HeroModel() }
 ) {
     CustomHorizontalClickeableCard(
-        modifier = modifier,
+        modifier = modifier.border(width = 2.dp, color = Color.Black, shape = RectangleShape),
         onClick = onClick
     ) {
         HeroImage(
             modifier = Modifier
-                .size(120.dp)
+                .size(100.dp)
                 .padding(4.dp)
                 .aspectRatio(ratio = 1f),
             contentScale = ContentScale.Crop,
             url = hero().image.url
         )
         HeroStats(
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth(),
             stats = { hero().stats }
         )
-    }
-}
-
-/*
-    orden: padding.shadow, usarlos cuando llame a estos composables
- */
-@Preview(showBackground = true)
-@Composable
-fun HeroItem(modifier: Modifier = Modifier, hero: HeroModel = HeroModel()) {
-    val brush = Brush.horizontalGradient(
-        colors = listOf(
-            Color(0xFFFA1404),
-            Color(0xFFF9DB07),
-            Color.Yellow
-        )
-    )
-    /*
-        Sería mejor usar una textura en vez de un gradiente.
-     */
-    Card(
-        modifier = modifier
-            .background(brush = brush)
-            .border(width = 2.dp, color = Color.Black, shape = RectangleShape),
-        shape = RectangleShape,
-        colors = CardDefaults.cardColors(Color(0x00000000))
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(2.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            HeroImage(
-                modifier = Modifier
-                    .size(120.dp)
-                    .padding(4.dp),
-                url = hero.image.url
-            )
-            Spacer(
-                modifier = Modifier.padding(8.dp)
-            )
-            Text(
-                modifier = Modifier.padding(2.dp),
-                text = hero.name
-            )
-        }
     }
 }
 
