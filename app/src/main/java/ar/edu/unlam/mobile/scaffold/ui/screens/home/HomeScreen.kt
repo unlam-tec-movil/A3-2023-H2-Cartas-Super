@@ -101,6 +101,13 @@ fun HomeScreen(
             ) {
                 controller.navigate(route = "Mapa")
             }
+            NavigationButton(
+                modifier = navButtonModifier,
+                text = "Usuario"
+            ) {
+                controller.navigate(route = "Usuario")
+            }
+
 
             if (cacheProgress < 1f) {
                 CustomProgressBarWithDots(modifier = navButtonModifier, progress = cacheProgress)
