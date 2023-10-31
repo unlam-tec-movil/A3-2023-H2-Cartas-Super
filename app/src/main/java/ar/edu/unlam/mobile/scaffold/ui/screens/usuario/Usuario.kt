@@ -2,6 +2,9 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.usuario
 
 import android.Manifest
 import android.app.ActionBar.LayoutParams
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.ViewGroup
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -12,19 +15,27 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
@@ -49,7 +61,16 @@ import java.util.concurrent.Executor
 
 
 @Composable
-fun Usuario(modifier: Modifier){
+fun Usuario(modifier: Modifier,
+            viewModel: GuestViewModel = hiltViewModel()){
+
+    var camara by remember{ mutableStateOf(false)}
+    val context = LocalContext.current
+
+    //Cargar Nombre de usuario
+    var name by remember { mutableStateOf("") }
+    var nameError by remember { mutableStateOf(false)}
+
 
     Box(modifier = modifier) {
         ParallaxBackgroundImage(
@@ -63,18 +84,54 @@ fun Usuario(modifier: Modifier){
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AnswerButton(
-                modifier = Modifier.testTag("Camara"),
-                text = "Camara",
-                 )
+            Row {
+            }
+            
+            Row {
+                TextField(value = name, onValueChange = {
+                    name = it
+                    nameError = false
+                }, label = { Text(text = "Ingrese usuario")}, isError = nameError)
+                Spacer(Modifier.size(16.dp))
 
-            //PermisosDeLaCamara()
+                Button(
+                    onClick = {
+                        if (name.isNotBlank()){
+                            viewModel.actualizarBase(name)
+                        }else{
+                            nameError = name.isBlank()
+                        }
+                    }
+                ) {
+                    Text("Continuar")
+                }
+
+            }
+                Spacer(Modifier.size(16.dp))
+            Row {
+                AnswerButton(
+                    modifier = Modifier.testTag("Camara"),
+                    text = "Camara",
+                    onButtonClick = { camara =! camara})
+
+                if (camara){
+                    PermisosDeLaCamara()
+                }
+                Spacer(Modifier.size(16.dp))
+                AnswerButton(
+                    modifier = Modifier.testTag("Agregar Usuario"),
+                    text = "Usuario"
+                )
+            }
+
             Row(modifier = Modifier.fillMaxWidth()){
             }
         }
     }
 
 }
+
+
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalPermissionsApi::class)
 @Composable
@@ -152,7 +209,6 @@ fun AnswerButton(
     modifier: Modifier = Modifier,
     text: String = "text",
     onButtonClick: () -> Unit = {}
-
 ) {
     ElevatedButton(
         onClick = onButtonClick,
