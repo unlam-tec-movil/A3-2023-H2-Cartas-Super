@@ -51,6 +51,9 @@ android {
             merges += "META-INF/LICENSE-notice.md"
         }
     }
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
 }
 
 dependencies {
@@ -72,6 +75,10 @@ dependencies {
     androidTestImplementation 'androidx.arch.core:core-testing:2.2.0'
     androidTestImplementation 'app.cash.turbine:turbine:1.0.0' // testeo simple de flows
     testImplementation 'androidx.arch.core:core-testing:2.2.0'
+
+    // Roboelectric para testear room en unit tests
+    testImplementation 'org.robolectric:robolectric:4.11.1'
+    testImplementation "org.robolectric:annotations:4.11.1"
 
     // Mockk
     def mockkVersion = "1.13.7"
