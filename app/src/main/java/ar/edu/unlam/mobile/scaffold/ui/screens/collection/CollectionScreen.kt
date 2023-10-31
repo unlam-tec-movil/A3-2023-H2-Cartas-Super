@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
@@ -19,7 +18,7 @@ import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroGallery
 @Composable
 fun CollectionScreen(
     modifier: Modifier = Modifier,
-    controller: NavHostController,
+    navigateToHeroDetail: (Int) -> Unit = {},
     viewModel: CollectionViewModelImp = hiltViewModel()
 ) {
     val sensorData by viewModel.sensorData
@@ -36,7 +35,7 @@ fun CollectionScreen(
             modifier = Modifier.fillMaxSize(),
             contentDescription = "Pantalla Coleccion",
             painterResourceId = R.drawable.fondo_coleccion,
-            data = sensorData
+            data = { sensorData }
         )
 
         val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
@@ -44,11 +43,10 @@ fun CollectionScreen(
         if (isLoading.value) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
-            val onItemClick: (Int) -> Unit = { heroID -> controller.navigate(route = "herodetail/$heroID") }
             HeroGallery(
                 modifier = Modifier.fillMaxSize(),
                 heroList = viewModel.heroList.collectAsStateWithLifecycle().value,
-                onItemClick = onItemClick
+                onItemClick = navigateToHeroDetail
             )
         }
     }

@@ -58,13 +58,16 @@ fun MainScreen() {
             composable("home") {
                 HomeScreen(
                     modifier = Modifier.padding(paddingValue),
-                    controller = controller
+                    navDuel = { controller.navigate(route = "duel") },
+                    navQuiz = { controller.navigate(route = "quiz") },
+                    navMap = { controller.navigate(route = "Mapa") },
+                    navCollection = { controller.navigate(route = "collection") }
                 )
             }
             composable("collection") {
                 CollectionScreen(
                     modifier = Modifier.padding(paddingValue),
-                    controller = controller
+                    navigateToHeroDetail = { heroID -> controller.navigate(route = "herodetail/$heroID") }
                 )
             }
             composable(
@@ -74,14 +77,14 @@ fun MainScreen() {
                 val heroID = navBackStackEntry.arguments?.getInt("heroid") ?: 1
                 HeroDetailScreen(
                     modifier = Modifier.padding(paddingValue),
-                    controller = controller,
+                    navigateToQR = { controller.navigate(route = "qr") },
                     heroID = heroID
                 )
             }
             composable("quiz") {
                 QuizScreen(
                     modifier = Modifier.padding(paddingValue),
-                    controller = controller
+                    returnHomeScreen = { controller.navigate(route = "home") }
                 )
             }
             composable("duel") {
