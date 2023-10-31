@@ -1,7 +1,10 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.map
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
@@ -35,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -94,7 +98,7 @@ fun ScreenMap(modifier: Modifier,
         }
 
         permissionState.shouldShowRationale -> {
-            RationaleAlert(onDismiss = { }) {
+            LaunchedEffect(Unit) {
                 permissionState.launchMultiplePermissionRequest()
             }
         }
@@ -109,17 +113,36 @@ fun ScreenMap(modifier: Modifier,
     with(viewState) {
         when (this) {
             ViewState.Loading -> {
-                Box(modifier = modifier,
-                    contentAlignment = Alignment.Center
-                ) {
-                    ParallaxBackgroundImage(
-                        modifier = Modifier.fillMaxSize(),
-                        contentDescription = "Pantalla Coleccion",
-                        painterResourceId = R.drawable.fondo_coleccion,
-                    )
-                    CircularProgressIndicator()
+                if (!isGpsEnabled(context)) {
+                    Box(
+                        modifier = modifier,
+                        contentAlignment = Alignment.Center
+                    ) {
+                        ParallaxBackgroundImage(
+                            modifier = Modifier.fillMaxSize(),
+                            contentDescription = "Pantalla Coleccion",
+                            painterResourceId = R.drawable.fondo_coleccion,
+                        )
+                        Text(
+                            text = "Por Favor activa el Gps para usar el mapa",
+                            style = MaterialTheme.typography.headlineLarge, textAlign = TextAlign.Center
+                        )
+                    }
+                } else {
+                    Box(
+                        modifier = modifier,
+                        contentAlignment = Alignment.Center
+                    ) {
+                        ParallaxBackgroundImage(
+                            modifier = Modifier.fillMaxSize(),
+                            contentDescription = "Pantalla Coleccion",
+                            painterResourceId = R.drawable.fondo_coleccion,
+                        )
+                        CircularProgressIndicator()
+                    }
                 }
             }
+
 
             ViewState.RevokedPermissions -> {
                 Box(modifier = modifier,
@@ -142,7 +165,8 @@ fun ScreenMap(modifier: Modifier,
                         )
                         Button(modifier = Modifier.padding(16.dp),
                             onClick = {
-                                val intent = Intent(Settings.ACTION_SETTINGS)
+                                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                intent.data = Uri.parse("package:${context.packageName}")
                                 context.startActivity(intent)
                             },
                             colors = ButtonDefaults.buttonColors(Color.Yellow)
@@ -172,7 +196,7 @@ fun ScreenMap(modifier: Modifier,
                     cameraState.position
                 }
 
-                MainScreen(
+                MapScreen(
                     currentPosition = LatLng(
                         currentLoc.latitude,
                         currentLoc.longitude
@@ -185,7 +209,7 @@ fun ScreenMap(modifier: Modifier,
 }
 
 @Composable
-fun MainScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
+fun MapScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
     val marker = LatLng(currentPosition.latitude, currentPosition.longitude)
     val puntoEncuentro1 = LatLng(-34.63333,-58.56667)
     val puntoEncuentro2 = LatLng(-34.7,-58.58333)
@@ -273,49 +297,10 @@ fun MainScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
     }
 }
 
-@Composable
-fun RationaleAlert(onDismiss: () -> Unit, onConfirm: () -> Unit) {
 
-    Dialog(
-        onDismissRequest = onDismiss,
-        properties = DialogProperties()
-    ) {
-        Surface(
-            modifier = Modifier
-                .wrapContentWidth()
-                .wrapContentHeight(),
-            shape = MaterialTheme.shapes.large,
-            tonalElevation = AlertDialogDefaults.TonalElevation
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = "Para poder usar la Localizacion necesita el permiso!",
-
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-                TextButton(
-                    onClick = {
-                        onConfirm()
-                        onDismiss()
-                    },
-                    modifier = Modifier.align(Alignment.End)
-                ) {
-                    Text("OK")
-                }
-            }
-        }
-    }
+fun isGpsEnabled(context: Context): Boolean {
+    val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 }
 
-/*private suspend fun CameraPositionState.centerOnLocation(
-    location: LatLng
-) = animate(
-    update = CameraUpdateFactory.newLatLngZoom(
-        location,
-        15f
-    ),
-    durationMs = 999999999
-)
-
-*/
 
