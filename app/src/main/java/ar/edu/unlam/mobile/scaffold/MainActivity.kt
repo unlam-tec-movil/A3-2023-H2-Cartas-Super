@@ -14,7 +14,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,7 +26,7 @@ import ar.edu.unlam.mobile.scaffold.ui.screens.home.HomeScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.ScreenMap
 import ar.edu.unlam.mobile.scaffold.ui.screens.qr.QrScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.quiz.QuizScreen
-import ar.edu.unlam.mobile.scaffold.ui.screens.usuario.Usuario
+import ar.edu.unlam.mobile.scaffold.ui.screens.usuario.UsuarioScreen
 import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -66,6 +65,7 @@ fun MainScreen() {
                     navDuel = { controller.navigate(route = "duel") },
                     navQuiz = { controller.navigate(route = "quiz") },
                     navMap = { controller.navigate(route = "Mapa") },
+                    navUsuario = { controller.navigate(route = "Usuario")},
                     navCollection = { controller.navigate(route = "collection") }
                 )
             }
@@ -111,7 +111,7 @@ fun MainScreen() {
                 )
             }
             composable("Usuario") {
-               Usuario(
+               UsuarioScreen(
                    modifier = Modifier.padding(paddingValue)
                )
             }

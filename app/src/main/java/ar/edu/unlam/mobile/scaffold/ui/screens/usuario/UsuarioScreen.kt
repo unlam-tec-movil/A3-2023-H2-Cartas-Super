@@ -1,10 +1,6 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.usuario
 
 import android.Manifest
-import android.app.ActionBar.LayoutParams
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.view.ViewGroup
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -18,18 +14,20 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,16 +40,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import ar.edu.unlam.mobile.scaffold.R
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomTitle
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
-import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -61,8 +58,8 @@ import java.util.concurrent.Executor
 
 
 @Composable
-fun Usuario(modifier: Modifier,
-            viewModel: GuestViewModel = hiltViewModel()){
+fun UsuarioScreen(modifier: Modifier,
+                  viewModel: UsuarioViewModel = hiltViewModel()){
 
     var camara by remember{ mutableStateOf(false)}
     val context = LocalContext.current
@@ -84,44 +81,51 @@ fun Usuario(modifier: Modifier,
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            CustomTitle(text = {"Usuarios"})
+
+            Spacer(Modifier.size(16.dp))
+
             Row {
-            }
-            
-            Row {
+                
                 TextField(value = name, onValueChange = {
                     name = it
                     nameError = false
-                }, label = { Text(text = "Ingrese usuario")}, isError = nameError)
-                Spacer(Modifier.size(16.dp))
-
-                Button(
-                    onClick = {
-                        if (name.isNotBlank()){
-                            viewModel.actualizarBase(name)
-                        }else{
-                            nameError = name.isBlank()
-                        }
-                    }
-                ) {
-                    Text("Continuar")
-                }
+                }, 
+                    label = { Text(text = "Ingrese usuario")},
+                    isError = nameError, modifier = Modifier,
+                    placeholder = { Text(text = "Nombre de usuario")},
+                    leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = null)})
 
             }
-                Spacer(Modifier.size(16.dp))
-            Row {
-                AnswerButton(
-                    modifier = Modifier.testTag("Camara"),
-                    text = "Camara",
-                    onButtonClick = { camara =! camara})
 
-                if (camara){
-                    PermisosDeLaCamara()
-                }
                 Spacer(Modifier.size(16.dp))
-                AnswerButton(
-                    modifier = Modifier.testTag("Agregar Usuario"),
-                    text = "Usuario"
-                )
+
+            Button(
+                onClick = {
+                    if (name.isNotBlank()){
+                        viewModel.actualizarBase(name)
+                    }else{
+                        nameError = name.isBlank()
+                    }
+                }
+            ) {
+                Text("Continuar")
+            }
+
+                Spacer(Modifier.size(16.dp))
+
+            Row {
+                CustomButton(
+                    modifier = Modifier.testTag("Camara"),
+                    label = {"Camara"},
+                    onClick = { camara =! camara})
+
+                Spacer(Modifier.size(16.dp))
+            }
+
+            if (camara){
+                PermisosDeLaCamara()
             }
 
             Row(modifier = Modifier.fillMaxWidth()){
@@ -151,13 +155,21 @@ fun PermisosDeLaCamara(){
     }
 
     Scaffold (modifier = Modifier.fillMaxWidth(), floatingActionButton = {
-        FloatingActionButton(onClick = {
+        FloatingActionButton(
+            onClick = {
             val executor = ContextCompat.getMainExecutor(context)
             takePicture(camaraController,executor)
-        }) {
-            Text(text = "Camara")
+        },
+            containerColor = Color.DarkGray,
+            contentColor = Color.White,
+            shape = CircleShape,
+
+        ) {
+            Icon(Icons.Default.Add, "Icono de mas")
         }
-    }) {
+    },
+        floatingActionButtonPosition = FabPosition.Center){
+
         if (permissionState.status.isGranted){
             CamaraComposable(camaraController, lifecycle, modifier = Modifier.padding(it))
         }else{
@@ -202,28 +214,4 @@ fun CamaraComposable(
         previewView
     })
 
-}
-
-@Composable
-fun AnswerButton(
-    modifier: Modifier = Modifier,
-    text: String = "text",
-    onButtonClick: () -> Unit = {}
-) {
-    ElevatedButton(
-        onClick = onButtonClick,
-        modifier = modifier
-            .width(180.dp)
-            .height(80.dp),
-        colors = ButtonDefaults.buttonColors(Color.Red),
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
-    ) {
-        Text(
-            text = text,
-            fontSize = 20.sp,
-            color = Color.White,
-            fontFamily = shaka_pow,
-            textAlign = TextAlign.Center
-        )
-    }
 }

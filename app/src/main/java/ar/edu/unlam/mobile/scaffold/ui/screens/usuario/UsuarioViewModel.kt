@@ -10,7 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 @HiltViewModel
-class GuestViewModel @Inject constructor(
+class UsuarioViewModel @Inject constructor(
     private val repository: GuestRepository
 ) : ViewModel(){
 
@@ -18,7 +18,7 @@ class GuestViewModel @Inject constructor(
     val existeGuest: LiveData<Boolean> = _existeGuest
 
     private fun crearUsuario(name: String): Guest {
-        return Guest(1, name)
+        return Guest(null, name)
     }
 
     fun actualizarBase(name: String){
