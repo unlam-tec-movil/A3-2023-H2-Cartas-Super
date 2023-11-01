@@ -13,6 +13,7 @@ import ar.edu.unlam.mobile.scaffold.data.database.entities.PowerstatsEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.WorkEntity
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -41,6 +42,11 @@ class HeroDataBaseTest {
             ).allowMainThreadQueries()
             .build()
         heroDao = heroDataBase.getHeroDao()
+    }
+
+    @After
+    fun tearDown() {
+        heroDataBase.close()
     }
 
     @Test
