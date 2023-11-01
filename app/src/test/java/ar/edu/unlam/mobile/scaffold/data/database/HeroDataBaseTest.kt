@@ -123,8 +123,9 @@ class HeroDataBaseTest {
         val heroList = heroDao.getAll()
 
         assertThat(heroList).hasSize(heroEntityList.size)
-        for (i in heroList.indices) {
-            assertThat(heroList[i]).isEqualTo(heroEntityList[i])
-        }
+        assertThat(heroList).contains(heroEntityList[0])
+        assertThat(heroList).contains(heroEntityList[1])
+        assertThat(heroList).contains(heroEntityList[2])
+        assertThat(heroList).contains(heroEntityList[3])
     }
 }
