@@ -14,14 +14,16 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
-import ar.edu.unlam.mobile.scaffold.ui.components.HeroText
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomTitle
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxHeroImage
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroAppearance
@@ -29,17 +31,11 @@ import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroBiography
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroConnections
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroStats
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroWork
-import ar.edu.unlam.mobile.scaffold.ui.screens.home.NavigationButton
-/*
-@Composable
-private fun DebugSensorData(data: SensorData?) {
-    Text(text = "Pitch: ${data?.pitch ?: 0}\nRoll: ${data?.roll ?: 0}")
-}*/
 
 @Composable
 fun HeroDetailScreen(
     modifier: Modifier = Modifier,
-    controller: NavHostController,
+    navigateToQR: () -> Unit = {},
     viewModel: HeroDetailViewModelImp = hiltViewModel(),
     heroID: Int = 1
 ) {
@@ -52,101 +48,134 @@ fun HeroDetailScreen(
         }
     }
 
-    val navButtonModifier = Modifier
-        .wrapContentSize()
-        .padding(16.dp)
     viewModel.getHero(heroID)
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val hero by viewModel.hero.collectAsStateWithLifecycle()
 
+    HeroDetailUi(
+        modifier = modifier,
+        sensorData = { sensorData },
+        isLoading = isLoading,
+        hero = { hero },
+        navigateToQR = navigateToQR
+    )
+}
+
+@Preview
+@Composable
+fun HeroDetailUi(
+    modifier: Modifier = Modifier,
+    sensorData: () -> SensorData = { SensorData() },
+    isLoading: Boolean = false,
+    hero: () -> HeroModel = { HeroModel() },
+    navigateToQR: () -> Unit = { }
+) {
     Box(modifier = modifier) {
+        ParallaxBackgroundImage(
+            modifier = Modifier.fillMaxSize().testTag("heroDetailUi background"),
+            painterResourceId = R.drawable.fondo_coleccion,
+            data = sensorData
+        )
         if (isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-        } else {
-            val hero by viewModel.hero.collectAsStateWithLifecycle()
-            ParallaxBackgroundImage(
-                modifier = Modifier.fillMaxSize(),
-                painterResourceId = R.drawable.fondo_coleccion,
-                data = sensorData
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .testTag("heroDetailUi Loading")
             )
+        } else {
+            val scrollState = rememberScrollState()
             Column(
                 modifier = Modifier
-                    .verticalScroll(state = rememberScrollState())
+                    .verticalScroll(state = scrollState)
             ) {
                 ParallaxHeroImage(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = 25.dp),
-                    imageUrl = hero.image.url,
+                        .padding(all = 25.dp)
+                        .testTag("heroDetailUi profile image"),
+                    imageUrl = hero().image.url,
                     data = sensorData
                 )
-                NavigationButton(
-                    modifier = navButtonModifier
-                        .align(Alignment.CenterHorizontally),
-                    text = "Intercambio"
-                ) {
-                    controller.navigate(route = "qr")
-                }
-                // DebugSensorData(data = data)
-                HeroData(modifier = Modifier.fillMaxWidth(), heroModel = hero)
+                CustomTitle(
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .align(alignment = Alignment.CenterHorizontally)
+                        .testTag("heroDetailUi character id and name"),
+                    text = { "${hero().id} ${hero().name}" }
+                )
+                CustomButton(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .wrapContentSize()
+                        .padding(8.dp)
+                        .testTag("heroDetailUi navigate to qr button"),
+                    onClick = navigateToQR,
+                    label = { "Intercambio" }
+                )
+                HeroData(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                        .testTag("heroDetailUi hero data"),
+                    hero = hero
+                )
             }
         }
     }
 }
 
 @Composable
-private fun HeroData(
+fun HeroData(
     modifier: Modifier = Modifier,
-    heroModel: HeroModel = HeroModel()
+    hero: () -> HeroModel = { HeroModel() }
 ) {
-    val titleTextModifier = Modifier
-        .padding(8.dp)
-        .fillMaxWidth()
     Column(
         modifier = modifier
     ) {
-        HeroText(
-            modifier = titleTextModifier,
-            text = "${heroModel.id} ${heroModel.name}"
-        )
-        HeroText(
-            modifier = titleTextModifier,
-            text = "Stats"
+        val titleTextModifier = Modifier
+            .padding(20.dp)
+            .align(alignment = Alignment.CenterHorizontally)
+        val infoModifier = Modifier
+            .fillMaxWidth()
+        CustomTitle(
+            modifier = titleTextModifier.testTag("title stats"),
+            text = { "Stats" }
         )
         HeroStats(
-            modifier = Modifier.fillMaxWidth(),
-            stats = heroModel.stats
+            modifier = infoModifier.testTag("stat text"),
+            stats = { hero().stats }
         )
-        HeroText(
-            modifier = titleTextModifier,
-            text = "Biografia"
+        CustomTitle(
+            modifier = titleTextModifier.testTag("title biography"),
+            text = { "Biografia" }
         )
         HeroBiography(
-            modifier = Modifier.fillMaxWidth(),
-            biography = heroModel.biography
+            modifier = infoModifier.testTag("biography text"),
+            biography = { hero().biography }
         )
-        HeroText(
-            modifier = titleTextModifier,
-            text = "Apariencia"
+        CustomTitle(
+            modifier = titleTextModifier.testTag("title appearance"),
+            text = { "Apariencia" }
         )
         HeroAppearance(
-            modifier = Modifier.fillMaxWidth(),
-            heroAppearance = heroModel.appearance
+            modifier = infoModifier.testTag("heroData appearance text"),
+            heroAppearance = { hero().appearance }
         )
-        HeroText(
-            modifier = titleTextModifier,
-            text = "Profesion"
+        CustomTitle(
+            modifier = titleTextModifier.testTag("title profession"),
+            text = { "Profesion" }
         )
         HeroWork(
-            modifier = Modifier.fillMaxWidth(),
-            heroWork = heroModel.work
+            modifier = infoModifier.testTag("heroData profession text"),
+            heroWork = { hero().work }
         )
-        HeroText(
-            modifier = titleTextModifier,
-            text = "Conecciones"
+        CustomTitle(
+            modifier = titleTextModifier.testTag("title connections"),
+            text = { "Conecciones" }
         )
         HeroConnections(
-            modifier = Modifier.fillMaxWidth(),
-            heroConnections = heroModel.connections
+            modifier = infoModifier.testTag("heroData text connections"),
+            heroConnections = { hero().connections }
         )
     }
 }

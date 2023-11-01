@@ -1,35 +1,34 @@
 package ar.edu.unlam.mobile.scaffold.ui.components.hero
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomClickeableCard
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomHorizontalClickeableCard
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextLabelSmall
 
 // player card color = Color(0xFF16A0E8)
 // adversary card color = Color(0xFFFA1404)
@@ -48,10 +47,7 @@ fun HeroPlayerCard(
     ) {
         HeroStats(
             modifier = Modifier.border(width = 1.dp, color = Color.Black, shape = RectangleShape),
-            stats = hero.stats,
-            brush = SolidColor(Color(0xFFF9DB07)),
-            alpha = 1f,
-            textColor = Color.Black
+            stats = { hero.stats },
         )
     }
 }
@@ -90,49 +86,56 @@ fun HeroCard(
     }
 }
 
-/*
-    orden: padding.shadow, usarlos cuando llame a estos composables
- */
 @Preview(showBackground = true)
 @Composable
-fun HeroItem(modifier: Modifier = Modifier, hero: HeroModel = HeroModel()) {
-    val brush = Brush.horizontalGradient(
-        colors = listOf(
-            Color(0xFFFA1404),
-            Color(0xFFF9DB07),
-            Color.Yellow
-        )
-    )
-    /*
-        Sería mejor usar una textura en vez de un gradiente.
-     */
-    Card(
-        modifier = modifier
-            .background(brush = brush)
-            .border(width = 2.dp, color = Color.Black, shape = RectangleShape),
-        shape = RectangleShape,
-        colors = CardDefaults.cardColors(Color(0x00000000))
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(2.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            HeroImage(
-                modifier = Modifier
-                    .size(120.dp)
-                    .padding(4.dp),
-                url = hero.image.url
-            )
-            Spacer(
-                modifier = Modifier.padding(8.dp)
-            )
-            Text(
-                modifier = Modifier.padding(2.dp),
-                text = hero.name
-            )
+fun PlayerDeck(
+    modifier: Modifier = Modifier,
+    playerDeck: List<HeroModel> = listOf(HeroModel(), HeroModel(), HeroModel()),
+    onCardClick: (Int) -> Unit = {}
+) {
+    val deckSize = remember {
+        playerDeck.size
+    }
+    // lazyColumn porque en un futuro un mazo va a tener más de tres cartas.
+    LazyColumn(
+        modifier = modifier,
+        content = {
+            items(deckSize) { i ->
+                DeckItem(
+                    modifier = Modifier.padding(8.dp),
+                    onClick = { onCardClick(i) },
+                    hero = { playerDeck[i] }
+                )
+            }
         }
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DeckItem(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    hero: () -> HeroModel = { HeroModel() }
+) {
+    CustomHorizontalClickeableCard(
+        modifier = modifier.border(width = 2.dp, color = Color.Black, shape = RectangleShape),
+        onClick = onClick
+    ) {
+        HeroImage(
+            modifier = Modifier
+                .size(100.dp)
+                .padding(4.dp)
+                .aspectRatio(ratio = 1f),
+            contentScale = ContentScale.Crop,
+            url = hero().image.url
+        )
+        HeroStats(
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth(),
+            stats = { hero().stats }
+        )
     }
 }
 
@@ -140,57 +143,53 @@ fun HeroItem(modifier: Modifier = Modifier, hero: HeroModel = HeroModel()) {
 fun HeroGallery(
     modifier: Modifier = Modifier,
     heroList: List<HeroModel>,
-    itemSize: Dp = 125.dp,
+    columnCount: Int = 3,
     onItemClick: (Int) -> Unit
 ) {
+    val listSize = remember(calculation = { heroList.size })
     LazyVerticalGrid(
-        modifier = modifier,
-        columns = GridCells.Adaptive(itemSize),
+        modifier = modifier.testTag("lazy grid"),
+        columns = GridCells.Fixed(columnCount),
+        contentPadding = PaddingValues(all = 8.dp),
         content = {
-            items(heroList.size) { i ->
+            items(listSize) { i ->
                 GalleryItem(
-                    heroModel = heroList[i],
-                    onItemClick = onItemClick
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                        .testTag("gallery item $i"),
+                    hero = heroList[i],
+                    onItemClick = { onItemClick(i + 1) }
                 )
             }
         }
     )
 }
 
+@Preview(showBackground = true)
 @Composable
 fun GalleryItem(
     modifier: Modifier = Modifier,
-    heroModel: HeroModel = HeroModel(),
-    onItemClick: (Int) -> Unit,
+    hero: HeroModel = HeroModel(),
+    onItemClick: () -> Unit = {},
 ) {
-    TextButton(
+    CustomClickeableCard(
         modifier = modifier,
-        shape = RectangleShape,
-        onClick = { onItemClick(heroModel.id) }
+        onClick = onItemClick
     ) {
-        Box(
+        HeroImage(
             modifier = Modifier
-                .background(brush = SolidColor(Color.Black), alpha = 0.25f)
-        ) {
-            Column {
-                HeroImage(
-                    modifier = Modifier.padding(4.dp),
-                    url = heroModel.image.url
-                )
-                Text(
-                    heroModel.name,
-                    modifier = Modifier
-                        .padding(bottom = 4.dp, start = 4.dp, end = 4.dp)
-                        .align(Alignment.CenterHorizontally),
-                    color = Color.Black,
-                    textAlign = TextAlign.Center
-                )
-            }
-            Text(
-                text = heroModel.id.toString(),
-                modifier = Modifier.padding(8.dp),
-                color = Color.Black
-            )
-        }
+                .padding(4.dp)
+                .aspectRatio(ratio = 0.8f)
+                .testTag("profile image"),
+            url = hero.image.url,
+            contentScale = ContentScale.Crop
+        )
+        CustomTextLabelSmall(
+            modifier = Modifier
+                .padding(start = 4.dp, end = 4.dp, bottom = 4.dp)
+                .align(alignment = Alignment.CenterHorizontally)
+                .testTag("id name text"),
+            text = { "${hero.id} ${hero.name}" }
+        )
     }
 }

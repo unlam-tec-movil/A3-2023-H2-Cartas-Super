@@ -32,11 +32,12 @@ fun ParallaxHeroImage(
     modifier: Modifier = Modifier,
     depthMultiplier: Int = 20,
     imageUrl: String = "https://loremflickr.com/400/400/cat?lock=1",
-    data: SensorData = SensorData(0f, 0f),
+    data: () -> SensorData = { SensorData() },
     alpha: Float = 0.8f
 ) {
-    val roll by derivedStateOf { data.roll * depthMultiplier }
-    val pitch by derivedStateOf { data.pitch * depthMultiplier }
+    val sensorData = data()
+    val roll by derivedStateOf { sensorData.roll * depthMultiplier }
+    val pitch by derivedStateOf { sensorData.pitch * depthMultiplier }
 
     Box(modifier = modifier) {
         // Glow Shadow
