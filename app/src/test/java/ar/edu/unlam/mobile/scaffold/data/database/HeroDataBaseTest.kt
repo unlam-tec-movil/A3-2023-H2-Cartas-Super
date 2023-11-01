@@ -11,7 +11,7 @@ import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.ImageEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.PowerstatsEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.WorkEntity
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -21,7 +21,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [31])
+@Config(sdk = [31]) // robolectric no funciona con los últimos sdk
 class HeroDataBaseTest {
 
     @get:Rule
@@ -44,8 +44,8 @@ class HeroDataBaseTest {
     }
 
     @Test
-    fun insertHeroEntity() = runTest {
-        val heroEntity = HeroEntity(
+    fun whenInsertAHeroEntityInDB_VerifyIfItWasInsertedInDB() = runTest {
+        val expectedHero = HeroEntity(
             id = 1,
             powerstats = PowerstatsEntity(),
             connections = ConnectionsEntity(),
@@ -56,13 +56,69 @@ class HeroDataBaseTest {
             work = WorkEntity()
         )
 
-        heroDao.insertHero(hero = heroEntity)
+        heroDao.insertHero(hero = expectedHero)
 
         val allHeroes = heroDao.getAll()
+        val hero = heroDao.getHero(expectedHero.id)
 
-        Truth.assertThat(allHeroes).contains(heroEntity)
-        Truth.assertThat(allHeroes).containsExactly(heroEntity)
-        Truth.assertThat(allHeroes).hasSize(1)
-        Truth.assertThat(allHeroes).isNotEmpty()
+        assertThat(allHeroes).contains(expectedHero)
+        assertThat(allHeroes).containsExactly(expectedHero)
+        assertThat(allHeroes).hasSize(1)
+        assertThat(allHeroes).isNotEmpty()
+        assertThat(hero).isEqualTo(expectedHero)
+    }
+
+    private val heroEntityList = listOf(
+        HeroEntity(
+            id = 1,
+            powerstats = PowerstatsEntity(),
+            connections = ConnectionsEntity(),
+            appearance = AppearanceEntity(),
+            biography = BiographyEntity(),
+            image = ImageEntity(),
+            name = "Mr. Test 1",
+            work = WorkEntity()
+        ),
+        HeroEntity(
+            id = 2,
+            powerstats = PowerstatsEntity(),
+            connections = ConnectionsEntity(),
+            appearance = AppearanceEntity(),
+            biography = BiographyEntity(),
+            image = ImageEntity(),
+            name = "Mr. Test 2",
+            work = WorkEntity()
+        ),
+        HeroEntity(
+            id = 3,
+            powerstats = PowerstatsEntity(),
+            connections = ConnectionsEntity(),
+            appearance = AppearanceEntity(),
+            biography = BiographyEntity(),
+            image = ImageEntity(),
+            name = "Mr. Test 3",
+            work = WorkEntity()
+        ),
+        HeroEntity(
+            id = 4,
+            powerstats = PowerstatsEntity(),
+            connections = ConnectionsEntity(),
+            appearance = AppearanceEntity(),
+            biography = BiographyEntity(),
+            image = ImageEntity(),
+            name = "Mr. Test 4",
+            work = WorkEntity()
+        )
+    )
+
+    @Test
+    fun whenInsertingAHeroEntityListInDB_VerifyIfTheListWasInserted() = runTest {
+        heroDao.insertAll(heroEntityList)
+        val heroList = heroDao.getAll()
+
+        assertThat(heroList).hasSize(heroEntityList.size)
+        for (i in heroList.indices) {
+            assertThat(heroList[i]).isEqualTo(heroEntityList[i])
+        }
     }
 }
