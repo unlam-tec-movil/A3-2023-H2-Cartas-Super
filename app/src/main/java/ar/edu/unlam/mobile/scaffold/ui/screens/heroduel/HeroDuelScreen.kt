@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,13 +47,14 @@ import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.ui.components.GameScore
 import ar.edu.unlam.mobile.scaffold.ui.components.PlayerDeck
 import ar.edu.unlam.mobile.scaffold.ui.components.SelectCardStat
+import ar.edu.unlam.mobile.scaffold.ui.components.SelectStatMultiplier
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroCard
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroPlayerCard
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Preview(showBackground = true)
 @Composable
-fun WinnerScreen(
+fun FinishDuelUi(
     modifier: Modifier = Modifier,
     winner: Winner = Winner.NONE,
     playerScore: Int = 0,
@@ -157,7 +157,7 @@ fun HeroDuelScreen(
         }
 
         if (showHeroDuelScreen) {
-            HeroDuel(
+            DuelUi(
                 modifier = modifier,
                 currentPlayerCard = currentPlayerCard,
                 currentAdversaryCard = currentAdversaryCard,
@@ -171,7 +171,7 @@ fun HeroDuelScreen(
         }
 
         if (showWinnerScreen) {
-            WinnerScreen(
+            FinishDuelUi(
                 modifier = modifier,
                 winner = winner,
                 playerScore = playerScore,
@@ -183,7 +183,7 @@ fun HeroDuelScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun HeroDuel(
+fun DuelUi(
     modifier: Modifier = Modifier,
     currentPlayerCard: HeroModel = HeroModel(),
     currentAdversaryCard: HeroModel = HeroModel(),
@@ -244,7 +244,7 @@ fun ActionMenu(
     ) {
         SelectCardStat(modifier = Modifier.width(160.dp), onClick = onClickSelectedStat)
         Spacer(modifier = Modifier.size(8.dp))
-        SelectMultiplier(
+        SelectStatMultiplier(
             useMultiplierX2 = useMultiplierX2,
             canMultix2BeUsed = canMultix2BeUsed
         )
@@ -264,42 +264,6 @@ fun ActionMenu(
                 )
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SelectMultiplier(
-    modifier: Modifier = Modifier,
-    canMultix2BeUsed: Boolean = true,
-    useMultiplierX2: (Boolean) -> Unit = {}
-) {
-    val offset = Offset(6.0f, 4.0f)
-    var checked by rememberSaveable {
-        mutableStateOf(false)
-    }
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Multi x2:",
-            style = TextStyle(
-                fontSize = 16.sp,
-                shadow = Shadow(
-                    color = Color.White,
-                    offset = offset,
-                    blurRadius = 4f
-                )
-            )
-        )
-        Checkbox(
-            checked = if (canMultix2BeUsed) checked else false,
-            onCheckedChange = {
-                checked = !checked
-                useMultiplierX2(checked)
-            }
-        )
     }
 }
 
