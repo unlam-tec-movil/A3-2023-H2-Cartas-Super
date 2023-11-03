@@ -3,7 +3,6 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.heroduel
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,12 +16,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,6 +47,7 @@ import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.ui.components.GameScore
 import ar.edu.unlam.mobile.scaffold.ui.components.PlayerDeck
+import ar.edu.unlam.mobile.scaffold.ui.components.SelectCardStat
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroCard
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroPlayerCard
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
@@ -152,7 +147,7 @@ fun HeroDuelScreen(
         )
 
         if (showSelectCardScreen) {
-            SelectCard(
+            SelectCardUi(
                 modifier = modifier,
                 playerDeck = playerDeck,
                 cardSelectedIndex = cardSelectedIndex,
@@ -247,7 +242,7 @@ fun ActionMenu(
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        SelectStat(modifier = Modifier.width(160.dp), onClick = onClickSelectedStat)
+        SelectCardStat(modifier = Modifier.width(160.dp), onClick = onClickSelectedStat)
         Spacer(modifier = Modifier.size(8.dp))
         SelectMultiplier(
             useMultiplierX2 = useMultiplierX2,
@@ -310,7 +305,7 @@ fun SelectMultiplier(
 
 @Preview(showBackground = true)
 @Composable
-fun SelectCard(
+fun SelectCardUi(
     modifier: Modifier = Modifier,
     playerDeck: List<HeroModel> = listOf(
         HeroModel(id = 1, name = "test 1"),
@@ -354,6 +349,7 @@ fun SelectCard(
     }
 }
 
+// reemplazar por customButton
 @Preview(showBackground = true)
 @Composable
 fun JugarCartaButton(
@@ -371,6 +367,7 @@ fun JugarCartaButton(
     }
 }
 
+// no es necesario
 @Composable
 fun InCaseOfError(place: String = "En algún lugar") {
     val context = LocalContext.current
@@ -384,59 +381,6 @@ fun InCaseOfError(place: String = "En algún lugar") {
             onClick = { context.startActivity(Intent(context, MainActivity::class.java)) }
         ) {
             Text(text = "volver al menú principal")
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SelectStat(
-    modifier: Modifier = Modifier,
-    statList: List<Stat> = listOf(
-        Stat.POWER,
-        Stat.DURABILITY,
-        Stat.STRENGTH,
-        Stat.SPEED,
-        Stat.COMBAT,
-        Stat.INTELLIGENCE
-    ),
-    onClick: (Stat) -> Unit = {}
-) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
-    var selectedStat by rememberSaveable { mutableStateOf(Stat.POWER) }
-
-    Box(
-        modifier = modifier
-    ) {
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = {
-                expanded = !expanded
-            }
-        ) {
-            TextField(
-                value = selectedStat.statName,
-                onValueChange = { onClick(selectedStat) },
-                readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                modifier = modifier.menuAnchor()
-            )
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                statList.forEach { item ->
-                    DropdownMenuItem(
-                        text = { Text(text = item.statName) },
-                        onClick = {
-                            selectedStat = item
-                            onClick(selectedStat)
-                            expanded = false
-                        }
-                    )
-                }
-            }
         }
     }
 }
