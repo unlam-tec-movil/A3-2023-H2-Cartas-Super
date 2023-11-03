@@ -158,7 +158,7 @@ fun PermisosDeLaCamara(){
         FloatingActionButton(
             onClick = {
             val executor = ContextCompat.getMainExecutor(context)
-            takePicture(camaraController,executor)
+            takePicture(camaraController,executor, context.filesDir)
         },
             containerColor = Color.DarkGray,
             contentColor = Color.White,
@@ -178,9 +178,30 @@ fun PermisosDeLaCamara(){
     }
 }
 
+fun makeProfilePicFile(filesDir: File):File{
+    val baseDirectory = File(filesDir,"photoPic")
 
-private fun takePicture(camaraController: LifecycleCameraController, executor : Executor){
-    val file = File.createTempFile("imagenTest", ".jpg")
+    if (!baseDirectory.exists()){
+        baseDirectory.mkdir()
+    }
+
+    val file = File(baseDirectory, "My_photo.jpg")
+
+    if(file.exists()){
+        file.delete()
+    }
+
+    file.createNewFile()
+    return file
+}
+
+
+private fun takePicture(camaraController: LifecycleCameraController, executor : Executor, filesDir: File){
+
+    val file = makeProfilePicFile(filesDir)
+
+    //val file = File.createTempFile("imagenTest", ".jpg")
+
     val outputDirectory = ImageCapture.OutputFileOptions.Builder(file).build()
     camaraController.takePicture(outputDirectory, executor,
         object : ImageCapture.OnImageSavedCallback {
