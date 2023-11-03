@@ -2,8 +2,6 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.heroduel
 
 import android.content.Intent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,6 +51,7 @@ import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
+import ar.edu.unlam.mobile.scaffold.ui.components.GameScore
 import ar.edu.unlam.mobile.scaffold.ui.components.PlayerDeck
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroCard
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroPlayerCard
@@ -232,54 +231,6 @@ fun HeroDuel(
             hero = currentPlayerCard
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GameScore(
-    modifier: Modifier = Modifier,
-    playerScore: Int = 0,
-    adversaryScore: Int = 0
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceAround
-    ) {
-        IndividualScore(
-            modifier = Modifier
-                .border(1.dp, color = Color.Black),
-            score = playerScore,
-            text = "Jugador:",
-            backgroundColor = Color(0xFF16A0E8)
-        )
-        IndividualScore(
-            modifier = Modifier
-                .border(1.dp, color = Color.Black),
-            score = adversaryScore,
-            text = "Adversario:",
-            backgroundColor = Color(0xFFFA1404),
-            textColor = Color.White
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun IndividualScore(
-    modifier: Modifier = Modifier,
-    score: Int = 0,
-    text: String = "Jugador o adversario:",
-    backgroundColor: Color = Color.White,
-    textColor: Color = Color.Black
-) {
-    Text(
-        modifier = modifier
-            .background(color = backgroundColor)
-            .padding(5.dp),
-        text = "$text $score",
-        fontWeight = FontWeight.ExtraBold,
-        color = textColor
-    )
 }
 
 @Preview(showBackground = true)
