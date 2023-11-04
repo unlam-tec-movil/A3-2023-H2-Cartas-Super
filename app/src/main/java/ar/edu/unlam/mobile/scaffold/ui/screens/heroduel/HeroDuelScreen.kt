@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -38,6 +36,7 @@ import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.ui.components.ActionMenu
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
 import ar.edu.unlam.mobile.scaffold.ui.components.GameScore
 import ar.edu.unlam.mobile.scaffold.ui.components.PlayerDeck
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroCard
@@ -244,8 +243,9 @@ fun SelectCardUi(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        JugarCartaButton(
-            onPlayCardClick = onPlayCardClick
+        CustomButton(
+            label = { "Jugar carta!" },
+            onClick = onPlayCardClick
         )
         HeroPlayerCard(
             modifier = Modifier
@@ -259,23 +259,5 @@ fun SelectCardUi(
             playerDeck = playerDeck,
             onCardClick = onPlayerCardClick
         )
-    }
-}
-
-// reemplazar por customButton
-@Preview(showBackground = true)
-@Composable
-fun JugarCartaButton(
-    modifier: Modifier = Modifier,
-    onPlayCardClick: () -> Unit = {}
-) {
-    Button(
-        colors = ButtonDefaults.buttonColors(Color.DarkGray),
-        modifier = modifier,
-        onClick = {
-            onPlayCardClick()
-        }
-    ) {
-        Text(modifier = Modifier, color = Color.White, text = "Jugar Carta")
     }
 }
