@@ -3,8 +3,6 @@ package ar.edu.unlam.mobile.scaffold.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,7 +50,6 @@ fun ActionMenu(
                 }
             )
         }
-        Spacer(modifier = Modifier.size(8.dp))
         CustomButton(
             label = { "Pelear!" },
             onClick = onFightClick

@@ -1,6 +1,7 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.heroduel
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -206,7 +208,7 @@ fun DuelUi(
         ActionMenu(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(7.dp),
+                .background(color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)),
             onClickSelectedStat = onClickSelectedStat,
             useMultiplier = useMultiplierX2,
             onFightClick = onFightClick,
