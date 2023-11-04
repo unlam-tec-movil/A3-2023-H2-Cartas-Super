@@ -49,7 +49,7 @@ import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Preview(showBackground = true)
 @Composable
-fun FinishDuelUi(
+fun FinishedDuelUi(
     modifier: Modifier = Modifier,
     winner: Winner = Winner.NONE,
     playerScore: Int = 0,
@@ -166,7 +166,7 @@ fun HeroDuelScreen(
         }
 
         if (showWinnerScreen) {
-            FinishDuelUi(
+            FinishedDuelUi(
                 modifier = modifier,
                 winner = winner,
                 playerScore = playerScore,
