@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun SelectStatMultiplier(
     modifier: Modifier = Modifier,
-    canMultix2BeUsed: Boolean = true,
-    useMultiplierX2: (Boolean) -> Unit = {}
+    enabled: Boolean = true,
+    onUseMultiplier: (Boolean) -> Unit = {}
 ) {
     val offset = Offset(6.0f, 4.0f)
     var checked by rememberSaveable {
@@ -44,10 +44,10 @@ fun SelectStatMultiplier(
             )
         )
         Checkbox(
-            checked = if (canMultix2BeUsed) checked else false,
+            checked = if (enabled) checked else false,
             onCheckedChange = {
                 checked = !checked
-                useMultiplierX2(checked)
+                onUseMultiplier(checked)
             }
         )
     }

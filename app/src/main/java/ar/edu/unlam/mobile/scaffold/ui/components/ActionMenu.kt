@@ -36,8 +36,8 @@ fun ActionMenu(
         SelectCardStat(modifier = Modifier.width(160.dp), onClick = onClickSelectedStat)
         Spacer(modifier = Modifier.size(8.dp))
         SelectStatMultiplier(
-            useMultiplierX2 = useMultiplierX2,
-            canMultix2BeUsed = canMultix2BeUsed
+            onUseMultiplier = useMultiplierX2,
+            enabled = canMultix2BeUsed
         )
         Button(
             colors = ButtonDefaults.buttonColors(Color.DarkGray),
