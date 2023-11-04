@@ -13,9 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -233,13 +230,6 @@ fun SelectCardUi(
     onPlayCardClick: () -> Unit = {},
     onPlayerCardClick: (Int) -> Unit = {},
 ) {
-    var setDefaults by rememberSaveable {
-        mutableStateOf(true)
-    }
-    if (setDefaults) {
-        onPlayerCardClick(0)
-        setDefaults = false
-    }
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween,
