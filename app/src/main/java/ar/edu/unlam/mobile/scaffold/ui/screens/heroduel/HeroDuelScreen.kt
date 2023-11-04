@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,7 +38,7 @@ import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
 import ar.edu.unlam.mobile.scaffold.ui.components.GameScore
 import ar.edu.unlam.mobile.scaffold.ui.components.PlayerDeck
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroCard
-import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroPlayerCard
+import ar.edu.unlam.mobile.scaffold.ui.components.hero.adversaryCardColor
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Preview(showBackground = true)
@@ -186,6 +185,7 @@ fun DuelUi(
 ) {
     Column(
         modifier = modifier,
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         GameScore(
@@ -197,10 +197,10 @@ fun DuelUi(
         )
         val cardModifier = Modifier
             .padding(7.dp)
-            .shadow(8.dp)
         HeroCard(
             modifier = cardModifier,
-            hero = currentAdversaryCard
+            hero = currentAdversaryCard,
+            cardColors = adversaryCardColor()
         )
         ActionMenu(
             modifier = Modifier
@@ -211,7 +211,7 @@ fun DuelUi(
             onFightClick = onFightClick,
             isMultiplierEnabled = canMultix2BeUsed
         )
-        HeroPlayerCard(
+        HeroCard(
             modifier = cardModifier,
             hero = currentPlayerCard
         )
@@ -239,12 +239,11 @@ fun SelectCardUi(
             label = { "Jugar carta!" },
             onClick = onPlayCardClick
         )
-        HeroPlayerCard(
+        HeroCard(
             modifier = Modifier
                 .padding(8.dp)
                 .shadow(9.dp),
-            hero = playerDeck[cardSelectedIndex],
-            cardColors = CardDefaults.cardColors(Color(0xFF16A0E8)) // hay que guardar el color en ui.theme.Color.kt
+            hero = playerDeck[cardSelectedIndex]
         )
         PlayerDeck(
             modifier = Modifier,

@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,28 +25,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomClickeableCard
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextLabelMedium
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextLabelSmall
 
-// player card color = Color(0xFF16A0E8)
-// adversary card color = Color(0xFFFA1404)
-// color amarillo = 0xFFF9DB07
-@Preview(showBackground = true)
 @Composable
-fun HeroPlayerCard(
-    modifier: Modifier = Modifier,
-    hero: HeroModel = HeroModel(),
-    cardColors: CardColors = CardDefaults.cardColors(containerColor = Color(0xFF16A0E8))
-) {
-    HeroCard(
-        modifier = modifier,
-        hero = hero,
-        cardColors = cardColors
-    ) {
-        HeroStats(
-            modifier = Modifier.border(width = 1.dp, color = Color.Black, shape = RectangleShape),
-            stats = { hero.stats },
-        )
-    }
+fun adversaryCardColor(): CardColors {
+    return CardDefaults.elevatedCardColors(
+        containerColor = MaterialTheme.colorScheme.secondary,
+        contentColor = MaterialTheme.colorScheme.onSecondary
+    )
+}
+
+@Composable
+fun playerCardColor(): CardColors {
+    return CardDefaults.elevatedCardColors(
+        containerColor = MaterialTheme.colorScheme.tertiary,
+        contentColor = MaterialTheme.colorScheme.onTertiary
+    )
 }
 
 @Preview(showBackground = true)
@@ -54,10 +49,10 @@ fun HeroPlayerCard(
 fun HeroCard(
     modifier: Modifier = Modifier,
     hero: HeroModel = HeroModel(),
-    cardColors: CardColors = CardDefaults.cardColors(containerColor = Color(0xFFFA1404)),
+    cardColors: CardColors = playerCardColor(),
     content: @Composable (ColumnScope.() -> Unit) = {}
 ) {
-    Card(
+    ElevatedCard(
         modifier = modifier
             .border(width = 1.dp, color = Color.Black, shape = RectangleShape),
         colors = cardColors,
@@ -74,9 +69,9 @@ fun HeroCard(
                 url = hero.image.url,
                 contentScale = ContentScale.Crop
             )
-            Text(
+            CustomTextLabelMedium(
                 modifier = Modifier.padding(1.dp),
-                text = hero.name
+                text = { hero.name }
             )
             content()
         }
