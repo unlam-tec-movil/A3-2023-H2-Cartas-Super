@@ -208,9 +208,9 @@ fun DuelUi(
                 .fillMaxWidth()
                 .padding(7.dp),
             onClickSelectedStat = onClickSelectedStat,
-            useMultiplierX2 = useMultiplierX2,
+            useMultiplier = useMultiplierX2,
             onFightClick = onFightClick,
-            canMultix2BeUsed = canMultix2BeUsed
+            isMultiplierEnabled = canMultix2BeUsed
         )
         HeroPlayerCard(
             modifier = cardModifier,

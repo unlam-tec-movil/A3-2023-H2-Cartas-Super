@@ -22,8 +22,8 @@ import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 fun ActionMenu(
     modifier: Modifier = Modifier,
     onClickSelectedStat: (Stat) -> Unit = {},
-    canMultix2BeUsed: Boolean = true,
-    useMultiplierX2: (Boolean) -> Unit = {},
+    isMultiplierEnabled: Boolean = true,
+    useMultiplier: (Boolean) -> Unit = {},
     onFightClick: () -> Unit = {}
 ) {
     var checked by rememberSaveable {
@@ -37,12 +37,18 @@ fun ActionMenu(
         Column {
             SelectCardStat(modifier = Modifier.width(160.dp), onClick = onClickSelectedStat)
             CustomLabeledCheckbox(
-                enabled = { canMultix2BeUsed },
+                enabled = { isMultiplierEnabled },
                 label = { "Multi x2:" },
-                checked = { checked },
+                checked = {
+                    if (isMultiplierEnabled) {
+                        checked
+                    } else {
+                        false
+                    }
+                },
                 onCheckedChange = {
                     checked = it
-                    useMultiplierX2(checked)
+                    useMultiplier(checked)
                 }
             )
         }
