@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -49,6 +50,9 @@ import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomTitle
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import coil.transform.CircleCropTransformation
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -82,10 +86,22 @@ fun UsuarioScreen(modifier: Modifier,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
+
             CustomTitle(text = {"Usuarios"})
 
             Spacer(Modifier.size(16.dp))
-
+        Box (contentAlignment = Alignment.Center){
+           Row {
+               AsyncImage(
+                   model = ImageRequest.Builder(LocalContext.current)
+                       .data("file:///data/user/0/ar.edu.unlam.mobile.scaffold/files/photoPic/My_photo.jpg")
+                       .transformations(CircleCropTransformation())
+                       .build(),
+                   contentDescription = "Imagen de usuario"
+               )
+           }
+        }
+            Spacer(Modifier.size(16.dp))
             Row {
                 
                 TextField(value = name, onValueChange = {
@@ -114,7 +130,9 @@ fun UsuarioScreen(modifier: Modifier,
             }
 
                 Spacer(Modifier.size(16.dp))
-
+            
+            Text(text = "Usuario actual: $name")
+            
             Row {
                 CustomButton(
                     modifier = Modifier.testTag("Camara"),
@@ -127,12 +145,8 @@ fun UsuarioScreen(modifier: Modifier,
             if (camara){
                 PermisosDeLaCamara()
             }
-
-            Row(modifier = Modifier.fillMaxWidth()){
-            }
         }
     }
-
 }
 
 

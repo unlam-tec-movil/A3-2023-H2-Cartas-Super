@@ -18,7 +18,7 @@ class UsuarioViewModel @Inject constructor(
     val existeGuest: LiveData<Boolean> = _existeGuest
 
     private fun crearUsuario(name: String): Guest {
-        return Guest(null, name)
+        return Guest(1, name)
     }
 
     fun actualizarBase(name: String){
