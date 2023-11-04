@@ -1,6 +1,5 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.heroduel
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,7 +23,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -35,7 +33,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import ar.edu.unlam.mobile.scaffold.MainActivity
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
@@ -235,37 +232,33 @@ fun SelectCardUi(
     onPlayCardClick: () -> Unit = {},
     onPlayerCardClick: (Int) -> Unit = {},
 ) {
-    if (playerDeck.isEmpty()) {
-        InCaseOfError("SelectCard composable.")
-    } else {
-        var setDefaults by rememberSaveable {
-            mutableStateOf(true)
-        }
-        if (setDefaults) {
-            onPlayerCardClick(0)
-            setDefaults = false
-        }
-        Column(
-            modifier = modifier,
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            JugarCartaButton(
-                onPlayCardClick = onPlayCardClick
-            )
-            HeroPlayerCard(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .shadow(9.dp),
-                hero = playerDeck[cardSelectedIndex],
-                cardColors = CardDefaults.cardColors(Color(0xFF16A0E8)) // hay que guardar el color en ui.theme.Color.kt
-            )
-            PlayerDeck(
-                modifier = Modifier,
-                playerDeck = playerDeck,
-                onCardClick = onPlayerCardClick
-            )
-        }
+    var setDefaults by rememberSaveable {
+        mutableStateOf(true)
+    }
+    if (setDefaults) {
+        onPlayerCardClick(0)
+        setDefaults = false
+    }
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        JugarCartaButton(
+            onPlayCardClick = onPlayCardClick
+        )
+        HeroPlayerCard(
+            modifier = Modifier
+                .padding(8.dp)
+                .shadow(9.dp),
+            hero = playerDeck[cardSelectedIndex],
+            cardColors = CardDefaults.cardColors(Color(0xFF16A0E8)) // hay que guardar el color en ui.theme.Color.kt
+        )
+        PlayerDeck(
+            modifier = Modifier,
+            playerDeck = playerDeck,
+            onCardClick = onPlayerCardClick
+        )
     }
 }
 
@@ -284,23 +277,5 @@ fun JugarCartaButton(
         }
     ) {
         Text(modifier = Modifier, color = Color.White, text = "Jugar Carta")
-    }
-}
-
-// no es necesario
-@Composable
-fun InCaseOfError(place: String = "En algún lugar") {
-    val context = LocalContext.current
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Hubo un error: Mazo vacío $place.")
-        Button(
-            onClick = { context.startActivity(Intent(context, MainActivity::class.java)) }
-        ) {
-            Text(text = "volver al menú principal")
-        }
     }
 }
