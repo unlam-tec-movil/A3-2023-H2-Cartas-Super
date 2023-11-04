@@ -4,13 +4,9 @@ import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -44,10 +40,9 @@ import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
+import ar.edu.unlam.mobile.scaffold.ui.components.ActionMenu
 import ar.edu.unlam.mobile.scaffold.ui.components.GameScore
 import ar.edu.unlam.mobile.scaffold.ui.components.PlayerDeck
-import ar.edu.unlam.mobile.scaffold.ui.components.SelectCardStat
-import ar.edu.unlam.mobile.scaffold.ui.components.SelectStatMultiplier
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroCard
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroPlayerCard
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
@@ -225,45 +220,6 @@ fun DuelUi(
             modifier = cardModifier,
             hero = currentPlayerCard
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ActionMenu(
-    modifier: Modifier = Modifier,
-    onClickSelectedStat: (Stat) -> Unit = {},
-    canMultix2BeUsed: Boolean = true,
-    useMultiplierX2: (Boolean) -> Unit = {},
-    onFightClick: () -> Unit = {}
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        SelectCardStat(modifier = Modifier.width(160.dp), onClick = onClickSelectedStat)
-        Spacer(modifier = Modifier.size(8.dp))
-        SelectStatMultiplier(
-            useMultiplierX2 = useMultiplierX2,
-            canMultix2BeUsed = canMultix2BeUsed
-        )
-        Button(
-            colors = ButtonDefaults.buttonColors(Color.DarkGray),
-            shape = ButtonDefaults.outlinedShape,
-            onClick = {
-                onFightClick()
-            }
-        ) {
-            Text(
-                text = "¡Pelear!",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                style = TextStyle(
-                    fontSize = 15.sp
-                )
-            )
-        }
     }
 }
 
