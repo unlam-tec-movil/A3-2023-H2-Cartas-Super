@@ -211,14 +211,14 @@ fun SelectCardUi(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CustomButton(
-            label = { "Jugar carta!" },
-            onClick = onPlayCardClick
-        )
         HeroCard(
             modifier = Modifier
                 .padding(8.dp),
             hero = playerDeck[cardSelectedIndex]
+        )
+        CustomButton(
+            label = { "Jugar carta!" },
+            onClick = onPlayCardClick
         )
         PlayerDeck(
             modifier = Modifier,

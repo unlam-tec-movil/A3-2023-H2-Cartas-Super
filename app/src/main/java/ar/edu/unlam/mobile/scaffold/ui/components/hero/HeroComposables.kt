@@ -1,7 +1,6 @@
 package ar.edu.unlam.mobile.scaffold.ui.components.hero
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
@@ -58,23 +57,23 @@ fun HeroCard(
         colors = cardColors,
         shape = RectangleShape
     ) {
-        Column(
-            modifier = Modifier.padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            HeroImage(
-                modifier = Modifier
-                    .size(190.dp)
-                    .border(width = 1.dp, color = Color.Black),
-                url = hero.image.url,
-                contentScale = ContentScale.Crop
-            )
-            CustomTextLabelMedium(
-                modifier = Modifier.padding(1.dp),
-                text = { hero.name }
-            )
-            content()
-        }
+        // row { infiniteTransition (jojo) HeroImage infiniteTransition (jojo) }
+        // AnimatedContent para intercambiar UIs, CrossFade es una manera más simple que AnimatedContent
+        HeroImage(
+            modifier = Modifier
+                .size(190.dp)
+                .border(width = 1.dp, color = Color.Black)
+                .align(Alignment.CenterHorizontally),
+            url = hero.image.url,
+            contentScale = ContentScale.Crop
+        )
+        CustomTextLabelMedium(
+            modifier = Modifier
+                .padding(1.dp)
+                .align(Alignment.CenterHorizontally),
+            text = { hero.name }
+        )
+        content()
     }
 }
 
