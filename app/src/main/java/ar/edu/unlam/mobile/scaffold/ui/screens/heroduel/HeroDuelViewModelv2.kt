@@ -101,7 +101,6 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
             started = SharingStarted.WhileSubscribed(),
             initialValue = HeroModel()
         )
-        _currentPlayerCard.value = currentPlayerDeck.value[0]
     }
 
     fun onPlayCardClick() {

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +28,7 @@ import ar.edu.unlam.mobile.scaffold.ui.components.ActionMenu
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomTitle
 import ar.edu.unlam.mobile.scaffold.ui.components.GameScore
+import ar.edu.unlam.mobile.scaffold.ui.components.MenancingAnimation
 import ar.edu.unlam.mobile.scaffold.ui.components.PlayerDeck
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroCard
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.adversaryCardColor
@@ -206,16 +208,21 @@ fun SelectCardUi(
     onPlayCardClick: () -> Unit = {},
     onPlayerCardClick: (Int) -> Unit = {},
 ) {
+    LaunchedEffect(key1 = Unit) {
+        onPlayerCardClick(0)
+    }
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HeroCard(
-            modifier = Modifier
-                .padding(8.dp),
-            hero = playerDeck[cardSelectedIndex]
-        )
+        MenancingAnimation {
+            HeroCard(
+                modifier = Modifier
+                    .padding(8.dp),
+                hero = playerDeck[cardSelectedIndex]
+            )
+        }
         CustomButton(
             label = { "Jugar carta!" },
             onClick = onPlayCardClick

@@ -61,6 +61,7 @@ fun HeroCard(
         // AnimatedContent para intercambiar UIs, CrossFade es una manera más simple que AnimatedContent
         HeroImage(
             modifier = Modifier
+                .padding(8.dp)
                 .size(190.dp)
                 .border(width = 1.dp, color = Color.Black)
                 .align(Alignment.CenterHorizontally),
