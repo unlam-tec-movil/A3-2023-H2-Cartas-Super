@@ -7,6 +7,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,12 +43,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import ar.edu.unlam.mobile.scaffold.R
+import ar.edu.unlam.mobile.scaffold.domain.usuario.Guest
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomTitle
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
@@ -72,83 +77,142 @@ fun UsuarioScreen(modifier: Modifier,
     var name by remember { mutableStateOf("") }
     var nameError by remember { mutableStateOf(false)}
 
+    val usuario by viewModel.usuario.observeAsState(initial = Guest(0,""))
+    val crearUsuario: (String) -> Unit = viewModel::crearUsuario
 
-    Box(modifier = modifier) {
-        ParallaxBackgroundImage(
-            modifier = Modifier
-                .fillMaxSize()
-                .testTag("background image"),
-            painterResourceId = R.drawable.fondo_coleccion,
-        )
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    val existeUsuario by viewModel.existeGuest.observeAsState()
 
-
-            CustomTitle(text = {"Usuarios"})
-
-            Spacer(Modifier.size(16.dp))
-        Box (contentAlignment = Alignment.Center){
-           Row {
-               AsyncImage(
-                   model = ImageRequest.Builder(LocalContext.current)
-                       .data("file:///data/user/0/ar.edu.unlam.mobile.scaffold/files/photoPic/My_photo.jpg")
-                       .transformations(CircleCropTransformation())
-                       .build(),
-                   contentDescription = "Imagen de usuario"
-               )
-           }
-        }
-            Spacer(Modifier.size(16.dp))
-            Row {
-                
-                TextField(value = name, onValueChange = {
-                    name = it
-                    nameError = false
-                }, 
-                    label = { Text(text = "Ingrese usuario")},
-                    isError = nameError, modifier = Modifier,
-                    placeholder = { Text(text = "Nombre de usuario")},
-                    leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = null)})
-
-            }
-
-                Spacer(Modifier.size(16.dp))
-
-            Button(
-                onClick = {
-                    if (name.isNotBlank()){
-                        viewModel.actualizarBase(name)
-                    }else{
-                        nameError = name.isBlank()
-                    }
-                }
-            ) {
-                Text("Continuar")
-            }
-
-                Spacer(Modifier.size(16.dp))
-            
-            Text(text = "Usuario actual: $name")
-            
-            Row {
-                CustomButton(
-                    modifier = Modifier.testTag("Camara"),
-                    label = {"Camara"},
-                    onClick = { camara =! camara})
-
-                Spacer(Modifier.size(16.dp))
-            }
-
-            if (camara){
-                PermisosDeLaCamara()
-            }
-        }
+    if (existeUsuario == true){
+        UsuarioUi(modifier = modifier,
+            usuario = usuario)
+    }else{
+        CargarUsuarioUi(modifier = modifier,
+            insertarUsuario = crearUsuario)
     }
 }
 
+@Preview(showBackground = true, heightDp = 800, widthDp = 400)
+@Composable
+fun UsuarioUi(modifier: Modifier = Modifier, 
+              usuario: Guest = Guest(1,"Test")){
+
+    var camara by remember{ mutableStateOf(false)}
+
+    ParallaxBackgroundImage(
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag("background image"),
+        painterResourceId = R.drawable.fondo_coleccion,
+    )
+
+    Column (modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally) 
+    {
+
+        CustomTitle(text = {"Usuarios"})
+
+        Spacer(Modifier.size(16.dp))
+        
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data("file:///data/user/0/ar.edu.unlam.mobile.scaffold/files/photoPic/My_photo.jpg")
+                .transformations(CircleCropTransformation())
+                .build(),
+            contentDescription = "Imagen de usuario",
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .size(100.dp)
+        )
+
+        Text(text = "Usuario actual: ${usuario.username}")
+
+        CustomButton(
+                modifier = Modifier.testTag("Camara"),
+                label = {"Camara"},
+                onClick = { camara =! camara})
+
+        Spacer(Modifier.size(16.dp))
+
+        if (camara){
+            PermisosDeLaCamara()
+        }
+        
+    }
+
+}
+
+@Preview(showBackground = true, heightDp = 800, widthDp = 400)
+@Composable
+fun CargarUsuarioUi(modifier: Modifier = Modifier, insertarUsuario: (String) -> Unit = {}){
+
+    var camara by remember{ mutableStateOf(false)}
+    var name by remember { mutableStateOf("nombre de usuario")}
+
+    ParallaxBackgroundImage(
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag("background image"),
+        painterResourceId = R.drawable.fondo_coleccion,
+    )
+
+    Column (modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally)
+    {
+
+        CustomTitle(text = {"Usuarios"})
+
+        Spacer(Modifier.size(16.dp))
+
+
+      /*  if ("si la imagen de perfil existe"){
+            AsyncImage
+        }else{
+            Image(painter = painterResource(id = R.drawable.default_imagen_heroe), contentDescription = "Imagen temporal")
+        }*/
+
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data("file:///data/user/0/ar.edu.unlam.mobile.scaffold/files/photoPic/My_photo.jpg")
+                .transformations(CircleCropTransformation())
+                .build(),
+            contentDescription = "Imagen de usuario",
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .size(100.dp)
+        )
+
+        TextField(value = name, onValueChange = {
+            name = it
+        },
+            label = { Text(text = "Ingrese usuario")},
+            placeholder = { Text(text = "Nombre de usuario")},
+            leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = null)})
+
+        Button(
+            onClick = {
+                if (name.isNotBlank()){
+                    insertarUsuario(name)
+                }
+            }
+        ) {
+            Text("Continuar")
+        }
+
+        CustomButton(
+            modifier = Modifier.testTag("Camara"),
+            label = {"Camara"},
+            onClick = { camara =! camara})
+
+        Spacer(Modifier.size(16.dp))
+
+        if (camara){
+            PermisosDeLaCamara()
+        }
+
+    }
+}
 
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalPermissionsApi::class)
@@ -213,8 +277,6 @@ fun makeProfilePicFile(filesDir: File):File{
 private fun takePicture(camaraController: LifecycleCameraController, executor : Executor, filesDir: File){
 
     val file = makeProfilePicFile(filesDir)
-
-    //val file = File.createTempFile("imagenTest", ".jpg")
 
     val outputDirectory = ImageCapture.OutputFileOptions.Builder(file).build()
     camaraController.takePicture(outputDirectory, executor,

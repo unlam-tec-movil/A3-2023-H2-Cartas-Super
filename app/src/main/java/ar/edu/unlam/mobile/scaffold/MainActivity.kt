@@ -112,7 +112,7 @@ fun MainScreen() {
             }
             composable("Usuario") {
                UsuarioScreen(
-                   modifier = Modifier.padding(paddingValue)
+                   modifier = Modifier.padding(paddingValue).fillMaxSize()
                )
             }
         }

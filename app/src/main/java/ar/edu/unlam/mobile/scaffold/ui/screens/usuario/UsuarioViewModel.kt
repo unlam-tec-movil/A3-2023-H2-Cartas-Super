@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ar.edu.unlam.mobile.scaffold.data.database.guest.Guest
+import ar.edu.unlam.mobile.scaffold.domain.usuario.Guest
 import ar.edu.unlam.mobile.scaffold.data.database.guest.GuestRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,20 +17,31 @@ class UsuarioViewModel @Inject constructor(
     private val _existeGuest = MutableLiveData<Boolean>()
     val existeGuest: LiveData<Boolean> = _existeGuest
 
-    private fun crearUsuario(name: String): Guest {
-        return Guest(1, name)
-    }
+    private val _usuario = MutableLiveData<Guest>()
+    val usuario: LiveData<Guest> = _usuario
 
-    fun actualizarBase(name: String){
-        val guest = crearUsuario(name)
+
+    fun crearUsuario(name: String){
+        val guest = Guest(1,name)
         viewModelScope.launch {
             repository.addGuestInDatabase(guest)
+            obtenerUsuario()
         }
+    }
+    suspend fun obtenerUsuario(){
+        val usuario = repository.usuarioExiste()
+
+            if(usuario == null ){
+                _existeGuest.value = false
+            }else{
+                _usuario.value = usuario!!
+                _existeGuest.value = true
+            }
     }
 
     init {
         viewModelScope.launch {
-            _existeGuest.value = repository.verifyDatabase()
+            obtenerUsuario()
         }
 
     }

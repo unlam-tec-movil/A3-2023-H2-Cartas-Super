@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.data.database.guest
+package ar.edu.unlam.mobile.scaffold.domain.usuario
 
 class Guest(
     val id: Int?,
