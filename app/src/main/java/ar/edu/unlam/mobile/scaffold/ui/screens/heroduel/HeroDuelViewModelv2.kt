@@ -23,9 +23,6 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
     private val _currentPlayerCard = MutableStateFlow(HeroModel())
     val currentPlayerCard = _currentPlayerCard.asStateFlow()
 
-    private val _cardSelectedIndex = MutableStateFlow(0)
-    val cardSelectedIndex = _cardSelectedIndex.asStateFlow()
-
     private val _showWinnerScreen = MutableStateFlow(false)
     val showWinnerScreen = _showWinnerScreen.asStateFlow()
 
@@ -109,7 +106,6 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
     }
 
     fun onPlayerCardClick(cardSelectedIndex: Int) {
-        _cardSelectedIndex.value = cardSelectedIndex
         _currentPlayerCard.value = currentPlayerDeck.value[cardSelectedIndex]
     }
 

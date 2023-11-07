@@ -12,6 +12,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -88,9 +91,6 @@ fun HeroDuelScreen(
         val playerDeck by viewModel.currentPlayerDeck.collectAsStateWithLifecycle(
             initialValue = listOf(HeroModel())
         )
-        val cardSelectedIndex by viewModel.cardSelectedIndex.collectAsStateWithLifecycle(
-            initialValue = 0
-        )
         val onPlayCardClick = viewModel::onPlayCardClick
         val onPlayerCardClick = viewModel::onPlayerCardClick
         val currentPlayerCard by viewModel.currentPlayerCard.collectAsStateWithLifecycle(
@@ -117,7 +117,6 @@ fun HeroDuelScreen(
             SelectCardUi(
                 modifier = modifier,
                 playerDeck = playerDeck,
-                cardSelectedIndex = cardSelectedIndex,
                 onPlayCardClick = onPlayCardClick,
                 onPlayerCardClick = onPlayerCardClick
             )
@@ -204,13 +203,14 @@ fun SelectCardUi(
         HeroModel(id = 1, name = "test 1"),
         HeroModel(id = 2, name = "test 2")
     ),
-    cardSelectedIndex: Int = 0,
     onPlayCardClick: () -> Unit = {},
     onPlayerCardClick: (Int) -> Unit = {},
 ) {
     LaunchedEffect(key1 = Unit) {
         onPlayerCardClick(0)
     }
+    var selectedCard by remember { mutableStateOf(playerDeck[0]) }
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -220,7 +220,7 @@ fun SelectCardUi(
             HeroCard(
                 modifier = Modifier
                     .padding(8.dp),
-                hero = playerDeck[cardSelectedIndex]
+                hero = selectedCard
             )
         }
         CustomButton(
@@ -230,7 +230,10 @@ fun SelectCardUi(
         PlayerDeck(
             modifier = Modifier,
             playerDeck = playerDeck,
-            onCardClick = onPlayerCardClick
+            onCardClick = {
+                selectedCard = playerDeck[it]
+                onPlayerCardClick(it)
+            }
         )
     }
 }
