@@ -5,11 +5,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -28,16 +28,15 @@ fun GameScore(
             modifier = Modifier
                 .border(1.dp, color = Color.Black),
             score = playerScore,
-            text = "Jugador:",
-            backgroundColor = Color(0xFF16A0E8)
+            text = "Jugador"
         )
         IndividualScore(
             modifier = Modifier
                 .border(1.dp, color = Color.Black),
             score = adversaryScore,
-            text = "Adversario:",
-            backgroundColor = Color(0xFFFA1404),
-            textColor = Color.White
+            text = "Adversario",
+            backgroundColor = MaterialTheme.colorScheme.secondary,
+            textColor = MaterialTheme.colorScheme.onSecondary
         )
     }
 }
@@ -48,15 +47,14 @@ fun IndividualScore(
     modifier: Modifier = Modifier,
     score: Int = 0,
     text: String = "Jugador o adversario:",
-    backgroundColor: Color = Color.White,
-    textColor: Color = Color.Black
+    backgroundColor: Color = MaterialTheme.colorScheme.tertiary,
+    textColor: Color = MaterialTheme.colorScheme.onTertiary
 ) {
     Text(
         modifier = modifier
             .background(color = backgroundColor)
             .padding(5.dp),
-        text = "$text $score",
-        fontWeight = FontWeight.ExtraBold,
+        text = "$text: $score",
         color = textColor
     )
 }

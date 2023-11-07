@@ -230,9 +230,9 @@ fun SelectCardUi(
         PlayerDeck(
             modifier = Modifier,
             playerDeck = playerDeck,
-            onCardClick = {
-                selectedCard = playerDeck[it]
-                onPlayerCardClick(it)
+            onCardClick = { index ->
+                selectedCard = playerDeck[index]
+                onPlayerCardClick(index)
             }
         )
     }
