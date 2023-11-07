@@ -27,12 +27,11 @@ import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.ui.components.ActionMenu
+import ar.edu.unlam.mobile.scaffold.ui.components.AnimatedHeroCard
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomTitle
 import ar.edu.unlam.mobile.scaffold.ui.components.GameScore
-import ar.edu.unlam.mobile.scaffold.ui.components.MenancingAnimation
 import ar.edu.unlam.mobile.scaffold.ui.components.PlayerDeck
-import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroCard
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.adversaryCardColor
 
 @Preview(showBackground = true)
@@ -74,7 +73,7 @@ fun HeroDuelScreen(
         modifier = Modifier.fillMaxSize()
     )
 
-    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle(initialValue = true)
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     if (isLoading) {
         CircularProgressIndicator(modifier = Modifier.fillMaxSize())
     } else {
@@ -155,7 +154,7 @@ fun DuelUi(
         )
         val cardModifier = Modifier
             .padding(7.dp)
-        HeroCard(
+        AnimatedHeroCard(
             modifier = cardModifier,
             hero = currentAdversaryCard,
             cardColors = adversaryCardColor()
@@ -170,7 +169,7 @@ fun DuelUi(
             isMultiplierEnabled = canMultix2BeUsed,
             heroStats = currentPlayerCard.stats
         )
-        HeroCard(
+        AnimatedHeroCard(
             modifier = cardModifier,
             hero = currentPlayerCard
         )
@@ -195,13 +194,10 @@ fun SelectCardUi(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        MenancingAnimation {
-            HeroCard(
-                modifier = Modifier
-                    .padding(8.dp),
-                hero = selectedCard
-            )
-        }
+        AnimatedHeroCard(
+            modifier = Modifier.padding(8.dp),
+            hero = selectedCard
+        )
         CustomButton(
             label = { "Jugar carta!" },
             onClick = onPlayCardClick

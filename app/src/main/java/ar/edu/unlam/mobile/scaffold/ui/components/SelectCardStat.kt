@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,9 +25,9 @@ fun SelectCardStat(
     heroStats: StatModel = StatModel(),
     onClick: (Stat) -> Unit = {}
 ) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
     val statList by remember { mutableStateOf(getStatList(heroStats)) }
-    var selectedStat by rememberSaveable { mutableStateOf(statList[0]) }
+    var selectedStat by remember { mutableStateOf(statList[0]) }
 
     Box(
         modifier = modifier
@@ -65,7 +64,7 @@ fun SelectCardStat(
     }
 }
 
-fun getStatList(stat: StatModel): List<Pair<Stat, Int>> {
+private fun getStatList(stat: StatModel): List<Pair<Stat, Int>> {
     val statPairList = mutableListOf<Pair<Stat, Int>>()
     statPairList.add(Pair(Stat.POWER, stat.power))
     statPairList.add(Pair(Stat.DURABILITY, stat.durability))
