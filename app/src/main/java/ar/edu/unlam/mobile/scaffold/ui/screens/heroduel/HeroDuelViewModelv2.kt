@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.GameRepository
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
-import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
-import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
+import ar.edu.unlam.mobile.scaffold.domain.cardgame.Stat
+import ar.edu.unlam.mobile.scaffold.domain.cardgame.Winner
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,12 +21,6 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
 
     private val _currentPlayerCard = MutableStateFlow(HeroModel())
     val currentPlayerCard = _currentPlayerCard.asStateFlow()
-
-    private val _showWinnerScreen = MutableStateFlow(false)
-    val showWinnerScreen = _showWinnerScreen.asStateFlow()
-
-    private val _showHeroDuelScreen = MutableStateFlow(false)
-    val showHeroDuelScreen = _showHeroDuelScreen.asStateFlow()
 
     private lateinit var game: CardGame
 
@@ -52,11 +46,11 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
     lateinit var currentAdversaryCard: StateFlow<HeroModel>
         private set
 
+    private val _currentScreen = MutableStateFlow(DuelScreen.SELECT_CARD_UI)
+    val currentScreen = _currentScreen.asStateFlow()
+
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    private val _showSelectCardScreen = MutableStateFlow(true)
-    val showSelectCardScreen = _showSelectCardScreen.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -77,8 +71,7 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
     }
 
     fun onPlayCardClick() {
-        _showSelectCardScreen.value = false
-        _showHeroDuelScreen.value = true
+        _currentScreen.value = DuelScreen.DUEL_UI
     }
 
     fun selectPlayerCard(cardSelectedIndex: Int) {
@@ -99,14 +92,12 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
         useMultix2 = false
         if (winner.value == Winner.NONE) {
             if (game.lastCardFightWinner.value == Winner.ADVERSARY) {
-                _showHeroDuelScreen.value = false
+                // se necesita resetear el estado, por eso se llama a este método con parámetro 0
                 selectPlayerCard(0)
-                _showSelectCardScreen.value = true
+                _currentScreen.value = DuelScreen.SELECT_CARD_UI
             }
         } else {
-            _showHeroDuelScreen.value = false
-            _showSelectCardScreen.value = false
-            _showWinnerScreen.value = true
+            _currentScreen.value = DuelScreen.FINISHED_DUEL_UI
         }
     }
 }

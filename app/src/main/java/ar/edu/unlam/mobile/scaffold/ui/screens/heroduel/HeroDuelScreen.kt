@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ar.edu.unlam.mobile.scaffold.R
-import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
-import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
+import ar.edu.unlam.mobile.scaffold.domain.cardgame.Stat
+import ar.edu.unlam.mobile.scaffold.domain.cardgame.Winner
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.ui.components.ActionMenu
 import ar.edu.unlam.mobile.scaffold.ui.components.AnimatedHeroCard
@@ -77,9 +77,6 @@ fun HeroDuelScreen(
     if (isLoading) {
         CircularProgressIndicator(modifier = Modifier.fillMaxSize())
     } else {
-        val showSelectCardScreen by viewModel.showSelectCardScreen.collectAsStateWithLifecycle()
-        val showHeroDuelScreen by viewModel.showHeroDuelScreen.collectAsStateWithLifecycle()
-        val showWinnerScreen by viewModel.showWinnerScreen.collectAsStateWithLifecycle()
         val playerDeck by viewModel.currentPlayerDeck.collectAsStateWithLifecycle()
         val onPlayCardClick = viewModel::onPlayCardClick
         val onPlayerCardClick = viewModel::selectPlayerCard
@@ -92,8 +89,9 @@ fun HeroDuelScreen(
         val onFightClick = viewModel::onFightClick
         val winner by viewModel.winner.collectAsStateWithLifecycle()
         val canMultix2BeUsed by viewModel.canMultix2BeUsed.collectAsStateWithLifecycle()
+        val currentScreen by viewModel.currentScreen.collectAsStateWithLifecycle()
 
-        if (showSelectCardScreen) {
+        if (currentScreen == DuelScreen.SELECT_CARD_UI) {
             SelectCardUi(
                 modifier = modifier,
                 playerDeck = playerDeck,
@@ -102,7 +100,7 @@ fun HeroDuelScreen(
             )
         }
 
-        if (showHeroDuelScreen) {
+        if (currentScreen == DuelScreen.DUEL_UI) {
             DuelUi(
                 modifier = modifier,
                 currentPlayerCard = currentPlayerCard,
@@ -116,7 +114,7 @@ fun HeroDuelScreen(
             )
         }
 
-        if (showWinnerScreen) {
+        if (currentScreen == DuelScreen.FINISHED_DUEL_UI) {
             FinishedDuelUi(
                 modifier = modifier,
                 winner = winner,

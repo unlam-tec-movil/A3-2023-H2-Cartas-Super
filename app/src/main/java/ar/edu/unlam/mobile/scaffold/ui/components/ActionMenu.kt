@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
+import ar.edu.unlam.mobile.scaffold.domain.cardgame.Stat
 import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
 
 @Preview(showBackground = true)
