@@ -167,7 +167,8 @@ fun DuelUi(
             onClickSelectedStat = onClickSelectedStat,
             useMultiplier = useMultiplier,
             onFightClick = onFightClick,
-            isMultiplierEnabled = canMultix2BeUsed
+            isMultiplierEnabled = canMultix2BeUsed,
+            heroStats = currentPlayerCard.stats
         )
         HeroCard(
             modifier = cardModifier,

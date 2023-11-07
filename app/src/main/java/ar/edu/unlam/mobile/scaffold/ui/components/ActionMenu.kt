@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
+import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
 
 @Preview(showBackground = true)
 @Composable
@@ -21,6 +22,7 @@ fun ActionMenu(
     modifier: Modifier = Modifier,
     onClickSelectedStat: (Stat) -> Unit = {},
     isMultiplierEnabled: Boolean = true,
+    heroStats: StatModel = StatModel(),
     useMultiplier: (Boolean) -> Unit = {},
     onFightClick: () -> Unit = {}
 ) {
@@ -33,7 +35,11 @@ fun ActionMenu(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
-            SelectCardStat(modifier = Modifier.width(160.dp), onClick = onClickSelectedStat)
+            SelectCardStat(
+                modifier = Modifier.width(200.dp),
+                onClick = onClickSelectedStat,
+                heroStats = heroStats
+            )
             CustomLabeledCheckbox(
                 enabled = { isMultiplierEnabled },
                 label = { "Multi x2:" },

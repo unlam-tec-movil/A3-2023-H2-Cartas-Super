@@ -10,29 +10,25 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
+import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
 
 @Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectCardStat(
     modifier: Modifier = Modifier,
-    statList: List<Stat> = listOf(
-        Stat.POWER,
-        Stat.DURABILITY,
-        Stat.STRENGTH,
-        Stat.SPEED,
-        Stat.COMBAT,
-        Stat.INTELLIGENCE
-    ),
+    heroStats: StatModel = StatModel(),
     onClick: (Stat) -> Unit = {}
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
-    var selectedStat by rememberSaveable { mutableStateOf(Stat.POWER) }
+    val statList by remember { mutableStateOf(getStatList(heroStats)) }
+    var selectedStat by rememberSaveable { mutableStateOf(statList[0]) }
 
     Box(
         modifier = modifier
@@ -44,8 +40,8 @@ fun SelectCardStat(
             }
         ) {
             TextField(
-                value = selectedStat.statName,
-                onValueChange = { onClick(selectedStat) },
+                value = "${selectedStat.first.statName}: ${selectedStat.second}",
+                onValueChange = { onClick(selectedStat.first) },
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 modifier = modifier.menuAnchor()
@@ -56,10 +52,10 @@ fun SelectCardStat(
             ) {
                 statList.forEach { item ->
                     DropdownMenuItem(
-                        text = { Text(text = item.statName) },
+                        text = { Text(text = "${item.first.statName}: ${item.second}") },
                         onClick = {
                             selectedStat = item
-                            onClick(selectedStat)
+                            onClick(selectedStat.first)
                             expanded = false
                         }
                     )
@@ -67,4 +63,16 @@ fun SelectCardStat(
             }
         }
     }
+}
+
+fun getStatList(stat: StatModel): List<Pair<Stat, Int>> {
+    val statPairList = mutableListOf<Pair<Stat, Int>>()
+    statPairList.add(Pair(Stat.POWER, stat.power))
+    statPairList.add(Pair(Stat.DURABILITY, stat.durability))
+    statPairList.add(Pair(Stat.STRENGTH, stat.strength))
+    statPairList.add(Pair(Stat.SPEED, stat.speed))
+    statPairList.add(Pair(Stat.COMBAT, stat.combat))
+    statPairList.add(Pair(Stat.INTELLIGENCE, stat.intelligence))
+    statPairList.sortByDescending { it.second }
+    return statPairList
 }
