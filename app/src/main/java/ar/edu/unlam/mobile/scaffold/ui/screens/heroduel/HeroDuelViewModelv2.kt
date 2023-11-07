@@ -10,7 +10,6 @@ import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -67,37 +66,14 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
         }
     }
 
-    private fun initStateFlows() {
-        winner = game.winner.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = Winner.NONE
-        )
-        canMultix2BeUsed = game.canMultix2BeUsed.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = true
-        )
-        playerScore = game.playerScore.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = 0
-        )
-        adversaryScore = game.adversaryScore.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = 0
-        )
-        currentPlayerDeck = game.currentPlayerDeck.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = listOf(HeroModel(), HeroModel(), HeroModel())
-        )
-        currentAdversaryCard = game.currentAdversaryCard.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = HeroModel()
-        )
+    private suspend fun initStateFlows() {
+        winner = game.winner.stateIn(scope = viewModelScope)
+        canMultix2BeUsed = game.canMultix2BeUsed.stateIn(scope = viewModelScope)
+        playerScore = game.playerScore.stateIn(scope = viewModelScope)
+        adversaryScore = game.adversaryScore.stateIn(scope = viewModelScope)
+        currentPlayerDeck = game.currentPlayerDeck.stateIn(scope = viewModelScope)
+        _currentPlayerCard.value = currentPlayerDeck.value[0]
+        currentAdversaryCard = game.currentAdversaryCard.stateIn(scope = viewModelScope)
     }
 
     fun onPlayCardClick() {
@@ -105,7 +81,7 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
         _showHeroDuelScreen.value = true
     }
 
-    fun onPlayerCardClick(cardSelectedIndex: Int) {
+    fun selectPlayerCard(cardSelectedIndex: Int) {
         _currentPlayerCard.value = currentPlayerDeck.value[cardSelectedIndex]
     }
 
@@ -124,7 +100,7 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
         if (winner.value == Winner.NONE) {
             if (game.lastCardFightWinner.value == Winner.ADVERSARY) {
                 _showHeroDuelScreen.value = false
-                onPlayerCardClick(0)
+                selectPlayerCard(0)
                 _showSelectCardScreen.value = true
             }
         } else {

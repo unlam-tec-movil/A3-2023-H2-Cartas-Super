@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -79,39 +78,21 @@ fun HeroDuelScreen(
     if (isLoading) {
         CircularProgressIndicator(modifier = Modifier.fillMaxSize())
     } else {
-        val showSelectCardScreen by viewModel.showSelectCardScreen.collectAsStateWithLifecycle(
-            initialValue = false
-        )
-        val showHeroDuelScreen by viewModel.showHeroDuelScreen.collectAsStateWithLifecycle(
-            initialValue = false
-        )
-        val showWinnerScreen by viewModel.showWinnerScreen.collectAsStateWithLifecycle(
-            initialValue = false
-        )
-        val playerDeck by viewModel.currentPlayerDeck.collectAsStateWithLifecycle(
-            initialValue = listOf(HeroModel())
-        )
+        val showSelectCardScreen by viewModel.showSelectCardScreen.collectAsStateWithLifecycle()
+        val showHeroDuelScreen by viewModel.showHeroDuelScreen.collectAsStateWithLifecycle()
+        val showWinnerScreen by viewModel.showWinnerScreen.collectAsStateWithLifecycle()
+        val playerDeck by viewModel.currentPlayerDeck.collectAsStateWithLifecycle()
         val onPlayCardClick = viewModel::onPlayCardClick
-        val onPlayerCardClick = viewModel::onPlayerCardClick
-        val currentPlayerCard by viewModel.currentPlayerCard.collectAsStateWithLifecycle(
-            initialValue = HeroModel()
-        )
-        val currentAdversaryCard by viewModel.currentAdversaryCard.collectAsStateWithLifecycle(
-            initialValue = HeroModel()
-        )
-        val playerScore by viewModel.playerScore.collectAsStateWithLifecycle(
-            initialValue = 0
-        )
-        val adversaryScore by viewModel.adversaryScore.collectAsStateWithLifecycle(
-            initialValue = 0
-        )
+        val onPlayerCardClick = viewModel::selectPlayerCard
+        val currentPlayerCard by viewModel.currentPlayerCard.collectAsStateWithLifecycle()
+        val currentAdversaryCard by viewModel.currentAdversaryCard.collectAsStateWithLifecycle()
+        val playerScore by viewModel.playerScore.collectAsStateWithLifecycle()
+        val adversaryScore by viewModel.adversaryScore.collectAsStateWithLifecycle()
         val onClickSelectedStat = viewModel::onClickSelectedStat
         val useMultiplierX2 = viewModel::useMultiplierX2
         val onFightClick = viewModel::onFightClick
-        val winner by viewModel.winner.collectAsStateWithLifecycle(initialValue = Winner.NONE)
-        val canMultix2BeUsed by viewModel.canMultix2BeUsed.collectAsStateWithLifecycle(
-            initialValue = true
-        )
+        val winner by viewModel.winner.collectAsStateWithLifecycle()
+        val canMultix2BeUsed by viewModel.canMultix2BeUsed.collectAsStateWithLifecycle()
 
         if (showSelectCardScreen) {
             SelectCardUi(
@@ -206,9 +187,6 @@ fun SelectCardUi(
     onPlayCardClick: () -> Unit = {},
     onPlayerCardClick: (Int) -> Unit = {},
 ) {
-    LaunchedEffect(key1 = Unit) {
-        onPlayerCardClick(0)
-    }
     var selectedCard by remember { mutableStateOf(playerDeck[0]) }
 
     Column(
