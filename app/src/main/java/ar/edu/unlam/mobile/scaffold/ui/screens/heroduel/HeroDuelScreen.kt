@@ -1,5 +1,10 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.heroduel
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -91,36 +96,68 @@ fun HeroDuelScreen(
         val canMultix2BeUsed by viewModel.canMultix2BeUsed.collectAsStateWithLifecycle()
         val currentScreen by viewModel.currentScreen.collectAsStateWithLifecycle()
 
-        if (currentScreen == DuelScreen.SELECT_CARD_UI) {
-            SelectCardUi(
-                modifier = modifier,
-                playerDeck = playerDeck,
-                onPlayCardClick = onPlayCardClick,
-                onPlayerCardClick = onPlayerCardClick
-            )
-        }
+        val animationDuration = 500
 
-        if (currentScreen == DuelScreen.DUEL_UI) {
-            DuelUi(
-                modifier = modifier,
-                currentPlayerCard = currentPlayerCard,
-                currentAdversaryCard = currentAdversaryCard,
-                playerScore = playerScore,
-                adversaryScore = adversaryScore,
-                onClickSelectedStat = onClickSelectedStat,
-                useMultiplier = useMultiplierX2,
-                onFightClick = onFightClick,
-                canMultix2BeUsed = canMultix2BeUsed
-            )
-        }
-
-        if (currentScreen == DuelScreen.FINISHED_DUEL_UI) {
-            FinishedDuelUi(
-                modifier = modifier,
-                winner = winner,
-                playerScore = playerScore,
-                adversaryScore = adversaryScore
-            )
+        AnimatedContent(
+            targetState = currentScreen,
+            label = "",
+            transitionSpec = {
+                if (targetState == DuelScreen.SELECT_CARD_UI) {
+                    slideInHorizontally(
+                        animationSpec = tween(
+                            durationMillis = animationDuration
+                        ),
+                        initialOffsetX = { fullWidth -> -fullWidth }
+                    ) togetherWith (
+                        slideOutHorizontally(
+                            animationSpec = tween(
+                                durationMillis = animationDuration
+                            ),
+                            targetOffsetX = { fullWidth -> fullWidth }
+                        )
+                        )
+                } else {
+                    slideInHorizontally(
+                        animationSpec = tween(
+                            durationMillis = animationDuration
+                        ),
+                        initialOffsetX = { fullWidth -> fullWidth }
+                    ) togetherWith (
+                        slideOutHorizontally(
+                            animationSpec = tween(
+                                durationMillis = animationDuration
+                            ),
+                            targetOffsetX = { fullWidth -> -fullWidth }
+                        )
+                        )
+                }
+            }
+        ) { screen ->
+            when (screen) {
+                DuelScreen.DUEL_UI -> DuelUi(
+                    modifier = modifier,
+                    currentPlayerCard = currentPlayerCard,
+                    currentAdversaryCard = currentAdversaryCard,
+                    playerScore = playerScore,
+                    adversaryScore = adversaryScore,
+                    onClickSelectedStat = onClickSelectedStat,
+                    useMultiplier = useMultiplierX2,
+                    onFightClick = onFightClick,
+                    canMultix2BeUsed = canMultix2BeUsed
+                )
+                DuelScreen.SELECT_CARD_UI -> SelectCardUi(
+                    modifier = modifier,
+                    playerDeck = playerDeck,
+                    onPlayCardClick = onPlayCardClick,
+                    onPlayerCardClick = onPlayerCardClick
+                )
+                DuelScreen.FINISHED_DUEL_UI -> FinishedDuelUi(
+                    modifier = modifier,
+                    winner = winner,
+                    playerScore = playerScore,
+                    adversaryScore = adversaryScore
+                )
+            }
         }
     }
 }
