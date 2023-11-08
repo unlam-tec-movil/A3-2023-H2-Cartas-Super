@@ -13,42 +13,37 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
+import ar.edu.unlam.mobile.scaffold.ui.screens.map.drawroute.DrawRoutes
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.presentation.MapViewModel
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.presentation.PermissionEvent
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.presentation.ViewState
@@ -58,6 +53,8 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
@@ -66,6 +63,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerInfoWindowContent
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
 
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -211,8 +209,16 @@ fun ScreenMap(modifier: Modifier,
 @Composable
 fun MapScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
     val marker = LatLng(currentPosition.latitude, currentPosition.longitude)
-    val puntoEncuentro1 = LatLng(-34.63333,-58.56667)
-    val puntoEncuentro2 = LatLng(-34.7,-58.58333)
+    val puntoEncuentro1 = LatLng(-34.63333, -58.56667)
+    val puntoEncuentro2 = LatLng(-34.7, -58.58333)
+
+
+
+    var selectedDestination by remember { mutableStateOf<LatLng?>(null) }
+
+
+
+
 
     Box(Modifier.fillMaxSize()) {
 
@@ -222,17 +228,48 @@ fun MapScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
             properties = MapProperties(
                 isMyLocationEnabled = true,
                 mapType = MapType.NORMAL,
-
                 )
         ) {
             Marker(
                 state = MarkerState(position = marker),
-                title = "Mi Posición Actual"
-
+                title = "Mi Posición Actual",
             )
 
-            MarkerInfoWindowContent(state = MarkerState(position = puntoEncuentro1), snippet = "Punto de encuentro 1",
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.comic)) {
+
+          /*if (selectedMarker == puntoEncuentro1){
+        DrawRoutes(
+        key = "AIzaSyA0d6l6FXVVOX_Ck67SiaZg3ACth-34dk4",
+        origin = marker,
+        destination = puntoEncuentro1,
+
+        )
+         }else if(selectedMarker == puntoEncuentro2){
+         DrawRoutes(
+        key = "AIzaSyA0d6l6FXVVOX_Ck67SiaZg3ACth-34dk4",
+        origin = marker,
+        destination = puntoEncuentro2,
+
+        )
+}
+
+*/
+
+
+
+
+
+
+
+
+
+
+            MarkerInfoWindowContent(
+                state = MarkerState(position = puntoEncuentro1),
+                snippet = "Punto de encuentro 1",
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.comic),
+
+            ) {
+                selectedDestination = puntoEncuentro1
                 Box(
                     modifier = Modifier
                         .height(290.dp)
@@ -258,13 +295,19 @@ fun MapScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
                         color = Color.Black,
                         fontFamily = shaka_pow
                     )
+
                 }
+
 
             }
 
 
-            MarkerInfoWindowContent(state = MarkerState(position = puntoEncuentro2), snippet = "Punto de encuentro 2" ,
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.comic_2)) {
+            MarkerInfoWindowContent(
+                state = MarkerState(position = puntoEncuentro2), snippet = "Punto de encuentro 2",
+                icon = BitmapDescriptorFactory.fromResource(R.drawable.comic_2)
+            ) {
+                selectedDestination = puntoEncuentro2
+
                 Box(
                     modifier = Modifier
                         .height(270.dp)
@@ -293,14 +336,28 @@ fun MapScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
                 }
 
             }
+
+
+            if (selectedDestination != null) {
+                DrawRoutes(
+                    key = "AIzaSyA0d6l6FXVVOX_Ck67SiaZg3ACth-34dk4",
+                    origin = marker,
+                    destination = selectedDestination!!,
+                )
+                if (selectedDestination == puntoEncuentro1){
+                    selectedDestination = null
+                } else if (selectedDestination == puntoEncuentro2){
+                    selectedDestination = null
+                }
+            }
+
         }
     }
-}
 
+}
 
 fun isGpsEnabled(context: Context): Boolean {
     val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 }
-
 
