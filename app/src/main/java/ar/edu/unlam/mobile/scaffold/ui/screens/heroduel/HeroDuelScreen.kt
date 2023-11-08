@@ -8,6 +8,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,22 +48,30 @@ fun FinishedDuelUi(
     playerScore: Int = 0,
     adversaryScore: Int = 0
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CustomTitle(
-            modifier = Modifier.padding(16.dp),
-            text = { "El ganador es " + if (winner == Winner.PLAYER) "el jugador!" else "el adversario." }
+    Box(modifier = modifier) {
+        Image(
+            painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
+            contentDescription = "Fondo DuelUi",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
         )
-        GameScore(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            playerScore = playerScore,
-            adversaryScore = adversaryScore
-        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CustomTitle(
+                modifier = Modifier.padding(16.dp),
+                text = { "El ganador es " + if (winner == Winner.PLAYER) "el jugador!" else "el adversario." }
+            )
+            GameScore(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                playerScore = playerScore,
+                adversaryScore = adversaryScore
+            )
+        }
     }
 }
 
@@ -71,16 +80,18 @@ fun HeroDuelScreen(
     modifier: Modifier = Modifier,
     viewModel: HeroDuelViewModelv2 = hiltViewModel()
 ) {
-    Image(
-        painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
-        contentDescription = "Pantalla NewGame",
-        contentScale = ContentScale.FillBounds,
-        modifier = Modifier.fillMaxSize()
-    )
 
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     if (isLoading) {
-        CircularProgressIndicator(modifier = Modifier.fillMaxSize())
+        Box(modifier = modifier) {
+            Image(
+                painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
+                contentDescription = "Fondo loading",
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier.fillMaxSize()
+            )
+            CircularProgressIndicator(modifier = Modifier.fillMaxSize())
+        }
     } else {
         val playerDeck by viewModel.currentPlayerDeck.collectAsStateWithLifecycle()
         val onPlayCardClick = viewModel::onPlayCardClick
@@ -175,39 +186,47 @@ fun DuelUi(
     useMultiplier: (Boolean) -> Unit = {},
     onFightClick: () -> Unit = {}
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        GameScore(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            playerScore = playerScore,
-            adversaryScore = adversaryScore
+    Box(modifier = modifier) {
+        Image(
+            painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
+            contentDescription = "Fondo DuelUi",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
         )
-        val cardModifier = Modifier
-            .padding(7.dp)
-        AnimatedHeroCard(
-            modifier = cardModifier,
-            hero = currentAdversaryCard,
-            cardColors = adversaryCardColor()
-        )
-        ActionMenu(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)),
-            onClickSelectedStat = onClickSelectedStat,
-            useMultiplier = useMultiplier,
-            onFightClick = onFightClick,
-            isMultiplierEnabled = canMultix2BeUsed,
-            heroStats = currentPlayerCard.stats
-        )
-        AnimatedHeroCard(
-            modifier = cardModifier,
-            hero = currentPlayerCard
-        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            GameScore(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                playerScore = playerScore,
+                adversaryScore = adversaryScore
+            )
+            val cardModifier = Modifier
+                .padding(7.dp)
+            AnimatedHeroCard(
+                modifier = cardModifier,
+                hero = currentAdversaryCard,
+                cardColors = adversaryCardColor()
+            )
+            ActionMenu(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)),
+                onClickSelectedStat = onClickSelectedStat,
+                useMultiplier = useMultiplier,
+                onFightClick = onFightClick,
+                isMultiplierEnabled = canMultix2BeUsed,
+                heroStats = currentPlayerCard.stats
+            )
+            AnimatedHeroCard(
+                modifier = cardModifier,
+                hero = currentPlayerCard
+            )
+        }
     }
 }
 
@@ -224,26 +243,34 @@ fun SelectCardUi(
 ) {
     var selectedCard by remember { mutableStateOf(playerDeck[0]) }
 
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        AnimatedHeroCard(
-            modifier = Modifier.padding(8.dp),
-            hero = selectedCard
+    Box(modifier = modifier) {
+        Image(
+            painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
+            contentDescription = "Fondo DuelUi",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
         )
-        CustomButton(
-            label = { "Jugar carta!" },
-            onClick = onPlayCardClick
-        )
-        PlayerDeck(
-            modifier = Modifier,
-            playerDeck = playerDeck,
-            onCardClick = { index ->
-                selectedCard = playerDeck[index]
-                onPlayerCardClick(index)
-            }
-        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(space = 5.dp, alignment = Alignment.Top),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AnimatedHeroCard(
+                modifier = Modifier.padding(8.dp),
+                hero = selectedCard
+            )
+            CustomButton(
+                label = { "Jugar carta!" },
+                onClick = onPlayCardClick
+            )
+            PlayerDeck(
+                modifier = Modifier.weight(1f),
+                playerDeck = playerDeck,
+                onCardClick = { index ->
+                    selectedCard = playerDeck[index]
+                    onPlayerCardClick(index)
+                }
+            )
+        }
     }
 }
