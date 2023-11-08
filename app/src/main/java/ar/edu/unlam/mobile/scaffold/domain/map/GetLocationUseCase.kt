@@ -1,8 +1,8 @@
-package ar.edu.unlam.mobile.scaffold.ui.screens.map.domain
+package ar.edu.unlam.mobile.scaffold.domain.map
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.data.ILocationService
+import ar.edu.unlam.mobile.scaffold.data.map.ILocationService
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

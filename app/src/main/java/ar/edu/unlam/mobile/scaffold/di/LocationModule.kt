@@ -1,8 +1,8 @@
-package ar.edu.unlam.mobile.scaffold.ui.screens.map.di
+package ar.edu.unlam.mobile.scaffold.di
 
 import android.content.Context
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.data.ILocationService
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.data.LocationService
+import ar.edu.unlam.mobile.scaffold.data.map.ILocationService
+import ar.edu.unlam.mobile.scaffold.data.map.LocationService
 import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides

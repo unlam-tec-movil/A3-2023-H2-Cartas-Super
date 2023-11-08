@@ -43,18 +43,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.drawroute.DrawRoutes
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.presentation.MapViewModel
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.presentation.PermissionEvent
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.presentation.ViewState
+import ar.edu.unlam.mobile.scaffold.ui.components.DrawRoutes
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
@@ -63,7 +58,6 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerInfoWindowContent
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.google.maps.android.compose.rememberMarkerState
 
 
 @RequiresApi(Build.VERSION_CODES.S)

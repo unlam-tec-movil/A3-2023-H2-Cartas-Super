@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -27,12 +26,9 @@ import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.heroduel.HeroDuelScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.home.HomeScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.ScreenMap
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.presentation.MapViewModel
 import ar.edu.unlam.mobile.scaffold.ui.screens.qr.QrScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.quiz.QuizScreen
 import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

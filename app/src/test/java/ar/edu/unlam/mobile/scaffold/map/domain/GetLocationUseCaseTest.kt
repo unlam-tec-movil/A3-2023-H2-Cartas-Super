@@ -1,7 +1,7 @@
 package ar.edu.unlam.mobile.scaffold.map.domain
 
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.data.ILocationService
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.domain.GetLocationUseCase
+import ar.edu.unlam.mobile.scaffold.data.map.ILocationService
+import ar.edu.unlam.mobile.scaffold.domain.map.GetLocationUseCase
 import com.google.android.gms.maps.model.LatLng
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.flowOf
