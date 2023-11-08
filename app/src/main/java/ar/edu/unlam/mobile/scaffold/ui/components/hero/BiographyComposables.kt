@@ -1,51 +1,35 @@
 package ar.edu.unlam.mobile.scaffold.ui.components.hero
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffold.domain.model.BiographyModel
-import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomCard
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextBodyLarge
 
 @Preview(showBackground = true)
 @Composable
-fun HeroBiography(modifier: Modifier = Modifier, biography: BiographyModel = BiographyModel()) {
-    Column(
-        modifier = modifier
-            .background(
-                brush = SolidColor(Color.Black),
-                alpha = 0.8f
-            )
-            .padding(8.dp),
-        horizontalAlignment = Alignment.Start
-    ) {
-        BiographyText(text = "Nombre", value = biography.fullName)
-        BiographyText(text = "Alter-Egos", value = biography.alterEgos)
-        BiographyText(text = "Apodos", value = biography.aliases)
-        BiographyText(text = "Lugar de nacimiento", value = biography.placeOfBirth)
-        BiographyText(text = "Primera aparicion", value = biography.firstAppearance)
-        BiographyText(text = "Editorial", value = biography.publisher)
-        BiographyText(text = "Alineacion", value = biography.alignment)
-    }
-}
-
-@Composable
-fun BiographyText(
+fun HeroBiography(
     modifier: Modifier = Modifier,
-    text: String = "Nombre",
-    value: String = "Clark Kent"
+    biography: () -> BiographyModel = { BiographyModel() }
 ) {
-    Text(
-        modifier = modifier,
-        text = "$text: $value",
-        fontFamily = shaka_pow,
-        color = Color.White
-    )
+    CustomCard(
+        modifier = modifier
+    ) {
+        CustomTextBodyLarge(
+            modifier = Modifier.padding(8.dp).testTag("body text"),
+            text = {
+                "Nombre: ${biography().fullName}\n" +
+                    "Alter-Egos: ${biography().alterEgos}\n" +
+                    "Apodos: ${biography().aliases}\n" +
+                    "Lugar de nacimiento: ${biography().placeOfBirth}\n" +
+                    "Primera aparicion: ${biography().firstAppearance}\n" +
+                    "Editorial: ${biography().publisher}\n" +
+                    "Alineacion: ${biography().alignment}"
+            }
+        )
+    }
 }

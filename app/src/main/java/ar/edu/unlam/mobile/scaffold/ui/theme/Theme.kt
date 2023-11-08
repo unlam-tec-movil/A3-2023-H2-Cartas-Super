@@ -39,7 +39,6 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun ComicWarTheme(
-    useSystemUIController: Boolean = true,
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
@@ -62,8 +61,6 @@ fun ComicWarTheme(
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
-
-
 
     MaterialTheme(
         colorScheme = colorScheme,

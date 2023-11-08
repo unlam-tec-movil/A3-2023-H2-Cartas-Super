@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -56,8 +54,8 @@ import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
 import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroCard
-import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroItem
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroPlayerCard
+import ar.edu.unlam.mobile.scaffold.ui.components.hero.PlayerDeck
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Preview(showBackground = true)
@@ -71,7 +69,7 @@ fun WinnerScreen(
     val offset = Offset(6.0f, 4.0f)
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -399,7 +397,7 @@ fun SelectCard(
             PlayerDeck(
                 modifier = Modifier,
                 playerDeck = playerDeck,
-                onPlayerCardClick = onPlayerCardClick
+                onCardClick = onPlayerCardClick
             )
         }
     }
@@ -419,35 +417,6 @@ fun JugarCartaButton(
         }
     ) {
         Text(modifier = Modifier, color = Color.White, text = "Jugar Carta")
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PlayerDeck(
-    modifier: Modifier = Modifier,
-    playerDeck: List<HeroModel> = listOf(HeroModel(), HeroModel(), HeroModel()),
-    onPlayerCardClick: (Int) -> Unit = {}
-) {
-    if (playerDeck.isNotEmpty()) {
-        LazyColumn(
-            modifier = modifier,
-            content = {
-                items(playerDeck.size) { i ->
-                    HeroItem(
-                        modifier = Modifier
-                            .clickable {
-                                onPlayerCardClick(i)
-                            }
-                            .padding(8.dp)
-                            .shadow(9.dp),
-                        hero = playerDeck[i]
-                    )
-                }
-            }
-        )
-    } else {
-        InCaseOfError(place = "PlayerDeck composable")
     }
 }
 

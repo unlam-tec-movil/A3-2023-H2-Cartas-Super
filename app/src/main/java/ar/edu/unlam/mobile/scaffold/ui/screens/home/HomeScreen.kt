@@ -1,6 +1,5 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.home
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -56,7 +54,6 @@ fun HomeScreen(
     viewModel: HomeViewmodel = hiltViewModel(),
     controller: NavHostController
 ) {
-
     val cacheProgress by viewModel.cachingProgress.collectAsStateWithLifecycle()
     val navButtonModifier = Modifier
         .wrapContentSize()
@@ -70,7 +67,7 @@ fun HomeScreen(
             viewModel.cancelSensorDataFlow()
         }
     }
-    val context = LocalContext.current
+
     Box(modifier = modifier) {
         ParallaxBackgroundImage(
             modifier = Modifier.fillMaxSize(),
@@ -103,7 +100,6 @@ fun HomeScreen(
                 text = "Mapa"
             ) {
                 controller.navigate(route = "Mapa")
-              //  context.startActivity(Intent(context, ScreenMapActivity::class.java))
             }
 
             if (cacheProgress < 1f) {
