@@ -12,6 +12,7 @@ import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit4.MockKRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -144,7 +145,9 @@ class HeroDuelViewModelv2Test {
     @Test
     fun afterViewModelFinishesLoading_VerifyCurrentPlayerCardIsTheFirstHeroOfPlayerDeck() = runTest {
         val expectedPlayerCard = playerDeck[0]
-        while (viewModel.isLoading.value) {}
+        while (viewModel.isLoading.value) {
+            delay(500)
+        }
 
         val currentPlayerCard = viewModel.currentPlayerCard.value
 
@@ -155,7 +158,9 @@ class HeroDuelViewModelv2Test {
     @Test
     fun afterViewModelFinishesLoading_VerifyWinnerIsSetToNone() = runTest {
         val expectedWinner = Winner.NONE
-        while (viewModel.isLoading.value) {}
+        while (viewModel.isLoading.value) {
+            delay(500)
+        }
 
         // Create an empty collector for the StateFlow. StateFlows creados con StateIn necesitan un
         // subscriptor para que empiecen a recolectar información.
@@ -172,7 +177,9 @@ class HeroDuelViewModelv2Test {
     @Test
     fun afterViewModelFinishesLoading_VerifyMultiplierIsAvailable() = runTest {
         val expectedValue = true
-        while (viewModel.isLoading.value) {}
+        while (viewModel.isLoading.value) {
+            delay(500)
+        }
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.isMultiplierAvailable.collect()
         }
@@ -181,16 +188,35 @@ class HeroDuelViewModelv2Test {
         assertThat(isMultiplierAvailable).isEqualTo(expectedValue)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getPlayerScore() {
+    fun afterViewModelFinishesLoading_VerifyPlayerAndAdversaryScoreAreZero() = runTest {
+        val expectedScore = 0
+        while (viewModel.isLoading.value) {
+            delay(500)
+        }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.playerScore.collect()
+            viewModel.adversaryScore.collect()
+        }
+        val playerScore = viewModel.playerScore.value
+        val adversaryScore = viewModel.adversaryScore.value
+        assertThat(playerScore).isEqualTo(expectedScore)
+        assertThat(adversaryScore).isEqualTo(expectedScore)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAdversaryScore() {
-    }
-
-    @Test
-    fun getCurrentPlayerDeck() {
+    fun afterViewModelFinishesLoading_VerifyCurrentPlayerDeckIsEqualToTheGamePlayerDeck() = runTest {
+        val expectedPlayerDeck = playerDeck
+        while (viewModel.isLoading.value) {
+            delay(500)
+        }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.currentPlayerDeck.collect()
+        }
+        val currentPlayerDeck = viewModel.currentPlayerDeck.value
+        assertThat(currentPlayerDeck).isEqualTo(expectedPlayerDeck)
     }
 
     @Test
