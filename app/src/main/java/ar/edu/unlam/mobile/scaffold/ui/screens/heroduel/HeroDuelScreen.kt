@@ -95,15 +95,15 @@ fun HeroDuelScreen(
         }
     } else {
         val playerDeck by viewModel.currentPlayerDeck.collectAsStateWithLifecycle()
-        val onPlayCardClick = viewModel::onPlayCardClick
+        val onPlayCardClick = viewModel::playCard
         val onPlayerCardClick = viewModel::selectPlayerCard
         val currentPlayerCard by viewModel.currentPlayerCard.collectAsStateWithLifecycle()
         val currentAdversaryCard by viewModel.currentAdversaryCard.collectAsStateWithLifecycle()
         val playerScore by viewModel.playerScore.collectAsStateWithLifecycle()
         val adversaryScore by viewModel.adversaryScore.collectAsStateWithLifecycle()
-        val onClickSelectedStat = viewModel::onClickSelectedStat
+        val onClickSelectedStat = viewModel::selectStat
         val useMultiplierX2 = viewModel::useMultiplierX2
-        val onFightClick = viewModel::onFightClick
+        val onFightClick = viewModel::fight
         val winner by viewModel.winner.collectAsStateWithLifecycle()
         val canMultix2BeUsed by viewModel.isMultiplierAvailable.collectAsStateWithLifecycle()
         val currentScreen by viewModel.currentScreen.collectAsStateWithLifecycle()

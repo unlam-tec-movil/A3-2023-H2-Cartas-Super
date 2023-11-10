@@ -70,7 +70,7 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
         currentAdversaryCard = game.currentAdversaryCard.stateIn(scope = viewModelScope)
     }
 
-    fun onPlayCardClick() {
+    fun playCard() {
         _currentScreen.value = DuelScreen.DUEL_UI
     }
 
@@ -78,7 +78,7 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
         _currentPlayerCard.value = currentPlayerDeck.value[cardSelectedIndex]
     }
 
-    fun onClickSelectedStat(stat: Stat) {
+    fun selectStat(stat: Stat) {
         selectedStat = stat
     }
 
@@ -86,7 +86,7 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
         useMultix2 = use
     }
 
-    fun onFightClick() {
+    fun fight() {
         val cardId = _currentPlayerCard.value.id
         game.playerPlayCard(cardId, selectedStat, useMultix2)
         useMultix2 = false

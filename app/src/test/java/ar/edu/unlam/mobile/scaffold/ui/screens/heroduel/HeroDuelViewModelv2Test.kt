@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.MainDispatcherRule
 import ar.edu.unlam.mobile.scaffold.data.repository.GameRepository
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
+import ar.edu.unlam.mobile.scaffold.domain.cardgame.Stat
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.Winner
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
@@ -219,35 +220,65 @@ class HeroDuelViewModelv2Test {
         assertThat(currentPlayerDeck).isEqualTo(expectedPlayerDeck)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getCurrentAdversaryCard() {
+    fun afterViewModelFinishesLoading_VerifyCurrentAdversaryCardIsFistHeroOfAdversaryDeck() = runTest {
+        val expectedAdversaryCard = adversaryDeck[0]
+        while (viewModel.isLoading.value) {
+            delay(500)
+        }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.currentAdversaryCard.collect()
+        }
+        val currentAdversaryCard = viewModel.currentAdversaryCard.value
+        assertThat(currentAdversaryCard).isEqualTo(expectedAdversaryCard)
     }
 
     @Test
-    fun getCurrentScreen() {
+    fun afterViewModelFinishesLoading_VerifyCurrentScreenIsSelectCardUi() = runTest {
+        val expectedScreen = DuelScreen.SELECT_CARD_UI
+        while (viewModel.isLoading.value) {
+            delay(500)
+        }
+        val currentScreen = viewModel.currentScreen.value
+        assertThat(currentScreen).isEqualTo(expectedScreen)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun isLoading() {
-    }
+    fun givenTheSelectedCardAndStat_VerifyTheScoresAfterClicklingFight() = runTest {
+        // given
+        val playerCardIndex = 0
+        val expectedPlayerCard = playerDeck[playerCardIndex]
+        val expectedAdversaryCard = adversaryDeck[0]
+        val selectedStat = Stat.DURABILITY
+        val expectedPlayerScore = expectedPlayerCard.stats.durability - expectedAdversaryCard.stats.durability
+        val expectedAdversaryScore = 0
 
-    @Test
-    fun onPlayCardClick() {
-    }
+        while (viewModel.isLoading.value) {
+            delay(500)
+        }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.currentAdversaryCard.collect()
+            viewModel.playerScore.collect()
+            viewModel.adversaryScore.collect()
+        }
+        // select card
+        assertThat(viewModel.currentScreen.value).isEqualTo(DuelScreen.SELECT_CARD_UI)
+        viewModel.selectPlayerCard(playerCardIndex)
+        viewModel.playCard()
+        // duel ui
+        assertThat(viewModel.currentScreen.value).isEqualTo(DuelScreen.DUEL_UI)
+        val currentAdversaryCard = viewModel.currentAdversaryCard.value
+        val currentPlayerCard = viewModel.currentPlayerCard.value
+        viewModel.selectStat(selectedStat)
+        viewModel.fight()
+        val playerScore = viewModel.playerScore.value
+        val adversaryScore = viewModel.adversaryScore.value
 
-    @Test
-    fun selectPlayerCard() {
-    }
-
-    @Test
-    fun onClickSelectedStat() {
-    }
-
-    @Test
-    fun useMultiplierX2() {
-    }
-
-    @Test
-    fun onFightClick() {
+        assertThat(playerScore).isEqualTo(expectedPlayerScore)
+        assertThat(adversaryScore).isEqualTo(expectedAdversaryScore)
+        assertThat(currentAdversaryCard).isEqualTo(expectedAdversaryCard)
+        assertThat(currentPlayerCard).isEqualTo(expectedPlayerCard)
     }
 }
