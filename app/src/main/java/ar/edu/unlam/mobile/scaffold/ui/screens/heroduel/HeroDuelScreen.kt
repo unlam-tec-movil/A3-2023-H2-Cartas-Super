@@ -45,7 +45,7 @@ import ar.edu.unlam.mobile.scaffold.ui.components.hero.adversaryCardColor
 @Composable
 fun FinishedDuelUi(
     modifier: Modifier = Modifier,
-    winner: Winner = Winner.NONE,
+    winner: Winner = Winner.PLAYER,
     playerScore: Int = 0,
     adversaryScore: Int = 0
 ) {
