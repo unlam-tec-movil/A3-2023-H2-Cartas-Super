@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,7 +52,7 @@ fun FinishedDuelUi(
     Box(modifier = modifier) {
         Image(
             painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
-            contentDescription = "Fondo DuelUi",
+            contentDescription = "FinishedDuelUi background",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize()
         )
@@ -61,13 +62,14 @@ fun FinishedDuelUi(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CustomTitle(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(16.dp).testTag("FinishedDuelUi result text"),
                 text = { "El ganador es " + if (winner == Winner.PLAYER) "el jugador!" else "el adversario." }
             )
             GameScore(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp),
+                    .padding(10.dp)
+                    .testTag("FinishedDuelUi final score"),
                 playerScore = playerScore,
                 adversaryScore = adversaryScore
             )
@@ -80,7 +82,6 @@ fun HeroDuelScreen(
     modifier: Modifier = Modifier,
     viewModel: HeroDuelViewModelv2 = hiltViewModel()
 ) {
-
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     if (isLoading) {
         Box(modifier = modifier) {
@@ -189,7 +190,7 @@ fun DuelUi(
     Box(modifier = modifier) {
         Image(
             painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
-            contentDescription = "Fondo DuelUi",
+            contentDescription = "DuelUi background",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize()
         )
@@ -201,21 +202,23 @@ fun DuelUi(
             GameScore(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(8.dp)
+                    .testTag("DuelUi game score"),
                 playerScore = playerScore,
                 adversaryScore = adversaryScore
             )
             val cardModifier = Modifier
                 .padding(7.dp)
             AnimatedHeroCard(
-                modifier = cardModifier,
+                modifier = cardModifier.testTag("DuelUi adversary card"),
                 hero = currentAdversaryCard,
                 cardColors = adversaryCardColor()
             )
             ActionMenu(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)),
+                    .background(color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f))
+                    .testTag("DuelUi action menu"),
                 onClickSelectedStat = onClickSelectedStat,
                 useMultiplier = useMultiplier,
                 onFightClick = onFightClick,
@@ -223,7 +226,7 @@ fun DuelUi(
                 heroStats = currentPlayerCard.stats
             )
             AnimatedHeroCard(
-                modifier = cardModifier,
+                modifier = cardModifier.testTag("DuelUi player card"),
                 hero = currentPlayerCard
             )
         }
@@ -246,7 +249,7 @@ fun SelectCardUi(
     Box(modifier = modifier) {
         Image(
             painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
-            contentDescription = "Fondo DuelUi",
+            contentDescription = "SelectCardUi background",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize()
         )
@@ -256,15 +259,16 @@ fun SelectCardUi(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AnimatedHeroCard(
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.padding(8.dp).testTag("SelectCardUi player card"),
                 hero = selectedCard
             )
             CustomButton(
+                modifier = Modifier.testTag("SelectCardUi play card button"),
                 label = { "Jugar carta!" },
                 onClick = onPlayCardClick
             )
             PlayerDeck(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).testTag("SelectCardUi player deck"),
                 playerDeck = playerDeck,
                 onCardClick = { index ->
                     selectedCard = playerDeck[index]
