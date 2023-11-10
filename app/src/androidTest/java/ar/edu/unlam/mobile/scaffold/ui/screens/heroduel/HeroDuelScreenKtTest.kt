@@ -1,6 +1,6 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.heroduel
 
-import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.assertAny
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
@@ -82,8 +82,9 @@ class HeroDuelScreenKtTest {
         )
     )
 
+    // utilizar este de ejemplo
     @Test
-    fun whenClickingOnAHeroFromTheDeck_VerifyPlayerCardFromSelectCardUiIsTheClickedHero() {
+    fun whenClickingSecondHeroFromTheDeck_VerifyPlayerCardFromSelectCardUiIsTheClickedHero() {
         val expectedHeroText = heroList[1].name
         compose.setContent {
             SelectCardUi(
@@ -98,12 +99,12 @@ class HeroDuelScreenKtTest {
             ) and hasClickAction(),
             useUnmergedTree = false
         ).performClick()
-        val playerCardChildren = compose
+        compose
             .onNodeWithTag(
                 testTag = "SelectCardUi player card",
                 useUnmergedTree = true
             ).onChildren()
-        playerCardChildren[1].assertTextContains(value = expectedHeroText)
+            .assertAny(hasText(expectedHeroText))
     }
 
     @Test

@@ -27,7 +27,7 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
     lateinit var winner: StateFlow<Winner>
         private set
 
-    lateinit var canMultix2BeUsed: StateFlow<Boolean>
+    lateinit var isMultiplierAvailable: StateFlow<Boolean>
         private set
 
     private var useMultix2 = false
@@ -62,7 +62,7 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
 
     private suspend fun initStateFlows() {
         winner = game.winner.stateIn(scope = viewModelScope)
-        canMultix2BeUsed = game.canMultix2BeUsed.stateIn(scope = viewModelScope)
+        isMultiplierAvailable = game.canMultix2BeUsed.stateIn(scope = viewModelScope)
         playerScore = game.playerScore.stateIn(scope = viewModelScope)
         adversaryScore = game.adversaryScore.stateIn(scope = viewModelScope)
         currentPlayerDeck = game.currentPlayerDeck.stateIn(scope = viewModelScope)

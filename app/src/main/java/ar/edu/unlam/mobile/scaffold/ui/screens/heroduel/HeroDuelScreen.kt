@@ -105,7 +105,7 @@ fun HeroDuelScreen(
         val useMultiplierX2 = viewModel::useMultiplierX2
         val onFightClick = viewModel::onFightClick
         val winner by viewModel.winner.collectAsStateWithLifecycle()
-        val canMultix2BeUsed by viewModel.canMultix2BeUsed.collectAsStateWithLifecycle()
+        val canMultix2BeUsed by viewModel.isMultiplierAvailable.collectAsStateWithLifecycle()
         val currentScreen by viewModel.currentScreen.collectAsStateWithLifecycle()
 
         val animationDuration = 500
