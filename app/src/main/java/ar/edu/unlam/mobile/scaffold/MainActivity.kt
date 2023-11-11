@@ -89,8 +89,7 @@ fun MainScreen() {
             }
             composable("duel") {
                 HeroDuelScreen(
-                    modifier = Modifier.padding(paddingValue),
-                    controller = controller
+                    modifier = Modifier.padding(paddingValue).fillMaxSize()
                 )
             }
             composable("qr") {

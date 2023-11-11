@@ -18,6 +18,14 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+@Composable
+fun horizontalCardColors(): CardColors {
+    return CardDefaults.elevatedCardColors(
+        containerColor = MaterialTheme.colorScheme.secondary,
+        contentColor = MaterialTheme.colorScheme.onSecondary
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomHorizontalClickeableCard(
@@ -29,7 +37,7 @@ fun CustomHorizontalClickeableCard(
         modifier = modifier,
         onClick = onClick,
         shape = RectangleShape,
-        colors = cardColors()
+        colors = horizontalCardColors()
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
