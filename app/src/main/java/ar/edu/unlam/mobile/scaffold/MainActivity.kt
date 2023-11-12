@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ar.edu.unlam.mobile.scaffold.ui.screens.collection.CollectionScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.deck.DeckScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.heroduel.HeroDuelScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.home.HomeScreen
@@ -61,6 +62,7 @@ fun MainScreen() {
                     navDuel = { controller.navigate(route = "duel") },
                     navQuiz = { controller.navigate(route = "quiz") },
                     navMap = { controller.navigate(route = "Mapa") },
+                    navDeck = { controller.navigate(route = "deck") },
                     navCollection = { controller.navigate(route = "collection") }
                 )
             }
@@ -108,6 +110,12 @@ fun MainScreen() {
                 ScreenMap(
                     modifier = Modifier.padding(paddingValue),
                     controller = controller
+                )
+            }
+            composable("deck") {
+                DeckScreen(
+                    modifier = Modifier.padding(paddingValue)
+
                 )
             }
         }

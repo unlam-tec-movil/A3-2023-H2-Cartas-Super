@@ -1,6 +1,8 @@
 package ar.edu.unlam.mobile.scaffold.data.database.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
@@ -19,4 +21,11 @@ interface HeroDao {
 
     @Upsert
     suspend fun insertHero(hero: HeroEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertHeroes(heroes: List<HeroEntity>)
+
+    @Query("SELECT * FROM hero_table ORDER BY id DESC LIMIT :quantity")
+    suspend fun getAllDeck(quantity: Int): List<HeroEntity>
+
 }
