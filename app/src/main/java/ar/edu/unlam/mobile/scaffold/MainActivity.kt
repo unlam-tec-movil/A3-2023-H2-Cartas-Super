@@ -1,5 +1,6 @@
 package ar.edu.unlam.mobile.scaffold
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,7 +24,7 @@ import ar.edu.unlam.mobile.scaffold.ui.screens.collection.CollectionScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.heroduel.HeroDuelScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.home.HomeScreen
-import ar.edu.unlam.mobile.scaffold.ui.screens.map.ScreenMap
+import ar.edu.unlam.mobile.scaffold.ui.screens.map.MapScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.qr.QrScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.quiz.QuizScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.usuario.UsuarioScreen
@@ -45,12 +46,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun MainScreen() {
     val controller = rememberNavController()
     Scaffold(
-
 
         floatingActionButton = {
             IconButton(onClick = { controller.navigate("home") }) {
@@ -65,7 +64,7 @@ fun MainScreen() {
                     navDuel = { controller.navigate(route = "duel") },
                     navQuiz = { controller.navigate(route = "quiz") },
                     navMap = { controller.navigate(route = "Mapa") },
-                    navUsuario = { controller.navigate(route = "Usuario")},
+                    navUsuario = { controller.navigate(route = "Usuario") },
                     navCollection = { controller.navigate(route = "collection") }
                 )
             }
@@ -104,18 +103,18 @@ fun MainScreen() {
                 )
             }
             composable("Mapa") {
-                ScreenMap(
-                    modifier = Modifier.padding(paddingValue),
-                    controller = controller,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    MapScreen(
+                        modifier = Modifier.padding(paddingValue),
+                        controller = controller,
 
-
-
-                )
+                    )
+                }
             }
             composable("Usuario") {
-               UsuarioScreen(
-                   modifier = Modifier.padding(paddingValue).fillMaxSize()
-               )
+                UsuarioScreen(
+                    modifier = Modifier.padding(paddingValue).fillMaxSize()
+                )
             }
         }
     }

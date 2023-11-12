@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.data.map
+package ar.edu.unlam.mobile.scaffold.core.map
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -23,11 +23,10 @@ import javax.inject.Inject
 class LocationService @Inject constructor(
     private val context: Context,
     private val locationClient: FusedLocationProviderClient
-): ILocationService {
+) : ILocationService {
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.S)
     override fun requestLocationUpdates(): Flow<LatLng?> = callbackFlow {
-
         if (!context.hasLocationPermission()) {
             trySend(null)
             return@callbackFlow
@@ -71,7 +70,4 @@ class LocationService @Inject constructor(
             Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
-
 }
-
-

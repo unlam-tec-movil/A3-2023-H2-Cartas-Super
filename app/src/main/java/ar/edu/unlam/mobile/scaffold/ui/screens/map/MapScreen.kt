@@ -41,11 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
-import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
+import ar.edu.unlam.mobile.scaffold.domain.model.Point
 import ar.edu.unlam.mobile.scaffold.ui.components.DrawRoutes
+import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -61,15 +61,15 @@ import com.google.maps.android.compose.MarkerInfoWindowContent
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
-
 @RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun ScreenMap(modifier: Modifier,
-              controller: NavHostController,
-              viewModel: MapViewModel = hiltViewModel()
+fun MapScreen(
+    modifier: Modifier,
+    controller: NavHostController,
+    viewModel: MapViewModel = hiltViewModel()
 ) {
-      val context = LocalContext.current
+    val context = LocalContext.current
 
     val permissionState = rememberMultiplePermissionsState(
         permissions = listOf(
@@ -79,6 +79,7 @@ fun ScreenMap(modifier: Modifier,
     )
 
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
+    val puntosDeEncuentro by viewModel.point.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         permissionState.launchMultiplePermissionRequest()
@@ -119,7 +120,8 @@ fun ScreenMap(modifier: Modifier,
                         )
                         Text(
                             text = "Por Favor activa el Gps para usar el mapa",
-                            style = MaterialTheme.typography.headlineLarge, textAlign = TextAlign.Center
+                            style = MaterialTheme.typography.headlineLarge,
+                            textAlign = TextAlign.Center
                         )
                     }
                 } else {
@@ -137,9 +139,9 @@ fun ScreenMap(modifier: Modifier,
                 }
             }
 
-
             ViewState.RevokedPermissions -> {
-                Box(modifier = modifier,
+                Box(
+                    modifier = modifier,
                     contentAlignment = Alignment.Center
                 ) {
                     ParallaxBackgroundImage(
@@ -154,10 +156,13 @@ fun ScreenMap(modifier: Modifier,
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Necesitas los permisos de localizacion y Gps activado para usar el mapa",
-                            style = MaterialTheme.typography.headlineLarge, textAlign = TextAlign.Center
+                        Text(
+                            "Necesitas los permisos de localizacion y Gps activado para usar el mapa",
+                            style = MaterialTheme.typography.headlineLarge,
+                            textAlign = TextAlign.Center
                         )
-                        Button(modifier = Modifier.padding(16.dp),
+                        Button(
+                            modifier = Modifier.padding(16.dp),
                             onClick = {
                                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                                 intent.data = Uri.parse("package:${context.packageName}")
@@ -165,7 +170,8 @@ fun ScreenMap(modifier: Modifier,
                             },
                             colors = ButtonDefaults.buttonColors(Color.Yellow)
                         ) {
-                            Text("Settings",
+                            Text(
+                                "Settings",
                                 fontSize = 20.sp,
                                 color = Color.Black,
                                 fontFamily = shaka_pow
@@ -173,7 +179,6 @@ fun ScreenMap(modifier: Modifier,
                         }
                     }
                 }
-
             }
 
             is ViewState.Success -> {
@@ -182,20 +187,22 @@ fun ScreenMap(modifier: Modifier,
                         this.location?.latitude ?: 0.0,
                         this.location?.longitude ?: 0.0
                     )
-                val cameraState = rememberCameraPositionState(){
-                    position = CameraPosition.fromLatLngZoom(currentLoc,18f)
+                val cameraState = rememberCameraPositionState {
+                    position = CameraPosition.fromLatLngZoom(currentLoc, 18f)
                 }
 
                 LaunchedEffect(key1 = currentLoc) {
                     cameraState.position
                 }
 
-                MapScreen(
+                Map(
+                    modifier = modifier.fillMaxSize(),
                     currentPosition = LatLng(
                         currentLoc.latitude,
                         currentLoc.longitude
                     ),
-                    cameraState = cameraState
+                    cameraState = cameraState,
+                    puntosDeEncuentro = puntosDeEncuentro
                 )
             }
         }
@@ -204,31 +211,28 @@ fun ScreenMap(modifier: Modifier,
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun MapScreen(currentPosition: LatLng,
-              cameraState: CameraPositionState,
-             location: MapViewModel = hiltViewModel()) {
-
-
-    val punto1 = LatLng(location.point[0].coordinates1, location.point[0].coordinates2)
-    val punto2 = LatLng(location.point[1].coordinates1, location.point[1].coordinates2)
+fun Map(
+    modifier: Modifier = Modifier,
+    currentPosition: LatLng,
+    cameraState: CameraPositionState,
+    puntosDeEncuentro: List<Point>
+) {
+    val punto1 = LatLng(puntosDeEncuentro[0].coordinates1, puntosDeEncuentro[0].coordinates2)
+    val punto2 = LatLng(puntosDeEncuentro[1].coordinates1, puntosDeEncuentro[1].coordinates2)
     val marker = LatLng(currentPosition.latitude, currentPosition.longitude)
 
     var selectedDestination by remember { mutableStateOf<LatLng?>(null) }
 
-
-
-
-    Box(Modifier.fillMaxSize()) {
-
-        ParallaxBackgroundImage(
+    Box(modifier) {
+        /*Image(
             modifier = Modifier.fillMaxSize(),
-            contentDescription = "Pantalla Coleccion",
-            painterResourceId = R.drawable.fondo_coleccion,
-        )
+            painter = painterResource(id = R.drawable.fondo_coleccion),
+            contentDescription ="Pantalla Coleccion" )*/
 
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(color = Color.Yellow),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -253,13 +257,13 @@ fun MapScreen(currentPosition: LatLng,
                 properties = MapProperties(
                     isMyLocationEnabled = true,
                     mapType = MapType.NORMAL,
+
                 )
             ) {
                 Marker(
                     state = MarkerState(position = marker),
                     title = "Mi Posición Actual",
                 )
-
 
                 /*if (selectedMarker == puntoEncuentro1){
         DrawRoutes(
@@ -279,14 +283,12 @@ fun MapScreen(currentPosition: LatLng,
 
 */
 
-
-
                 MarkerInfoWindowContent(
                     state = MarkerState(position = punto1),
                     snippet = "Punto de encuentro 1",
                     icon = BitmapDescriptorFactory.fromResource(R.drawable.comic),
 
-                    ) {
+                ) {
                     selectedDestination = punto1
                     Box(
                         modifier = Modifier
@@ -316,15 +318,12 @@ fun MapScreen(currentPosition: LatLng,
                             fontFamily = shaka_pow
 
                         )
-
                     }
-
-
                 }
 
-
                 MarkerInfoWindowContent(
-                    state = MarkerState(position = punto2), snippet = "Punto de encuentro 2",
+                    state = MarkerState(position = punto2),
+                    snippet = "Punto de encuentro 2",
                     icon = BitmapDescriptorFactory.fromResource(R.drawable.comic_2)
                 ) {
                     selectedDestination = punto2
@@ -357,9 +356,7 @@ fun MapScreen(currentPosition: LatLng,
                             fontFamily = shaka_pow
                         )
                     }
-
                 }
-
 
                 if (selectedDestination != null) {
                     DrawRoutes(
@@ -373,10 +370,8 @@ fun MapScreen(currentPosition: LatLng,
                         selectedDestination = null
                     }
                 }
-
             }
         }
-
     }
 }
 
@@ -384,4 +379,3 @@ fun isGpsEnabled(context: Context): Boolean {
     val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 }
-

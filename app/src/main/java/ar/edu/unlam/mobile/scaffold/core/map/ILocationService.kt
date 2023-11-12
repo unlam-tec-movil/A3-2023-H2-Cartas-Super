@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.data.map
+package ar.edu.unlam.mobile.scaffold.core.map
 
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
