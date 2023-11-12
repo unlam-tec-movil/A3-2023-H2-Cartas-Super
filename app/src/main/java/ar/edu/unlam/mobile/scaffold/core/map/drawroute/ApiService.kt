@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.ui.screens.map.drawroute
+package ar.edu.unlam.mobile.scaffold.core.map.drawroute
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -58,7 +58,7 @@ import retrofit2.http.Query
             }
         }
 
-        private interface Api {
+        interface Api {
             @GET("json")
             suspend fun getRoute(
                 @Query("origin") origin: String,

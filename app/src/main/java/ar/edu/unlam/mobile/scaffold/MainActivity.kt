@@ -39,6 +39,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
 
+
+
         setContent {
             ComicWarTheme {
                 // A surface container using the 'background' color from the theme

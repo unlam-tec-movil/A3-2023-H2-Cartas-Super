@@ -34,12 +34,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
@@ -200,37 +202,66 @@ fun ScreenMap(modifier: Modifier,
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun MapScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
+fun MapScreen(currentPosition: LatLng,
+              cameraState: CameraPositionState,
+             location: MapViewModel = hiltViewModel()) {
+
+
+    val punto1 = LatLng(location.point[0].coordinates1, location.point[0].coordinates2)
+    val punto2 = LatLng(location.point[1].coordinates1, location.point[1].coordinates2)
     val marker = LatLng(currentPosition.latitude, currentPosition.longitude)
-    val puntoEncuentro1 = LatLng(-34.63333, -58.56667)
-    val puntoEncuentro2 = LatLng(-34.7, -58.58333)
-
-
 
     var selectedDestination by remember { mutableStateOf<LatLng?>(null) }
 
 
 
 
-
     Box(Modifier.fillMaxSize()) {
 
-        GoogleMap(
+        ParallaxBackgroundImage(
             modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraState,
-            properties = MapProperties(
-                isMyLocationEnabled = true,
-                mapType = MapType.NORMAL,
-                )
+            contentDescription = "Pantalla Coleccion",
+            painterResourceId = R.drawable.fondo_coleccion,
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Marker(
-                state = MarkerState(position = marker),
-                title = "Mi Posición Actual",
+            Text(
+                "Puntos de Encuentro",
+                modifier = Modifier
+                    .padding(10.dp)
+                    .testTag("MapScreen title"),
+                style = MaterialTheme.typography.headlineLarge,
+                textAlign = TextAlign.Center,
+                fontSize = 40.sp,
+                color = Color.Black,
+                fontFamily = shaka_pow
+
             )
 
+            GoogleMap(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .testTag("MapScren googleMap"),
+                cameraPositionState = cameraState,
+                properties = MapProperties(
+                    isMyLocationEnabled = true,
+                    mapType = MapType.NORMAL,
+                )
+            ) {
+                Marker(
+                    state = MarkerState(position = marker),
+                    title = "Mi Posición Actual",
+                )
 
-          /*if (selectedMarker == puntoEncuentro1){
+
+                /*if (selectedMarker == puntoEncuentro1){
         DrawRoutes(
         key = "AIzaSyA0d6l6FXVVOX_Ck67SiaZg3ACth-34dk4",
         origin = marker,
@@ -250,104 +281,103 @@ fun MapScreen(currentPosition: LatLng, cameraState: CameraPositionState) {
 
 
 
+                MarkerInfoWindowContent(
+                    state = MarkerState(position = punto1),
+                    snippet = "Punto de encuentro 1",
+                    icon = BitmapDescriptorFactory.fromResource(R.drawable.comic),
+
+                    ) {
+                    selectedDestination = punto1
+                    Box(
+                        modifier = Modifier
+                            .height(290.dp)
+                            .width(300.dp)
+                            .background(Color.Green)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.punto_encuentro_1),
+                            contentDescription = null,
+                            contentScale = ContentScale.FillHeight,
+                            modifier = Modifier
+                                .width(500.dp)
+                                .height(250.dp)
+                                .testTag("Image 1 punto de encuentro1")
+                        )
+
+                        Text(
+                            text = "Punto De Encuentro 1",
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .padding(top = 250.dp)
+                                .fillMaxWidth()
+                                .testTag("Text 1 punto de encuentro1"),
+                            fontSize = 30.sp,
+                            color = Color.Black,
+                            fontFamily = shaka_pow
+
+                        )
+
+                    }
 
 
+                }
 
 
-
-
-
-            MarkerInfoWindowContent(
-                state = MarkerState(position = puntoEncuentro1),
-                snippet = "Punto de encuentro 1",
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.comic),
-
-            ) {
-                selectedDestination = puntoEncuentro1
-                Box(
-                    modifier = Modifier
-                        .height(290.dp)
-                        .width(300.dp)
-                        .background(Color.Green)
+                MarkerInfoWindowContent(
+                    state = MarkerState(position = punto2), snippet = "Punto de encuentro 2",
+                    icon = BitmapDescriptorFactory.fromResource(R.drawable.comic_2)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.punto_encuentro_1),
-                        contentDescription = null,
-                        contentScale = ContentScale.FillHeight,
-                        modifier = Modifier
-                            .width(500.dp)
-                            .height(250.dp)
-                    )
+                    selectedDestination = punto2
 
-                    Text(
-                        text = "Punto De Encuentro 1",
-                        textAlign = TextAlign.Center,
+                    Box(
                         modifier = Modifier
-                            .padding(top = 250.dp)
-                            .fillMaxWidth(),
-                        fontSize = 30.sp,
-                        color = Color.Black,
-                        fontFamily = shaka_pow
-                    )
+                            .height(270.dp)
+                            .width(300.dp)
+                            .background(Color.Green)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.punto_encuentro_2),
+                            contentDescription = null,
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier
+                                .width(380.dp)
+                                .height(220.dp)
+                                .testTag("image2 Punto de encuentro2")
+                        )
+
+                        Text(
+                            text = "Punto De Encuentro 2",
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .padding(top = 230.dp)
+                                .fillMaxWidth()
+                                .testTag("texto punto de encuentro2"),
+                            fontSize = 30.sp,
+                            color = Color.Black,
+                            fontFamily = shaka_pow
+                        )
+                    }
 
                 }
 
 
-            }
-
-
-            MarkerInfoWindowContent(
-                state = MarkerState(position = puntoEncuentro2), snippet = "Punto de encuentro 2",
-                icon = BitmapDescriptorFactory.fromResource(R.drawable.comic_2)
-            ) {
-                selectedDestination = puntoEncuentro2
-
-                Box(
-                    modifier = Modifier
-                        .height(270.dp)
-                        .width(300.dp)
-                        .background(Color.Green)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.punto_encuentro_2),
-                        contentDescription = null,
-                        contentScale = ContentScale.FillWidth,
-                        modifier = Modifier
-                            .width(380.dp)
-                            .height(220.dp)
+                if (selectedDestination != null) {
+                    DrawRoutes(
+                        key = "AIzaSyA0d6l6FXVVOX_Ck67SiaZg3ACth-34dk4",
+                        origin = marker,
+                        destination = selectedDestination!!,
                     )
-
-                    Text(
-                        text = "Punto De Encuentro 2",
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .padding(top = 230.dp)
-                            .fillMaxWidth(),
-                        fontSize = 30.sp,
-                        color = Color.Black,
-                        fontFamily = shaka_pow
-                    )
+                    if (selectedDestination == punto1) {
+                        selectedDestination = null
+                    } else if (selectedDestination == punto2) {
+                        selectedDestination = null
+                    }
                 }
 
             }
-
-
-            if (selectedDestination != null) {
-                DrawRoutes(
-                    key = "AIzaSyA0d6l6FXVVOX_Ck67SiaZg3ACth-34dk4",
-                    origin = marker,
-                    destination = selectedDestination!!,
-                )
-                if (selectedDestination == puntoEncuentro1){
-                    selectedDestination = null
-                } else if (selectedDestination == puntoEncuentro2){
-                    selectedDestination = null
-                }
-            }
-
         }
-    }
 
+    }
 }
 
 fun isGpsEnabled(context: Context): Boolean {

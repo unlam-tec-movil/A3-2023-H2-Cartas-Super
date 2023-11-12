@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.ui.screens.map.drawroute
+package ar.edu.unlam.mobile.scaffold.core.map.drawroute
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.JsonArray
