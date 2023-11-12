@@ -1,7 +1,5 @@
 package ar.edu.unlam.mobile.scaffold.domain.cardgame
 
-import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
-import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
 import kotlinx.coroutines.flow.MutableStateFlow

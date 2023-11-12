@@ -11,16 +11,22 @@ import org.junit.runner.Description
 
 /**
  * https://stackoverflow.com/questions/58303961/kotlin-coroutine-unit-test-fails-with-module-with-the-main-dispatcher-had-faile
+ *
  * https://youtu.be/B-dJTFeOAqw
+ *
  * https://developer.android.com/kotlin/coroutines/test
- * No se puede acceder a Dispatcher.Main en los test unitarios que no tienen dependencias de
+ *
+ * No se puede acceder a Dispatcher.Main en los test unitarios porque no pueden acceder a los recursos de
  * android.
+ *
  * Por esta razón, se debe crear esta reglar para sobreescribir Dispatchers.Main por un test
  * dispatcher.
+ *
  * Si uno no hace esto ocurre el siguiente error:
+ *
  * * Module with the Main dispatcher had failed to initialize. For tests Dispatchers.setMain from
  * kotlinx-coroutines-test module can be used.
-  */
+ */
 // Reusable JUnit4 TestRule to override the Main dispatcher
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainDispatcherRule(

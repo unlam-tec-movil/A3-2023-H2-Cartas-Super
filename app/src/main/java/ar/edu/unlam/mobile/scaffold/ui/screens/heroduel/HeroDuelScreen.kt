@@ -1,185 +1,75 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.heroduel
 
-import android.content.Intent
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import ar.edu.unlam.mobile.scaffold.MainActivity
 import ar.edu.unlam.mobile.scaffold.R
-import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
-import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
+import ar.edu.unlam.mobile.scaffold.domain.cardgame.Stat
+import ar.edu.unlam.mobile.scaffold.domain.cardgame.Winner
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
-import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroCard
-import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroPlayerCard
-import ar.edu.unlam.mobile.scaffold.ui.components.hero.PlayerDeck
-import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
+import ar.edu.unlam.mobile.scaffold.ui.components.ActionMenu
+import ar.edu.unlam.mobile.scaffold.ui.components.AnimatedHeroCard
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomTitle
+import ar.edu.unlam.mobile.scaffold.ui.components.GameScore
+import ar.edu.unlam.mobile.scaffold.ui.components.PlayerDeck
+import ar.edu.unlam.mobile.scaffold.ui.components.hero.adversaryCardColor
 
 @Preview(showBackground = true)
 @Composable
-fun WinnerScreen(
+fun FinishedDuelUi(
     modifier: Modifier = Modifier,
-    winner: Winner = Winner.NONE,
+    winner: Winner = Winner.PLAYER,
     playerScore: Int = 0,
     adversaryScore: Int = 0
 ) {
-    val offset = Offset(6.0f, 4.0f)
-
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "El ganador es " + if (winner == Winner.PLAYER) "el jugador" else "el adversario",
-            modifier = Modifier.padding(16.dp),
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            fontFamily = shaka_pow,
-            style = TextStyle(
-                fontSize = 24.sp,
-                shadow = Shadow(
-                    color = Color.White,
-                    offset = offset,
-                    blurRadius = 4f
-                )
+    Box(modifier = modifier) {
+        Image(
+            painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
+            contentDescription = "FinishedDuelUi background",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
+        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CustomTitle(
+                modifier = Modifier.padding(16.dp).testTag("FinishedDuelUi result text"),
+                text = { "El ganador es " + if (winner == Winner.PLAYER) "el jugador!" else "el adversario." }
             )
-        )
-        GameScore(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            playerScore = playerScore,
-            adversaryScore = adversaryScore
-        )
-    }
-}
-
-@Composable
-fun HeroDuelScreen(
-    modifier: Modifier = Modifier,
-    controller: NavHostController,
-    viewModel: HeroDuelViewModelv2 = hiltViewModel()
-) {
-    Image(
-        painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
-        contentDescription = "Pantalla NewGame",
-        contentScale = ContentScale.FillBounds,
-        modifier = Modifier.fillMaxSize()
-    )
-
-    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle(initialValue = true)
-    if (isLoading) {
-        CircularProgressIndicator(modifier = Modifier.fillMaxSize())
-    } else {
-        val showSelectCardScreen by viewModel.showSelectCardScreen.collectAsStateWithLifecycle(
-            initialValue = false
-        )
-        val showHeroDuelScreen by viewModel.showHeroDuelScreen.collectAsStateWithLifecycle(
-            initialValue = false
-        )
-        val showWinnerScreen by viewModel.showWinnerScreen.collectAsStateWithLifecycle(
-            initialValue = false
-        )
-        val playerDeck by viewModel.currentPlayerDeck.collectAsStateWithLifecycle(
-            initialValue = listOf(HeroModel())
-        )
-        val cardSelectedIndex by viewModel.cardSelectedIndex.collectAsStateWithLifecycle(
-            initialValue = 0
-        )
-        val onPlayCardClick = viewModel::onPlayCardClick
-        val onPlayerCardClick = viewModel::onPlayerCardClick
-        val currentPlayerCard by viewModel.currentPlayerCard.collectAsStateWithLifecycle(
-            initialValue = HeroModel()
-        )
-        val currentAdversaryCard by viewModel.currentAdversaryCard.collectAsStateWithLifecycle(
-            initialValue = HeroModel()
-        )
-        val playerScore by viewModel.playerScore.collectAsStateWithLifecycle(
-            initialValue = 0
-        )
-        val adversaryScore by viewModel.adversaryScore.collectAsStateWithLifecycle(
-            initialValue = 0
-        )
-        val onClickSelectedStat = viewModel::onClickSelectedStat
-        val useMultiplierX2 = viewModel::useMultiplierX2
-        val onFightClick = viewModel::onFightClick
-        val winner by viewModel.winner.collectAsStateWithLifecycle(initialValue = Winner.NONE)
-        val canMultix2BeUsed by viewModel.canMultix2BeUsed.collectAsStateWithLifecycle(
-            initialValue = true
-        )
-
-        if (showSelectCardScreen) {
-            SelectCard(
-                modifier = modifier,
-                playerDeck = playerDeck,
-                cardSelectedIndex = cardSelectedIndex,
-                onPlayCardClick = onPlayCardClick,
-                onPlayerCardClick = onPlayerCardClick
-            )
-        }
-
-        if (showHeroDuelScreen) {
-            HeroDuel(
-                modifier = modifier,
-                currentPlayerCard = currentPlayerCard,
-                currentAdversaryCard = currentAdversaryCard,
-                playerScore = playerScore,
-                adversaryScore = adversaryScore,
-                onClickSelectedStat = onClickSelectedStat,
-                useMultiplierX2 = useMultiplierX2,
-                onFightClick = onFightClick,
-                canMultix2BeUsed = canMultix2BeUsed
-            )
-        }
-
-        if (showWinnerScreen) {
-            WinnerScreen(
-                modifier = modifier,
-                winner = winner,
+            GameScore(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+                    .testTag("FinishedDuelUi final score"),
                 playerScore = playerScore,
                 adversaryScore = adversaryScore
             )
@@ -187,9 +77,106 @@ fun HeroDuelScreen(
     }
 }
 
+@Composable
+fun HeroDuelScreen(
+    modifier: Modifier = Modifier,
+    viewModel: HeroDuelViewModelv2 = hiltViewModel()
+) {
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    if (isLoading) {
+        Box(modifier = modifier) {
+            Image(
+                painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
+                contentDescription = "Fondo loading",
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier.fillMaxSize()
+            )
+            CircularProgressIndicator(modifier = Modifier.fillMaxSize())
+        }
+    } else {
+        val playerDeck by viewModel.currentPlayerDeck.collectAsStateWithLifecycle()
+        val onPlayCardClick = viewModel::playCard
+        val onPlayerCardClick = viewModel::selectPlayerCard
+        val currentPlayerCard by viewModel.currentPlayerCard.collectAsStateWithLifecycle()
+        val currentAdversaryCard by viewModel.currentAdversaryCard.collectAsStateWithLifecycle()
+        val playerScore by viewModel.playerScore.collectAsStateWithLifecycle()
+        val adversaryScore by viewModel.adversaryScore.collectAsStateWithLifecycle()
+        val onClickSelectedStat = viewModel::selectStat
+        val useMultiplierX2 = viewModel::useMultiplierX2
+        val onFightClick = viewModel::fight
+        val winner by viewModel.winner.collectAsStateWithLifecycle()
+        val canMultix2BeUsed by viewModel.isMultiplierAvailable.collectAsStateWithLifecycle()
+        val currentScreen by viewModel.currentScreen.collectAsStateWithLifecycle()
+
+        val animationDuration = 500
+
+        AnimatedContent(
+            targetState = currentScreen,
+            label = "",
+            transitionSpec = {
+                if (targetState == DuelScreen.SELECT_CARD_UI) {
+                    slideInHorizontally(
+                        animationSpec = tween(
+                            durationMillis = animationDuration
+                        ),
+                        initialOffsetX = { fullWidth -> -fullWidth }
+                    ) togetherWith (
+                        slideOutHorizontally(
+                            animationSpec = tween(
+                                durationMillis = animationDuration
+                            ),
+                            targetOffsetX = { fullWidth -> fullWidth }
+                        )
+                        )
+                } else {
+                    slideInHorizontally(
+                        animationSpec = tween(
+                            durationMillis = animationDuration
+                        ),
+                        initialOffsetX = { fullWidth -> fullWidth }
+                    ) togetherWith (
+                        slideOutHorizontally(
+                            animationSpec = tween(
+                                durationMillis = animationDuration
+                            ),
+                            targetOffsetX = { fullWidth -> -fullWidth }
+                        )
+                        )
+                }
+            }
+        ) { screen ->
+            when (screen) {
+                DuelScreen.DUEL_UI -> DuelUi(
+                    modifier = modifier,
+                    currentPlayerCard = currentPlayerCard,
+                    currentAdversaryCard = currentAdversaryCard,
+                    playerScore = playerScore,
+                    adversaryScore = adversaryScore,
+                    onClickSelectedStat = onClickSelectedStat,
+                    useMultiplier = useMultiplierX2,
+                    onFightClick = onFightClick,
+                    canMultix2BeUsed = canMultix2BeUsed
+                )
+                DuelScreen.SELECT_CARD_UI -> SelectCardUi(
+                    modifier = modifier,
+                    playerDeck = playerDeck,
+                    onPlayCardClick = onPlayCardClick,
+                    onPlayerCardClick = onPlayerCardClick
+                )
+                DuelScreen.FINISHED_DUEL_UI -> FinishedDuelUi(
+                    modifier = modifier,
+                    winner = winner,
+                    playerScore = playerScore,
+                    adversaryScore = adversaryScore
+                )
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
-fun HeroDuel(
+fun DuelUi(
     modifier: Modifier = Modifier,
     currentPlayerCard: HeroModel = HeroModel(),
     currentAdversaryCard: HeroModel = HeroModel(),
@@ -197,125 +184,50 @@ fun HeroDuel(
     adversaryScore: Int = 0,
     onClickSelectedStat: (Stat) -> Unit = {},
     canMultix2BeUsed: Boolean = true,
-    useMultiplierX2: (Boolean) -> Unit = {},
+    useMultiplier: (Boolean) -> Unit = {},
     onFightClick: () -> Unit = {}
 ) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        GameScore(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            playerScore = playerScore,
-            adversaryScore = adversaryScore
+    Box(modifier = modifier) {
+        Image(
+            painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
+            contentDescription = "DuelUi background",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
         )
-        val cardModifier = Modifier
-            .padding(7.dp)
-            .shadow(8.dp)
-        HeroCard(
-            modifier = cardModifier,
-            hero = currentAdversaryCard
-        )
-        ActionMenu(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(7.dp),
-            onClickSelectedStat = onClickSelectedStat,
-            useMultiplierX2 = useMultiplierX2,
-            onFightClick = onFightClick,
-            canMultix2BeUsed = canMultix2BeUsed
-        )
-        HeroPlayerCard(
-            modifier = cardModifier,
-            hero = currentPlayerCard
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GameScore(
-    modifier: Modifier = Modifier,
-    playerScore: Int = 0,
-    adversaryScore: Int = 0
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceAround
-    ) {
-        IndividualScore(
-            modifier = Modifier
-                .border(1.dp, color = Color.Black),
-            score = playerScore,
-            text = "Jugador:",
-            backgroundColor = Color(0xFF16A0E8)
-        )
-        IndividualScore(
-            modifier = Modifier
-                .border(1.dp, color = Color.Black),
-            score = adversaryScore,
-            text = "Adversario:",
-            backgroundColor = Color(0xFFFA1404),
-            textColor = Color.White
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun IndividualScore(
-    modifier: Modifier = Modifier,
-    score: Int = 0,
-    text: String = "Jugador o adversario:",
-    backgroundColor: Color = Color.White,
-    textColor: Color = Color.Black
-) {
-    Text(
-        modifier = modifier
-            .background(color = backgroundColor)
-            .padding(5.dp),
-        text = "$text $score",
-        fontWeight = FontWeight.ExtraBold,
-        color = textColor
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ActionMenu(
-    modifier: Modifier = Modifier,
-    onClickSelectedStat: (Stat) -> Unit = {},
-    canMultix2BeUsed: Boolean = true,
-    useMultiplierX2: (Boolean) -> Unit = {},
-    onFightClick: () -> Unit = {}
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        SelectStat(modifier = Modifier.width(160.dp), onClick = onClickSelectedStat)
-        Spacer(modifier = Modifier.size(8.dp))
-        SelectMultiplier(
-            useMultiplierX2 = useMultiplierX2,
-            canMultix2BeUsed = canMultix2BeUsed
-        )
-        Button(
-            colors = ButtonDefaults.buttonColors(Color.DarkGray),
-            shape = ButtonDefaults.outlinedShape,
-            onClick = {
-                onFightClick()
-            }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "¡Pelear!",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                style = TextStyle(
-                    fontSize = 15.sp
-                )
+            GameScore(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .testTag("DuelUi game score"),
+                playerScore = playerScore,
+                adversaryScore = adversaryScore
+            )
+            val cardModifier = Modifier
+                .padding(7.dp)
+            AnimatedHeroCard(
+                modifier = cardModifier.testTag("DuelUi adversary card"),
+                hero = currentAdversaryCard,
+                cardColors = adversaryCardColor()
+            )
+            ActionMenu(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f))
+                    .testTag("DuelUi action menu"),
+                onClickSelectedStat = onClickSelectedStat,
+                useMultiplier = useMultiplier,
+                onFightClick = onFightClick,
+                isMultiplierEnabled = canMultix2BeUsed,
+                heroStats = currentPlayerCard.stats
+            )
+            AnimatedHeroCard(
+                modifier = cardModifier.testTag("DuelUi player card"),
+                hero = currentPlayerCard
             )
         }
     }
@@ -323,169 +235,46 @@ fun ActionMenu(
 
 @Preview(showBackground = true)
 @Composable
-fun SelectMultiplier(
-    modifier: Modifier = Modifier,
-    canMultix2BeUsed: Boolean = true,
-    useMultiplierX2: (Boolean) -> Unit = {}
-) {
-    val offset = Offset(6.0f, 4.0f)
-    var checked by rememberSaveable {
-        mutableStateOf(false)
-    }
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Multi x2:",
-            style = TextStyle(
-                fontSize = 16.sp,
-                shadow = Shadow(
-                    color = Color.White,
-                    offset = offset,
-                    blurRadius = 4f
-                )
-            )
-        )
-        Checkbox(
-            checked = if (canMultix2BeUsed) checked else false,
-            onCheckedChange = {
-                checked = !checked
-                useMultiplierX2(checked)
-            }
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SelectCard(
+fun SelectCardUi(
     modifier: Modifier = Modifier,
     playerDeck: List<HeroModel> = listOf(
         HeroModel(id = 1, name = "test 1"),
         HeroModel(id = 2, name = "test 2")
     ),
-    cardSelectedIndex: Int = 0,
     onPlayCardClick: () -> Unit = {},
     onPlayerCardClick: (Int) -> Unit = {},
 ) {
-    if (playerDeck.isEmpty()) {
-        InCaseOfError("SelectCard composable.")
-    } else {
-        var setDefaults by rememberSaveable {
-            mutableStateOf(true)
-        }
-        if (setDefaults) {
-            onPlayerCardClick(0)
-            setDefaults = false
-        }
+    var selectedCard by remember { mutableStateOf(playerDeck[0]) }
+
+    Box(modifier = modifier) {
+        Image(
+            painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
+            contentDescription = "SelectCardUi background",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
+        )
         Column(
-            modifier = modifier,
-            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(space = 5.dp, alignment = Alignment.Top),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            JugarCartaButton(
-                onPlayCardClick = onPlayCardClick
+            AnimatedHeroCard(
+                modifier = Modifier.padding(8.dp).testTag("SelectCardUi player card"),
+                hero = selectedCard
             )
-            HeroPlayerCard(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .shadow(9.dp),
-                hero = playerDeck[cardSelectedIndex],
-                cardColors = CardDefaults.cardColors(Color(0xFF16A0E8)) // hay que guardar el color en ui.theme.Color.kt
+            CustomButton(
+                modifier = Modifier.testTag("SelectCardUi play card button"),
+                label = { "Jugar carta!" },
+                onClick = onPlayCardClick
             )
             PlayerDeck(
-                modifier = Modifier,
+                modifier = Modifier.weight(1f).testTag("SelectCardUi player deck"),
                 playerDeck = playerDeck,
-                onCardClick = onPlayerCardClick
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun JugarCartaButton(
-    modifier: Modifier = Modifier,
-    onPlayCardClick: () -> Unit = {}
-) {
-    Button(
-        colors = ButtonDefaults.buttonColors(Color.DarkGray),
-        modifier = modifier,
-        onClick = {
-            onPlayCardClick()
-        }
-    ) {
-        Text(modifier = Modifier, color = Color.White, text = "Jugar Carta")
-    }
-}
-
-@Composable
-fun InCaseOfError(place: String = "En algún lugar") {
-    val context = LocalContext.current
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Hubo un error: Mazo vacío $place.")
-        Button(
-            onClick = { context.startActivity(Intent(context, MainActivity::class.java)) }
-        ) {
-            Text(text = "volver al menú principal")
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SelectStat(
-    modifier: Modifier = Modifier,
-    statList: List<Stat> = listOf(
-        Stat.POWER,
-        Stat.DURABILITY,
-        Stat.STRENGTH,
-        Stat.SPEED,
-        Stat.COMBAT,
-        Stat.INTELLIGENCE
-    ),
-    onClick: (Stat) -> Unit = {}
-) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
-    var selectedStat by rememberSaveable { mutableStateOf(Stat.POWER) }
-
-    Box(
-        modifier = modifier
-    ) {
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = {
-                expanded = !expanded
-            }
-        ) {
-            TextField(
-                value = selectedStat.statName,
-                onValueChange = { onClick(selectedStat) },
-                readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                modifier = modifier.menuAnchor()
-            )
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                statList.forEach { item ->
-                    DropdownMenuItem(
-                        text = { Text(text = item.statName) },
-                        onClick = {
-                            selectedStat = item
-                            onClick(selectedStat)
-                            expanded = false
-                        }
-                    )
+                onCardClick = { index ->
+                    selectedCard = playerDeck[index]
+                    onPlayerCardClick(index)
                 }
-            }
+            )
         }
     }
 }

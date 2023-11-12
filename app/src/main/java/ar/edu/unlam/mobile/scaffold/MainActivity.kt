@@ -1,10 +1,8 @@
 package ar.edu.unlam.mobile.scaffold
 
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -28,37 +26,32 @@ import ar.edu.unlam.mobile.scaffold.ui.screens.home.HomeScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.ScreenMap
 import ar.edu.unlam.mobile.scaffold.ui.screens.qr.QrScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.quiz.QuizScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.usuario.UsuarioScreen
 import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
-
         setContent {
             ComicWarTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     MainScreen()
-
-
                 }
             }
         }
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.S)
+
 @Composable
 fun MainScreen() {
     val controller = rememberNavController()
     Scaffold(
+
+
         floatingActionButton = {
             IconButton(onClick = { controller.navigate("home") }) {
                 Icon(Icons.Filled.Home, contentDescription = "Home")
@@ -72,6 +65,7 @@ fun MainScreen() {
                     navDuel = { controller.navigate(route = "duel") },
                     navQuiz = { controller.navigate(route = "quiz") },
                     navMap = { controller.navigate(route = "Mapa") },
+                    navUsuario = { controller.navigate(route = "Usuario")},
                     navCollection = { controller.navigate(route = "collection") }
                 )
             }
@@ -100,8 +94,7 @@ fun MainScreen() {
             }
             composable("duel") {
                 HeroDuelScreen(
-                    modifier = Modifier.padding(paddingValue),
-                    controller = controller
+                    modifier = Modifier.padding(paddingValue).fillMaxSize()
                 )
             }
             composable("qr") {
@@ -110,7 +103,6 @@ fun MainScreen() {
                     controller = controller
                 )
             }
-
             composable("Mapa") {
                 ScreenMap(
                     modifier = Modifier.padding(paddingValue),
@@ -120,10 +112,11 @@ fun MainScreen() {
 
                 )
             }
-
+            composable("Usuario") {
+               UsuarioScreen(
+                   modifier = Modifier.padding(paddingValue).fillMaxSize()
+               )
+            }
         }
     }
-
-
 }
-
