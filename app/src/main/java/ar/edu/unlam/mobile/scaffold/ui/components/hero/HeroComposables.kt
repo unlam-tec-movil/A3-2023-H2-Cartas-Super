@@ -1,20 +1,17 @@
 package ar.edu.unlam.mobile.scaffold.ui.components.hero
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,29 +24,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomClickeableCard
-import ar.edu.unlam.mobile.scaffold.ui.components.CustomHorizontalClickeableCard
+import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextLabelMedium
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomTextLabelSmall
 
-// player card color = Color(0xFF16A0E8)
-// adversary card color = Color(0xFFFA1404)
-// color amarillo = 0xFFF9DB07
-@Preview(showBackground = true)
 @Composable
-fun HeroPlayerCard(
-    modifier: Modifier = Modifier,
-    hero: HeroModel = HeroModel(),
-    cardColors: CardColors = CardDefaults.cardColors(containerColor = Color(0xFF16A0E8))
-) {
-    HeroCard(
-        modifier = modifier,
-        hero = hero,
-        cardColors = cardColors
-    ) {
-        HeroStats(
-            modifier = Modifier.border(width = 1.dp, color = Color.Black, shape = RectangleShape),
-            stats = { hero.stats },
-        )
-    }
+fun adversaryCardColor(): CardColors {
+    return CardDefaults.elevatedCardColors(
+        containerColor = MaterialTheme.colorScheme.secondary,
+        contentColor = MaterialTheme.colorScheme.onSecondary
+    )
+}
+
+@Composable
+fun playerCardColor(): CardColors {
+    return CardDefaults.elevatedCardColors(
+        containerColor = MaterialTheme.colorScheme.tertiary,
+        contentColor = MaterialTheme.colorScheme.onTertiary
+    )
 }
 
 @Preview(showBackground = true)
@@ -57,85 +48,33 @@ fun HeroPlayerCard(
 fun HeroCard(
     modifier: Modifier = Modifier,
     hero: HeroModel = HeroModel(),
-    cardColors: CardColors = CardDefaults.cardColors(containerColor = Color(0xFFFA1404)),
+    cardColors: CardColors = playerCardColor(),
     content: @Composable (ColumnScope.() -> Unit) = {}
 ) {
-    Card(
+    ElevatedCard(
         modifier = modifier
             .border(width = 1.dp, color = Color.Black, shape = RectangleShape),
         colors = cardColors,
         shape = RectangleShape
     ) {
-        Column(
-            modifier = Modifier.padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            HeroImage(
-                modifier = Modifier
-                    .size(190.dp)
-                    .border(width = 1.dp, color = Color.Black),
-                url = hero.image.url,
-                contentScale = ContentScale.Crop
-            )
-            Text(
-                modifier = Modifier.padding(1.dp),
-                text = hero.name
-            )
-            content()
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PlayerDeck(
-    modifier: Modifier = Modifier,
-    playerDeck: List<HeroModel> = listOf(HeroModel(), HeroModel(), HeroModel()),
-    onCardClick: (Int) -> Unit = {}
-) {
-    val deckSize = remember {
-        playerDeck.size
-    }
-    // lazyColumn porque en un futuro un mazo va a tener más de tres cartas.
-    LazyColumn(
-        modifier = modifier,
-        content = {
-            items(deckSize) { i ->
-                DeckItem(
-                    modifier = Modifier.padding(8.dp),
-                    onClick = { onCardClick(i) },
-                    hero = { playerDeck[i] }
-                )
-            }
-        }
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DeckItem(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-    hero: () -> HeroModel = { HeroModel() }
-) {
-    CustomHorizontalClickeableCard(
-        modifier = modifier.border(width = 2.dp, color = Color.Black, shape = RectangleShape),
-        onClick = onClick
-    ) {
+        // row { infiniteTransition (jojo) HeroImage infiniteTransition (jojo) }
+        // AnimatedContent para intercambiar UIs, CrossFade es una manera más simple que AnimatedContent
         HeroImage(
             modifier = Modifier
-                .size(100.dp)
-                .padding(4.dp)
-                .aspectRatio(ratio = 1f),
-            contentScale = ContentScale.Crop,
-            url = hero().image.url
+                .padding(8.dp)
+                .size(190.dp)
+                .border(width = 1.dp, color = Color.Black)
+                .align(Alignment.CenterHorizontally),
+            url = hero.image.url,
+            contentScale = ContentScale.Crop
         )
-        HeroStats(
+        CustomTextLabelMedium(
             modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth(),
-            stats = { hero().stats }
+                .padding(1.dp)
+                .align(Alignment.CenterHorizontally),
+            text = { hero.name }
         )
+        content()
     }
 }
 

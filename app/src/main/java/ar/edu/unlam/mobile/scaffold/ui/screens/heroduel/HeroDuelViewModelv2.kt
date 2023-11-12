@@ -4,13 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.GameRepository
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
-import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Stat
-import ar.edu.unlam.mobile.scaffold.domain.heroDuel.Winner
+import ar.edu.unlam.mobile.scaffold.domain.cardgame.Stat
+import ar.edu.unlam.mobile.scaffold.domain.cardgame.Winner
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -23,21 +22,12 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
     private val _currentPlayerCard = MutableStateFlow(HeroModel())
     val currentPlayerCard = _currentPlayerCard.asStateFlow()
 
-    private val _cardSelectedIndex = MutableStateFlow(0)
-    val cardSelectedIndex = _cardSelectedIndex.asStateFlow()
-
-    private val _showWinnerScreen = MutableStateFlow(false)
-    val showWinnerScreen = _showWinnerScreen.asStateFlow()
-
-    private val _showHeroDuelScreen = MutableStateFlow(false)
-    val showHeroDuelScreen = _showHeroDuelScreen.asStateFlow()
-
     private lateinit var game: CardGame
 
     lateinit var winner: StateFlow<Winner>
         private set
 
-    lateinit var canMultix2BeUsed: StateFlow<Boolean>
+    lateinit var isMultiplierAvailable: StateFlow<Boolean>
         private set
 
     private var useMultix2 = false
@@ -56,11 +46,11 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
     lateinit var currentAdversaryCard: StateFlow<HeroModel>
         private set
 
+    private val _currentScreen = MutableStateFlow(DuelScreen.SELECT_CARD_UI)
+    val currentScreen = _currentScreen.asStateFlow()
+
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    private val _showSelectCardScreen = MutableStateFlow(true)
-    val showSelectCardScreen = _showSelectCardScreen.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -70,50 +60,25 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
         }
     }
 
-    private fun initStateFlows() {
-        winner = game.winner.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = Winner.NONE
-        )
-        canMultix2BeUsed = game.canMultix2BeUsed.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = true
-        )
-        playerScore = game.playerScore.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = 0
-        )
-        adversaryScore = game.adversaryScore.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = 0
-        )
-        currentPlayerDeck = game.currentPlayerDeck.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = listOf(HeroModel(), HeroModel(), HeroModel())
-        )
-        currentAdversaryCard = game.currentAdversaryCard.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = HeroModel()
-        )
+    private suspend fun initStateFlows() {
+        winner = game.winner.stateIn(scope = viewModelScope)
+        isMultiplierAvailable = game.canMultix2BeUsed.stateIn(scope = viewModelScope)
+        playerScore = game.playerScore.stateIn(scope = viewModelScope)
+        adversaryScore = game.adversaryScore.stateIn(scope = viewModelScope)
+        currentPlayerDeck = game.currentPlayerDeck.stateIn(scope = viewModelScope)
+        _currentPlayerCard.value = currentPlayerDeck.value[0]
+        currentAdversaryCard = game.currentAdversaryCard.stateIn(scope = viewModelScope)
     }
 
-    fun onPlayCardClick() {
-        _showSelectCardScreen.value = false
-        _showHeroDuelScreen.value = true
+    fun playCard() {
+        _currentScreen.value = DuelScreen.DUEL_UI
     }
 
-    fun onPlayerCardClick(cardSelectedIndex: Int) {
-        _cardSelectedIndex.value = cardSelectedIndex
+    fun selectPlayerCard(cardSelectedIndex: Int) {
         _currentPlayerCard.value = currentPlayerDeck.value[cardSelectedIndex]
     }
 
-    fun onClickSelectedStat(stat: Stat) {
+    fun selectStat(stat: Stat) {
         selectedStat = stat
     }
 
@@ -121,20 +86,18 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
         useMultix2 = use
     }
 
-    fun onFightClick() {
+    fun fight() {
         val cardId = _currentPlayerCard.value.id
         game.playerPlayCard(cardId, selectedStat, useMultix2)
         useMultix2 = false
         if (winner.value == Winner.NONE) {
             if (game.lastCardFightWinner.value == Winner.ADVERSARY) {
-                _showHeroDuelScreen.value = false
-                onPlayerCardClick(0)
-                _showSelectCardScreen.value = true
+                // se necesita resetear el estado, por eso se llama a este método con parámetro 0
+                selectPlayerCard(0)
+                _currentScreen.value = DuelScreen.SELECT_CARD_UI
             }
         } else {
-            _showHeroDuelScreen.value = false
-            _showSelectCardScreen.value = false
-            _showWinnerScreen.value = true
+            _currentScreen.value = DuelScreen.FINISHED_DUEL_UI
         }
     }
 }
