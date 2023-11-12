@@ -77,7 +77,7 @@ fun MainScreen() {
                 val heroID = navBackStackEntry.arguments?.getInt("heroid") ?: 1
                 HeroDetailScreen(
                     modifier = Modifier.padding(paddingValue),
-                    navigateToQR = { controller.navigate(route = "qr") },
+                    navigateToQR = { controller.navigate(route = "qr/${heroID}") },
                     heroID = heroID
                 )
             }
@@ -92,10 +92,16 @@ fun MainScreen() {
                     modifier = Modifier.padding(paddingValue).fillMaxSize()
                 )
             }
-            composable("qr") {
+            composable(
+                route = "qr/{heroID}",
+                arguments = listOf(navArgument("heroID") { type = NavType.IntType }),
+                ) {
+                    navBackStackEntry ->
+                val heroID = navBackStackEntry.arguments?.getInt("heroID") ?: 1
                 QrScreen(
                     modifier = Modifier.padding(paddingValue),
-                    controller = controller
+                    controller = controller,
+                    heroID = heroID
                 )
             }
             composable("Mapa") {
