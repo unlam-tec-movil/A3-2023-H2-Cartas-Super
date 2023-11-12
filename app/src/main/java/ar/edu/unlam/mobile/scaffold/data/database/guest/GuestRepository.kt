@@ -3,7 +3,7 @@ package ar.edu.unlam.mobile.scaffold.data.database.guest
 import ar.edu.unlam.mobile.scaffold.data.database.dao.GuestDao
 import ar.edu.unlam.mobile.scaffold.domain.usuario.Guest
 
-class GuestRepository (private val dao: GuestDao) {
+class GuestRepository(private val dao: GuestDao) {
     suspend fun addGuestInDatabase(guest: Guest) {
         dao.insertGuest(guest.toEntity())
     }
@@ -13,12 +13,11 @@ class GuestRepository (private val dao: GuestDao) {
     }
 
     suspend fun usuarioExiste(): Guest? {
-        //Obtengo la lista
+        // Obtengo la lista
         val listaDeUsuario = dao.getGuests()
-        if(listaDeUsuario.size >0){
+        if (listaDeUsuario.isNotEmpty()) {
             return listaDeUsuario[0].toDomain()
         }
         return null
     }
-
 }
