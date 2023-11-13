@@ -40,8 +40,6 @@ class DeckViewModel @Inject constructor(private val heroRepository: HeroReposito
 
                     val deckSize = 6
                     val newCards = heroRepository.getRandomPlayerDeck(deckSize)
-
-
                     heroRepository.saveCardsToDatabase(newCards)
 
                     _cards.value = newCards

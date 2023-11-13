@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -66,7 +67,7 @@ fun DeckScreen(
                 painter = painterResource(id = R.drawable.fondo_mazo_azul),
                 contentDescription = "Pantalla detalles del héroe",
                 contentScale = ContentScale.FillBounds,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize().testTag("TestDeckScreen pantalla fondo")
             )
         }
         LazyColumn(
@@ -84,7 +85,7 @@ fun DeckScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier
+                    modifier = Modifier.testTag("DeckScreen titulo pantalla")
                         .offset(x = 2.dp, y = 2.dp)
                 )
             }
@@ -98,7 +99,8 @@ fun DeckScreen(
                 ) {
                     for (card in rowCards) {
 
-                        HeroCardDeck(hero = card)
+                        HeroCardDeck(hero = card,
+                            modifier = Modifier.testTag("DeckScreen Hero Card"))
                     }
                 }
 
