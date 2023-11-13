@@ -1,6 +1,8 @@
 package ar.edu.unlam.mobile.scaffold.di
 
+import ar.edu.unlam.mobile.scaffold.data.database.dao.GuestDao
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
+import ar.edu.unlam.mobile.scaffold.data.database.guest.GuestRepository
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
 import ar.edu.unlam.mobile.scaffold.data.repository.GameRepository
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.HeroRepository
@@ -33,5 +35,11 @@ object RepositoryModule {
     @Provides
     fun provideQuizGameRepository(repo: IHeroRepository): IQuizGameRepository {
         return QuizGameRepository(repo)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGuestRepository(guestBD : GuestDao) : GuestRepository{
+        return GuestRepository(guestBD)
     }
 }

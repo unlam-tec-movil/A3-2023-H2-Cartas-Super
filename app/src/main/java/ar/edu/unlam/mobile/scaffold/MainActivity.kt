@@ -27,6 +27,7 @@ import ar.edu.unlam.mobile.scaffold.ui.screens.home.HomeScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.ScreenMap
 import ar.edu.unlam.mobile.scaffold.ui.screens.qr.QrScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.quiz.QuizScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.usuario.UsuarioScreen
 import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,10 +46,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun MainScreen() {
     val controller = rememberNavController()
     Scaffold(
+
+
         floatingActionButton = {
             IconButton(onClick = { controller.navigate("home") }) {
                 Icon(Icons.Filled.Home, contentDescription = "Home")
@@ -63,6 +67,7 @@ fun MainScreen() {
                     navQuiz = { controller.navigate(route = "quiz") },
                     navMap = { controller.navigate(route = "Mapa") },
                     navDeck = { controller.navigate(route = "deck") },
+                    navUsuario = { controller.navigate(route = "Usuario")},
                     navCollection = { controller.navigate(route = "collection") }
                 )
             }
@@ -117,6 +122,11 @@ fun MainScreen() {
                     modifier = Modifier.padding(paddingValue)
 
                 )
+            }
+            composable("Usuario") {
+               UsuarioScreen(
+                   modifier = Modifier.padding(paddingValue).fillMaxSize()
+               )
             }
         }
     }
