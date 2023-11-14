@@ -44,7 +44,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.domain.model.Point
-import ar.edu.unlam.mobile.scaffold.ui.components.DrawRoutes
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -252,7 +251,7 @@ fun Map(
             GoogleMap(
                 modifier = Modifier
                     .fillMaxSize()
-                    .testTag("MapScren googleMap"),
+                    .testTag("MapScreen googleMap"),
                 cameraPositionState = cameraState,
                 properties = MapProperties(
                     isMyLocationEnabled = true,
@@ -264,24 +263,6 @@ fun Map(
                     state = MarkerState(position = marker),
                     title = "Mi Posición Actual",
                 )
-
-                /*if (selectedMarker == puntoEncuentro1){
-        DrawRoutes(
-        key = "AIzaSyA0d6l6FXVVOX_Ck67SiaZg3ACth-34dk4",
-        origin = marker,
-        destination = puntoEncuentro1,
-
-        )
-         }else if(selectedMarker == puntoEncuentro2){
-         DrawRoutes(
-        key = "AIzaSyA0d6l6FXVVOX_Ck67SiaZg3ACth-34dk4",
-        origin = marker,
-        destination = puntoEncuentro2,
-
-        )
-}
-
-*/
 
                 MarkerInfoWindowContent(
                     state = MarkerState(position = punto1),
@@ -303,7 +284,7 @@ fun Map(
                             modifier = Modifier
                                 .width(500.dp)
                                 .height(250.dp)
-                                .testTag("Image 1 punto de encuentro1")
+                                .testTag("imagen punto uno de encuentro"),
                         )
 
                         Text(
@@ -312,7 +293,7 @@ fun Map(
                             modifier = Modifier
                                 .padding(top = 250.dp)
                                 .fillMaxWidth()
-                                .testTag("Text 1 punto de encuentro1"),
+                                .testTag(tag = "MapScreen Text punto de encuentro uno"),
                             fontSize = 30.sp,
                             color = Color.Black,
                             fontFamily = shaka_pow
@@ -341,7 +322,7 @@ fun Map(
                             modifier = Modifier
                                 .width(380.dp)
                                 .height(220.dp)
-                                .testTag("image2 Punto de encuentro2")
+                                .testTag("MapScreen Image punto de encuentro2")
                         )
 
                         Text(
@@ -350,24 +331,11 @@ fun Map(
                             modifier = Modifier
                                 .padding(top = 230.dp)
                                 .fillMaxWidth()
-                                .testTag("texto punto de encuentro2"),
+                                .testTag("MapScreen Text punto de encuentro2"),
                             fontSize = 30.sp,
                             color = Color.Black,
                             fontFamily = shaka_pow
                         )
-                    }
-                }
-
-                if (selectedDestination != null) {
-                    DrawRoutes(
-                        key = "AIzaSyA0d6l6FXVVOX_Ck67SiaZg3ACth-34dk4",
-                        origin = marker,
-                        destination = selectedDestination!!,
-                    )
-                    if (selectedDestination == punto1) {
-                        selectedDestination = null
-                    } else if (selectedDestination == punto2) {
-                        selectedDestination = null
                     }
                 }
             }
