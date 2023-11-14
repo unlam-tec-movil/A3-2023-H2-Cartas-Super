@@ -19,9 +19,6 @@ class QrScannerViewModel @Inject constructor(
     private val heroQrManager: HeroQrManager
 ) : ViewModel() {
 
-    private val _qrString = MutableStateFlow("Nothing")
-    val qrString = _qrString.asStateFlow()
-
     private val _qrScannerUiState = MutableStateFlow<QrScannerUiState>(QrScannerUiState.Loading)
     val qrScannerUIState = _qrScannerUiState.asStateFlow()
 
@@ -33,7 +30,6 @@ class QrScannerViewModel @Inject constructor(
         qrScanner.startScan()
             .addOnSuccessListener { barcode ->
                 viewModelScope.launch(Dispatchers.IO) {
-                    _qrString.value = barcode.rawValue!!
                     _heroQr.value = heroQrManager.getHeroFromQr(barcode.rawValue!!)
                     _qrScannerUiState.value = QrScannerUiState.QrSuccess
                 }
