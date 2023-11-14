@@ -18,42 +18,42 @@ import javax.inject.Inject
 class QuizViewModel @Inject constructor(
     private val repo: IQuizGameRepository,
     private val orientationDataManager: IOrientationDataManager
-) : ViewModel() {
+) : ViewModel(), IQuizViewModel {
 
     private lateinit var game: QuizGame
 
     private val _sensorData = MutableStateFlow(SensorData())
-    val sensorData = _sensorData.asStateFlow()
+    override val sensorData = _sensorData.asStateFlow()
 
     private val _isLoading = MutableStateFlow(true)
-    val isLoading = _isLoading.asStateFlow()
+    override val isLoading = _isLoading.asStateFlow()
 
     private val _heroPortraitUrl = MutableStateFlow("https://loremflickr.com/400/400/cat?lock=1")
-    val heroPortraitUrl = _heroPortraitUrl.asStateFlow()
+    override val heroPortraitUrl = _heroPortraitUrl.asStateFlow()
 
     private val _option1 = MutableStateFlow("option 1")
-    val option1 = _option1.asStateFlow()
+    override val option1 = _option1.asStateFlow()
 
     private val _option2 = MutableStateFlow("option 2")
-    val option2 = _option2.asStateFlow()
+    override val option2 = _option2.asStateFlow()
 
     private val _option3 = MutableStateFlow("option 3")
-    val option3 = _option3.asStateFlow()
+    override val option3 = _option3.asStateFlow()
 
     private val _option4 = MutableStateFlow("option 4")
-    val option4 = _option4.asStateFlow()
+    override val option4 = _option4.asStateFlow()
 
     private val _showResult = MutableStateFlow(false)
-    val showResult = _showResult.asStateFlow()
+    override val showResult = _showResult.asStateFlow()
 
     private val _isCorrectAnswer = MutableStateFlow(false)
-    val isCorrectAnswer = _isCorrectAnswer.asStateFlow()
+    override val isCorrectAnswer = _isCorrectAnswer.asStateFlow()
 
     private val _correctAnswer = MutableStateFlow("Correct Hero Name")
-    val correctAnswer = _correctAnswer.asStateFlow()
+    override val correctAnswer = _correctAnswer.asStateFlow()
 
     private val _chosenHero = MutableStateFlow("Chosen hero name")
-    val chosenHero = _chosenHero.asStateFlow()
+    override val chosenHero = _chosenHero.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -66,7 +66,7 @@ class QuizViewModel @Inject constructor(
         }
     }
 
-    fun newGame() {
+    override fun newGame() {
         viewModelScope.launch(Dispatchers.IO) {
             _isLoading.value = true
             _showResult.value = false
@@ -85,19 +85,19 @@ class QuizViewModel @Inject constructor(
         _isLoading.value = false
     }
 
-    fun selectOption1() {
+    override fun selectOption1() {
         selectOption(QuizOption.OPTION_1)
     }
 
-    fun selectOption2() {
+    override fun selectOption2() {
         selectOption(QuizOption.OPTION_2)
     }
 
-    fun selectOption3() {
+    override fun selectOption3() {
         selectOption(QuizOption.OPTION_3)
     }
 
-    fun selectOption4() {
+    override fun selectOption4() {
         selectOption(QuizOption.OPTION_4)
     }
 
@@ -107,7 +107,7 @@ class QuizViewModel @Inject constructor(
         _showResult.value = true
     }
 
-    fun cancelSensorDataFlow() {
+    override fun cancelSensorDataFlow() {
         orientationDataManager.cancel()
     }
     override fun onCleared() {
