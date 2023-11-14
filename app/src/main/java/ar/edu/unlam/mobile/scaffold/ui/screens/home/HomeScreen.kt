@@ -25,7 +25,7 @@ import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewmodel = hiltViewModel(),
+    viewModel: IHomeViewModel = hiltViewModel(),
     navDuel: () -> Unit = { },
     navQuiz: () -> Unit = { },
     navMap: () -> Unit = { },

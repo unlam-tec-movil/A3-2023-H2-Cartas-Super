@@ -17,13 +17,13 @@ import javax.inject.Inject
 class HomeViewmodel @Inject constructor(
     private val repo: IHeroRepository,
     private val orientationDataManager: IOrientationDataManager
-) : ViewModel() {
+) : ViewModel(), IHomeViewModel {
 
     private val _sensorData = MutableStateFlow(SensorData())
-    val sensorData = _sensorData.asStateFlow()
+    override val sensorData = _sensorData.asStateFlow()
 
     private val _cachingProgress = MutableStateFlow(0.00f)
-    val cachingProgress = _cachingProgress.asStateFlow()
+    override val cachingProgress = _cachingProgress.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -46,7 +46,7 @@ class HomeViewmodel @Inject constructor(
         }
     }
 
-    fun cancelSensorDataFlow() {
+    override fun cancelSensorDataFlow() {
         orientationDataManager.cancel()
     }
 
