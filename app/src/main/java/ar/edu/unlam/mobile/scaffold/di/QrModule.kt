@@ -1,6 +1,8 @@
 package ar.edu.unlam.mobile.scaffold.di
 
 import android.content.Context
+import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
+import ar.edu.unlam.mobile.scaffold.domain.qrmanager.HeroQrManager
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
@@ -30,5 +32,11 @@ object QrModule {
         config: GmsBarcodeScannerOptions
     ): GmsBarcodeScanner {
         return GmsBarcodeScanning.getClient(context, config)
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideHeroQrManager(repo: IHeroRepository): HeroQrManager {
+        return HeroQrManager(repo)
     }
 }

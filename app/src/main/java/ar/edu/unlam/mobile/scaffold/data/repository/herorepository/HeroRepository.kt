@@ -19,7 +19,7 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
     IHeroRepository {
 
     // private val API_COLLECTION_SIZE = 731 // no eliminar
-    private val COLLECTION_MAX_SIZE = 731 // es menor o igual a API_COLLECTION_SIZE
+    override val COLLECTION_MAX_SIZE = 731 // es menor o igual a API_COLLECTION_SIZE
     override fun preloadHeroCache(): Flow<Float> {
         return flow {
             emit(0f)
