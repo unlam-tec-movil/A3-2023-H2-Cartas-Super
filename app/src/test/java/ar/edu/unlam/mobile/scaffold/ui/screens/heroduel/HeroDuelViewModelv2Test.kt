@@ -2,7 +2,7 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.heroduel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.MainDispatcherRule
-import ar.edu.unlam.mobile.scaffold.data.repository.GameRepository
+import ar.edu.unlam.mobile.scaffold.data.repository.gamerepository.GameRepository
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.Stat
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.Winner

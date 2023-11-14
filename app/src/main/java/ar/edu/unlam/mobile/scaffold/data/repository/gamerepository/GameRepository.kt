@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.data.repository
+package ar.edu.unlam.mobile.scaffold.data.repository.gamerepository
 
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
@@ -9,7 +9,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class GameRepository @Inject constructor(private val repo: IHeroRepository) {
+class GameRepository @Inject constructor(private val repo: IHeroRepository) : IGameRepository {
 
     private val DEFAULT_DECK_SIZE = 3
     /*
@@ -21,7 +21,7 @@ class GameRepository @Inject constructor(private val repo: IHeroRepository) {
 
      */
 
-    suspend fun getNewCardGame(): CardGame {
+    override suspend fun getNewCardGame(): CardGame {
         var playerDeck: List<HeroModel> = listOf()
         var adversaryDeck: List<HeroModel> = listOf()
 

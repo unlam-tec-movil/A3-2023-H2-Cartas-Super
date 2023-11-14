@@ -4,7 +4,8 @@ import ar.edu.unlam.mobile.scaffold.data.database.dao.GuestDao
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.guest.GuestRepository
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
-import ar.edu.unlam.mobile.scaffold.data.repository.GameRepository
+import ar.edu.unlam.mobile.scaffold.data.repository.gamerepository.GameRepository
+import ar.edu.unlam.mobile.scaffold.data.repository.gamerepository.IGameRepository
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.HeroRepository
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.data.repository.quizrepository.IQuizGameRepository
@@ -27,7 +28,7 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideGameRepository(repo: IHeroRepository): GameRepository {
+    fun provideGameRepository(repo: IHeroRepository): IGameRepository {
         return GameRepository(repo)
     }
 
@@ -39,7 +40,7 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideGuestRepository(guestBD : GuestDao) : GuestRepository{
+    fun provideGuestRepository(guestBD: GuestDao): GuestRepository {
         return GuestRepository(guestBD)
     }
 }
