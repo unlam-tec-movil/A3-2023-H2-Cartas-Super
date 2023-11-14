@@ -7,7 +7,6 @@ import javax.inject.Inject
 class HeroQrManager @Inject constructor(private val repo: IHeroRepository) {
 
     // solamente se pueden obtener cartas x qr una sola vez
-    // falta aumentar hero.quantity + 1
     suspend fun getHeroFromQr(qrRawValue: String): HeroModel {
         val id = getHeroId(qrRawValue)
         return repo.winHeroCard(id)
