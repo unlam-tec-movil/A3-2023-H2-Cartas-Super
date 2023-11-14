@@ -164,4 +164,7 @@ dependencies {
 
     //SharedPreferences
     implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    // ML - kit: Google code scanner (Android only)
+    implementation 'com.google.android.gms:play-services-code-scanner:16.1.0'
 }

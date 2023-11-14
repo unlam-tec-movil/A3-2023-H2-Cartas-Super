@@ -30,6 +30,7 @@ fun HomeScreen(
     navQuiz: () -> Unit = { },
     navMap: () -> Unit = { },
     navUsuario: () -> Unit = { },
+    navQrScanner: () -> Unit = { },
     navCollection: () -> Unit = { }
 ) {
     val cacheProgress by viewModel.cachingProgress.collectAsStateWithLifecycle()
@@ -51,6 +52,7 @@ fun HomeScreen(
         navMap = navMap,
         navUsuario = navUsuario,
         navCollection = navCollection,
+        navQrScanner = navQrScanner,
         cacheProgress = { cacheProgress }
     )
 }
@@ -65,6 +67,7 @@ fun HomeUi(
     navMap: () -> Unit = { },
     navUsuario: () -> Unit = { },
     navCollection: () -> Unit = { },
+    navQrScanner: () -> Unit = { },
     cacheProgress: () -> Float = { 0f }
 ) {
     val navButtonModifier = Modifier
@@ -114,6 +117,11 @@ fun HomeUi(
                 modifier = navButtonModifier,
                 cacheProgress = cacheProgress,
                 navCollection = navCollection
+            )
+            CustomButton(
+                modifier = navButtonModifier,
+                onClick = navQrScanner,
+                label = { "Obtener heroe QR" }
             )
         }
     }

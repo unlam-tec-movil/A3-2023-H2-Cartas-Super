@@ -25,6 +25,7 @@ import ar.edu.unlam.mobile.scaffold.ui.screens.heroduel.HeroDuelScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.home.HomeScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.ScreenMap
 import ar.edu.unlam.mobile.scaffold.ui.screens.qr.QrScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.qrscanner.QrScannerScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.quiz.QuizScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.usuario.UsuarioScreen
 import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
@@ -45,12 +46,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun MainScreen() {
     val controller = rememberNavController()
     Scaffold(
-
 
         floatingActionButton = {
             IconButton(onClick = { controller.navigate("home") }) {
@@ -65,8 +64,9 @@ fun MainScreen() {
                     navDuel = { controller.navigate(route = "duel") },
                     navQuiz = { controller.navigate(route = "quiz") },
                     navMap = { controller.navigate(route = "Mapa") },
-                    navUsuario = { controller.navigate(route = "Usuario")},
-                    navCollection = { controller.navigate(route = "collection") }
+                    navUsuario = { controller.navigate(route = "Usuario") },
+                    navCollection = { controller.navigate(route = "collection") },
+                    navQrScanner = { controller.navigate(route = "QrScanner") }
                 )
             }
             composable("collection") {
@@ -110,9 +110,16 @@ fun MainScreen() {
                 )
             }
             composable("Usuario") {
-               UsuarioScreen(
-                   modifier = Modifier.padding(paddingValue).fillMaxSize()
-               )
+                UsuarioScreen(
+                    modifier = Modifier.padding(paddingValue).fillMaxSize()
+                )
+            }
+            composable("QrScanner") {
+                QrScannerScreen(
+                    modifier = Modifier
+                        .padding(paddingValue)
+                        .fillMaxSize()
+                )
             }
         }
     }
