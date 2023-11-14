@@ -12,4 +12,5 @@ interface IHeroRepository {
     suspend fun getHero(heroId: Int): HeroModel
     suspend fun getAllHero(): List<HeroModel>
     fun preloadHeroCache(): Flow<Float>
+    suspend fun winHeroCard(): HeroModel
 }

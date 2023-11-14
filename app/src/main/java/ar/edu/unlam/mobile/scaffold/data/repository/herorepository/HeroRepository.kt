@@ -2,6 +2,7 @@ package ar.edu.unlam.mobile.scaffold.data.repository.herorepository
 
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
+import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroQuantityUpdate
 import ar.edu.unlam.mobile.scaffold.data.database.entities.toHeroModel
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
 import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
@@ -29,6 +30,17 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
                 emit(percentage)
             }
         }
+    }
+
+    override suspend fun winHeroCard(): HeroModel {
+        val id = (1..COLLECTION_MAX_SIZE).random()
+        val hero = getHero(id)
+        val updateHero = HeroQuantityUpdate(
+            id = hero.id,
+            quantity = hero.quantity + 1
+        )
+        dataBase.updateQuantity(updateHero)
+        return hero
     }
 
     override suspend fun getAdversaryDeck(size: Int): List<HeroModel> {

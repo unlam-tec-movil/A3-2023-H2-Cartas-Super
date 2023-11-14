@@ -138,7 +138,7 @@ fun QrFailureUi(
     Box(modifier = modifier) {
         Image(
             painter = painterResource(id = R.drawable.fondo_coleccion),
-            contentDescription = "QrFaillureUi background",
+            contentDescription = "QrFailureUi background",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
