@@ -34,13 +34,23 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
 
     override suspend fun winHeroCard(): HeroModel {
         val id = (1..COLLECTION_MAX_SIZE).random()
+        return updateHeroQuantity(id)
+    }
+
+    private suspend fun updateHeroQuantity(
+        id: Int
+    ): HeroModel {
         val hero = getHero(id)
         val updateHero = HeroQuantityUpdate(
             id = hero.id,
             quantity = hero.quantity + 1
         )
         dataBase.updateQuantity(updateHero)
-        return hero
+        return getHero(id)
+    }
+
+    override suspend fun winHeroCard(id: Int): HeroModel {
+        return updateHeroQuantity(id)
     }
 
     override suspend fun getAdversaryDeck(size: Int): List<HeroModel> {

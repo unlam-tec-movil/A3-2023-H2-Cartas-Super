@@ -10,7 +10,7 @@ class HeroQrManager @Inject constructor(private val repo: IHeroRepository) {
     // falta aumentar hero.quantity + 1
     suspend fun getHeroFromQr(qrRawValue: String): HeroModel {
         val id = getHeroId(qrRawValue)
-        return repo.getHero(id)
+        return repo.winHeroCard(id)
     }
 
     private fun getHeroId(string: String): Int {
