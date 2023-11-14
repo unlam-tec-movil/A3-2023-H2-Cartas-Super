@@ -3,6 +3,7 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.heroduel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffold.data.repository.GameRepository
+import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.Stat
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.Winner
@@ -17,7 +18,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) : ViewModel() {
+class HeroDuelViewModelv2 @Inject constructor(
+    private val repo: GameRepository,
+    private val heroRepo: IHeroRepository
+) : ViewModel() {
 
     private val _currentPlayerCard = MutableStateFlow(HeroModel())
     val currentPlayerCard = _currentPlayerCard.asStateFlow()
@@ -52,6 +56,9 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    private val _wonHero = MutableStateFlow(HeroModel())
+    val wonHero = _wonHero.asStateFlow()
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             game = repo.getNewCardGame()
@@ -84,6 +91,15 @@ class HeroDuelViewModelv2 @Inject constructor(private val repo: GameRepository) 
 
     fun useMultiplierX2(use: Boolean) {
         useMultix2 = use
+    }
+
+    fun checkIfPlayerWonHero() {
+        if (winner.value == Winner.PLAYER) {
+            viewModelScope.launch(Dispatchers.IO) {
+                _wonHero.value = heroRepo.winHeroCard()
+                _currentScreen.value = DuelScreen.WIN_CARD_UI
+            }
+        }
     }
 
     fun fight() {

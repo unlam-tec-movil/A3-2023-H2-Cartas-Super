@@ -10,7 +10,7 @@ import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroQuantityUpdate
 @Dao
 interface HeroDao {
 
-    @Query("SELECT * FROM hero_table ORDER BY id DESC")
+    @Query("SELECT * FROM hero_table ORDER BY id")
     suspend fun getAll(): List<HeroEntity>
 
     @Query("SELECT * FROM hero_table WHERE id IS :idHero")

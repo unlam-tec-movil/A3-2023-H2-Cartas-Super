@@ -7,6 +7,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,9 +48,16 @@ fun FinishedDuelUi(
     modifier: Modifier = Modifier,
     winner: Winner = Winner.PLAYER,
     playerScore: Int = 0,
-    adversaryScore: Int = 0
+    adversaryScore: Int = 0,
+    onPlayerWinner: () -> Unit = { }
 ) {
-    Box(modifier = modifier) {
+    Box(
+        modifier = modifier.clickable {
+            if (winner == Winner.PLAYER) {
+                onPlayerWinner()
+            }
+        }
+    ) {
         Image(
             painter = painterResource(id = R.drawable.fondo_pantalla_pelea),
             contentDescription = "FinishedDuelUi background",
@@ -62,7 +70,9 @@ fun FinishedDuelUi(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CustomTitle(
-                modifier = Modifier.padding(16.dp).testTag("FinishedDuelUi result text"),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .testTag("FinishedDuelUi result text"),
                 text = { "El ganador es " + if (winner == Winner.PLAYER) "el jugador!" else "el adversario." }
             )
             GameScore(
@@ -107,6 +117,8 @@ fun HeroDuelScreen(
         val winner by viewModel.winner.collectAsStateWithLifecycle()
         val canMultix2BeUsed by viewModel.isMultiplierAvailable.collectAsStateWithLifecycle()
         val currentScreen by viewModel.currentScreen.collectAsStateWithLifecycle()
+        val wonHero by viewModel.wonHero.collectAsStateWithLifecycle()
+        val checkIfPlayerWonHero = viewModel::checkIfPlayerWonHero
 
         val animationDuration = 500
 
@@ -167,9 +179,39 @@ fun HeroDuelScreen(
                     modifier = modifier,
                     winner = winner,
                     playerScore = playerScore,
-                    adversaryScore = adversaryScore
+                    adversaryScore = adversaryScore,
+                    onPlayerWinner = checkIfPlayerWonHero
                 )
+                DuelScreen.WIN_CARD_UI -> WinCardUi(modifier = modifier, hero = wonHero)
             }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun WinCardUi(
+    modifier: Modifier = Modifier,
+    hero: HeroModel = HeroModel()
+) {
+    Box(modifier = modifier) {
+        Image(
+            painter = painterResource(id = R.drawable.fondo_coleccion),
+            contentDescription = "WinCardUi background",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.FillBounds
+        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(space = 25.dp, alignment = Alignment.CenterVertically),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CustomTitle(
+                text = { "Ganaste la siguiente carta!" }
+            )
+            AnimatedHeroCard(
+                hero = hero
+            )
         }
     }
 }
@@ -259,7 +301,9 @@ fun SelectCardUi(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AnimatedHeroCard(
-                modifier = Modifier.padding(8.dp).testTag("SelectCardUi player card"),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .testTag("SelectCardUi player card"),
                 hero = selectedCard
             )
             CustomButton(
@@ -268,7 +312,9 @@ fun SelectCardUi(
                 onClick = onPlayCardClick
             )
             PlayerDeck(
-                modifier = Modifier.weight(1f).testTag("SelectCardUi player deck"),
+                modifier = Modifier
+                    .weight(1f)
+                    .testTag("SelectCardUi player deck"),
                 playerDeck = playerDeck,
                 onCardClick = { index ->
                     selectedCard = playerDeck[index]
