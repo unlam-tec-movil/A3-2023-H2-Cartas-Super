@@ -14,46 +14,48 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+// quitadas las interfaces de los viewmodels ya que, hilt solamente soporta viewModels que solamente
+// hereden de ViewModel y que no implementen interfaces.
 @HiltViewModel
 class QuizViewModel @Inject constructor(
     private val repo: IQuizGameRepository,
     private val orientationDataManager: IOrientationDataManager
-) : ViewModel(), IQuizViewModel {
+) : ViewModel() {
 
     private lateinit var game: QuizGame
 
     private val _sensorData = MutableStateFlow(SensorData())
-    override val sensorData = _sensorData.asStateFlow()
+    val sensorData = _sensorData.asStateFlow()
 
     private val _isLoading = MutableStateFlow(true)
-    override val isLoading = _isLoading.asStateFlow()
+    val isLoading = _isLoading.asStateFlow()
 
     private val _heroPortraitUrl = MutableStateFlow("https://loremflickr.com/400/400/cat?lock=1")
-    override val heroPortraitUrl = _heroPortraitUrl.asStateFlow()
+    val heroPortraitUrl = _heroPortraitUrl.asStateFlow()
 
     private val _option1 = MutableStateFlow("option 1")
-    override val option1 = _option1.asStateFlow()
+    val option1 = _option1.asStateFlow()
 
     private val _option2 = MutableStateFlow("option 2")
-    override val option2 = _option2.asStateFlow()
+    val option2 = _option2.asStateFlow()
 
     private val _option3 = MutableStateFlow("option 3")
-    override val option3 = _option3.asStateFlow()
+    val option3 = _option3.asStateFlow()
 
     private val _option4 = MutableStateFlow("option 4")
-    override val option4 = _option4.asStateFlow()
+    val option4 = _option4.asStateFlow()
 
     private val _showResult = MutableStateFlow(false)
-    override val showResult = _showResult.asStateFlow()
+    val showResult = _showResult.asStateFlow()
 
     private val _isCorrectAnswer = MutableStateFlow(false)
-    override val isCorrectAnswer = _isCorrectAnswer.asStateFlow()
+    val isCorrectAnswer = _isCorrectAnswer.asStateFlow()
 
     private val _correctAnswer = MutableStateFlow("Correct Hero Name")
-    override val correctAnswer = _correctAnswer.asStateFlow()
+    val correctAnswer = _correctAnswer.asStateFlow()
 
     private val _chosenHero = MutableStateFlow("Chosen hero name")
-    override val chosenHero = _chosenHero.asStateFlow()
+    val chosenHero = _chosenHero.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -66,7 +68,7 @@ class QuizViewModel @Inject constructor(
         }
     }
 
-    override fun newGame() {
+    fun newGame() {
         viewModelScope.launch(Dispatchers.IO) {
             _isLoading.value = true
             _showResult.value = false
@@ -85,19 +87,19 @@ class QuizViewModel @Inject constructor(
         _isLoading.value = false
     }
 
-    override fun selectOption1() {
+    fun selectOption1() {
         selectOption(QuizOption.OPTION_1)
     }
 
-    override fun selectOption2() {
+    fun selectOption2() {
         selectOption(QuizOption.OPTION_2)
     }
 
-    override fun selectOption3() {
+    fun selectOption3() {
         selectOption(QuizOption.OPTION_3)
     }
 
-    override fun selectOption4() {
+    fun selectOption4() {
         selectOption(QuizOption.OPTION_4)
     }
 
@@ -107,7 +109,7 @@ class QuizViewModel @Inject constructor(
         _showResult.value = true
     }
 
-    override fun cancelSensorDataFlow() {
+    fun cancelSensorDataFlow() {
         orientationDataManager.cancel()
     }
     override fun onCleared() {

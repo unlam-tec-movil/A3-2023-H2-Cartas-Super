@@ -19,7 +19,7 @@ import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroGallery
 fun CollectionScreen(
     modifier: Modifier = Modifier,
     navigateToHeroDetail: (Int) -> Unit = {},
-    viewModel: ICollectionViewModel = hiltViewModel()
+    viewModel: CollectionViewModelImp = hiltViewModel()
 ) {
     val sensorData by viewModel.sensorData
         .collectAsStateWithLifecycle(initialValue = SensorData(0f, 0f))

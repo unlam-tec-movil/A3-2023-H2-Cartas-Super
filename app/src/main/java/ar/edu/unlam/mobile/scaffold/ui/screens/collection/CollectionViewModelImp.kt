@@ -18,16 +18,16 @@ import javax.inject.Inject
 class CollectionViewModelImp @Inject constructor(
     private val repo: IHeroRepository,
     private val orientationDataManager: IOrientationDataManager
-) : ViewModel(), ICollectionViewModel {
+) : ViewModel() {
 
     private val _sensorData = MutableStateFlow(SensorData())
-    override val sensorData = _sensorData.asStateFlow()
+    val sensorData = _sensorData.asStateFlow()
 
     private val _heroList = MutableStateFlow<List<HeroModel>>(emptyList())
-    override val heroList = _heroList.asStateFlow()
+    val heroList = _heroList.asStateFlow()
 
     private val _isLoading = MutableStateFlow(true)
-    override val isLoading = _isLoading.asStateFlow()
+    val isLoading = _isLoading.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -44,7 +44,7 @@ class CollectionViewModelImp @Inject constructor(
         }
     }
 
-    override fun cancelSensorDataFlow() {
+    fun cancelSensorDataFlow() {
         orientationDataManager.cancel()
     }
 

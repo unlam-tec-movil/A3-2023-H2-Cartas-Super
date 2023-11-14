@@ -18,16 +18,16 @@ import javax.inject.Inject
 class HeroDetailViewModelImp @Inject constructor(
     private val repo: IHeroRepository,
     private val orientationDataManager: IOrientationDataManager
-) : ViewModel(), IHeroDetailViewModel {
+) : ViewModel() {
 
     private val _sensorData = MutableStateFlow(SensorData())
-    override val sensorData = _sensorData.asStateFlow()
+    val sensorData = _sensorData.asStateFlow()
 
     private val _hero = MutableStateFlow(HeroModel())
-    override val hero = _hero.asStateFlow()
+    val hero = _hero.asStateFlow()
 
     private val _isLoading = MutableStateFlow(true)
-    override val isLoading = _isLoading.asStateFlow()
+    val isLoading = _isLoading.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -37,7 +37,7 @@ class HeroDetailViewModelImp @Inject constructor(
         }
     }
 
-    override fun getHero(heroID: Int) {
+    fun getHero(heroID: Int) {
         viewModelScope.launch {
             _hero.value = withContext(Dispatchers.IO) {
                 repo.getHero(heroID)
@@ -46,7 +46,7 @@ class HeroDetailViewModelImp @Inject constructor(
         }
     }
 
-    override fun cancelSensorDataFlow() {
+    fun cancelSensorDataFlow() {
         orientationDataManager.cancel()
     }
 

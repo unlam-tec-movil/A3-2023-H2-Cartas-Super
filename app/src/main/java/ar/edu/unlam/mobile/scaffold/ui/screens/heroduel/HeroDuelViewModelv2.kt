@@ -19,40 +19,40 @@ import javax.inject.Inject
 @HiltViewModel
 class HeroDuelViewModelv2 @Inject constructor(
     private val repo: IGameRepository
-) : ViewModel(), IHeroDuelViewModel {
+) : ViewModel() {
 
     private val _currentPlayerCard = MutableStateFlow(HeroModel())
-    override val currentPlayerCard = _currentPlayerCard.asStateFlow()
+    val currentPlayerCard = _currentPlayerCard.asStateFlow()
 
     private lateinit var game: CardGame
 
-    override lateinit var winner: StateFlow<Winner>
+    lateinit var winner: StateFlow<Winner>
         private set
 
-    override lateinit var isMultiplierAvailable: StateFlow<Boolean>
+    lateinit var isMultiplierAvailable: StateFlow<Boolean>
         private set
 
     private var useMultix2 = false
 
     private var selectedStat = Stat.POWER
 
-    override lateinit var playerScore: StateFlow<Int>
+    lateinit var playerScore: StateFlow<Int>
         private set
 
-    override lateinit var adversaryScore: StateFlow<Int>
+    lateinit var adversaryScore: StateFlow<Int>
         private set
 
-    override lateinit var currentPlayerDeck: StateFlow<List<HeroModel>>
+    lateinit var currentPlayerDeck: StateFlow<List<HeroModel>>
         private set
 
-    override lateinit var currentAdversaryCard: StateFlow<HeroModel>
+    lateinit var currentAdversaryCard: StateFlow<HeroModel>
         private set
 
     private val _currentScreen = MutableStateFlow(DuelScreen.SELECT_CARD_UI)
-    override val currentScreen = _currentScreen.asStateFlow()
+    val currentScreen = _currentScreen.asStateFlow()
 
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
-    override val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -72,23 +72,23 @@ class HeroDuelViewModelv2 @Inject constructor(
         currentAdversaryCard = game.currentAdversaryCard.stateIn(scope = viewModelScope)
     }
 
-    override fun playCard() {
+    fun playCard() {
         _currentScreen.value = DuelScreen.DUEL_UI
     }
 
-    override fun selectPlayerCard(cardSelectedIndex: Int) {
+    fun selectPlayerCard(cardSelectedIndex: Int) {
         _currentPlayerCard.value = currentPlayerDeck.value[cardSelectedIndex]
     }
 
-    override fun selectStat(stat: Stat) {
+    fun selectStat(stat: Stat) {
         selectedStat = stat
     }
 
-    override fun useMultiplierX2(use: Boolean) {
+    fun useMultiplierX2(use: Boolean) {
         useMultix2 = use
     }
 
-    override fun fight() {
+    fun fight() {
         val cardId = _currentPlayerCard.value.id
         game.playerPlayCard(cardId, selectedStat, useMultix2)
         useMultix2 = false

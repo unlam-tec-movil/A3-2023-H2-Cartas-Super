@@ -85,7 +85,7 @@ fun QuizResultPopup(
 fun QuizScreen(
     modifier: Modifier = Modifier,
     returnHomeScreen: () -> Unit = {},
-    viewModel: IQuizViewModel = hiltViewModel()
+    viewModel: QuizViewModel = hiltViewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val imageUrl by viewModel.heroPortraitUrl.collectAsStateWithLifecycle()

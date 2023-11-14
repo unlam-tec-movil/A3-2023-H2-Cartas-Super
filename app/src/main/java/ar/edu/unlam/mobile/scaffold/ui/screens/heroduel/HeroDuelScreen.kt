@@ -80,7 +80,7 @@ fun FinishedDuelUi(
 @Composable
 fun HeroDuelScreen(
     modifier: Modifier = Modifier,
-    viewModel: IHeroDuelViewModel = hiltViewModel()
+    viewModel: HeroDuelViewModelv2 = hiltViewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     if (isLoading) {

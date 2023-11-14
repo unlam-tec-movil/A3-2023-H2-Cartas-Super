@@ -36,7 +36,7 @@ import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroWork
 fun HeroDetailScreen(
     modifier: Modifier = Modifier,
     navigateToQR: () -> Unit = {},
-    viewModel: IHeroDetailViewModel = hiltViewModel(),
+    viewModel: HeroDetailViewModelImp = hiltViewModel(),
     heroID: Int = 1
 ) {
     val sensorData by viewModel.sensorData
