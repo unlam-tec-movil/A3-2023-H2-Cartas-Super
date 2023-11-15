@@ -1,5 +1,6 @@
 package ar.edu.unlam.mobile.scaffold
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,10 +20,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import ar.edu.unlam.mobile.scaffold.ui.components.BottomBar
-import ar.edu.unlam.mobile.scaffold.ui.screens.details.SecondaryScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.collection.CollectionScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.deck.DeckScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.heroduel.HeroDuelScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.home.HomeScreen
-import ar.edu.unlam.mobile.scaffold.ui.theme.MyApplicationTheme
+import ar.edu.unlam.mobile.scaffold.ui.screens.map.MapScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.qr.QrScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.qrscanner.QrScannerScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.quiz.QuizScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.usuario.UsuarioScreen
+import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,7 +38,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApplicationTheme {
+            ComicWarTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     MainScreen()
@@ -42,33 +50,96 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen() {
-    // Controller es el elemento que nos permite navegar entre pantallas. Tiene las acciones
-    // para navegar como naviegate y también la información de en dónde se "encuentra" el usuario
-    // a través del back stack
     val controller = rememberNavController()
     Scaffold(
-        bottomBar = { BottomBar(controller = controller) },
+
         floatingActionButton = {
             IconButton(onClick = { controller.navigate("home") }) {
                 Icon(Icons.Filled.Home, contentDescription = "Home")
             }
         },
     ) { paddingValue ->
-        // NavHost es el componente que funciona como contenedor de los otros componentes que
-        // podrán ser destinos de navegación.
         NavHost(navController = controller, startDestination = "home") {
-            // composable es el componente que se usa para definir un destino de navegación.
-            // Por parámetro recibe la ruta que se utilizará para navegar a dicho destino.
             composable("home") {
-                // Home es el componente en sí que es el destino de navegación.
-                HomeScreen(modifier = Modifier.padding(paddingValue))
+                HomeScreen(
+                    modifier = Modifier.padding(paddingValue),
+                    navDuel = { controller.navigate(route = "duel") },
+                    navQuiz = { controller.navigate(route = "quiz") },
+                    navMap = { controller.navigate(route = "Mapa") },
+                    navUsuario = { controller.navigate(route = "Usuario") },
+                    navCollection = { controller.navigate(route = "collection") },
+                    navQrScanner = { controller.navigate(route = "QrScanner") },
+                    navDeck = {controller.navigate(route = "deck")}
+                )
+            }
+            composable("collection") {
+                CollectionScreen(
+                    modifier = Modifier.padding(paddingValue),
+                    navigateToHeroDetail = { heroID -> controller.navigate(route = "herodetail/$heroID") }
+                )
             }
             composable(
-                route = "segundo/{id}",
-                arguments = listOf(navArgument("id") { type = NavType.IntType }),
+                route = "herodetail/{heroid}",
+                arguments = listOf(navArgument("heroid") { type = NavType.IntType }),
             ) { navBackStackEntry ->
-                val id = navBackStackEntry.arguments?.getInt("id") ?: 1
-                SecondaryScreen(controller = controller, id = id)
+                val heroID = navBackStackEntry.arguments?.getInt("heroid") ?: 1
+                HeroDetailScreen(
+                    modifier = Modifier.padding(paddingValue),
+                    navigateToQR = { controller.navigate(route = "qr/$heroID") },
+                    heroID = heroID
+                )
+            }
+            composable("quiz") {
+                QuizScreen(
+                    modifier = Modifier.padding(paddingValue),
+                    returnHomeScreen = { controller.navigate(route = "home") }
+                )
+            }
+            composable("duel") {
+                HeroDuelScreen(
+                    modifier = Modifier.padding(paddingValue).fillMaxSize()
+                )
+            }
+            composable(
+                route = "qr/{heroID}",
+                arguments = listOf(navArgument("heroID") { type = NavType.IntType }),
+            ) {
+                    navBackStackEntry ->
+                val heroID = navBackStackEntry.arguments?.getInt("heroID") ?: 1
+                QrScreen(
+                    modifier = Modifier.padding(paddingValue),
+                    // controller = controller,
+                    heroID = heroID
+                )
+            }
+            composable("Mapa") {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    MapScreen(
+                        modifier = Modifier.padding(paddingValue),
+                        controller = controller,
+
+                    )
+                }
+            }
+            composable("Usuario") {
+                UsuarioScreen(
+                    modifier = Modifier.padding(paddingValue).fillMaxSize()
+                )
+                UsuarioScreen(
+                    modifier = Modifier.padding(paddingValue).fillMaxSize()
+                )
+            }
+            composable("deck"){
+                DeckScreen(
+                    modifier = Modifier.padding(paddingValue).fillMaxSize()
+                )
+            }
+            composable("QrScanner") {
+                QrScannerScreen(
+                    modifier = Modifier
+                        .padding(paddingValue)
+                        .fillMaxSize()
+                )
             }
         }
     }
