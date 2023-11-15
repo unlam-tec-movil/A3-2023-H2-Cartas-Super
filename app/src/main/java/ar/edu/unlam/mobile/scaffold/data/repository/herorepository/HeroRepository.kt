@@ -2,6 +2,7 @@ package ar.edu.unlam.mobile.scaffold.data.repository.herorepository
 
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
+import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroQuantityUpdate
 import ar.edu.unlam.mobile.scaffold.data.database.entities.toHeroModel
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
 import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
@@ -20,7 +21,7 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
     IHeroRepository {
 
     // private val API_COLLECTION_SIZE = 731 // no eliminar
-    private val COLLECTION_MAX_SIZE = 731 // es menor o igual a API_COLLECTION_SIZE
+    override val COLLECTION_MAX_SIZE = 731 // es menor o igual a API_COLLECTION_SIZE
     override fun preloadHeroCache(): Flow<Float> {
         return flow {
             emit(0f)
@@ -30,6 +31,27 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
                 emit(percentage)
             }
         }
+    }
+
+    override suspend fun winHeroCard(): HeroModel {
+        val id = (1..COLLECTION_MAX_SIZE).random()
+        return updateHeroQuantity(id)
+    }
+
+    private suspend fun updateHeroQuantity(
+        id: Int
+    ): HeroModel {
+        val hero = getHero(id)
+        val updateHero = HeroQuantityUpdate(
+            id = hero.id,
+            quantity = hero.quantity + 1
+        )
+        dataBase.updateQuantity(updateHero)
+        return getHero(id)
+    }
+
+    override suspend fun winHeroCard(id: Int): HeroModel {
+        return updateHeroQuantity(id)
     }
 
     override suspend fun getAdversaryDeck(size: Int): List<HeroModel> {

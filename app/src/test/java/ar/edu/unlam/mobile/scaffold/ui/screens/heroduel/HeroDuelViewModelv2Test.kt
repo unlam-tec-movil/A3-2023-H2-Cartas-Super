@@ -3,6 +3,7 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.heroduel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.MainDispatcherRule
 import ar.edu.unlam.mobile.scaffold.data.repository.GameRepository
+import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.Stat
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.Winner
@@ -53,6 +54,9 @@ class HeroDuelViewModelv2Test {
 
     @RelaxedMockK
     lateinit var gameRepository: GameRepository
+
+    @RelaxedMockK
+    lateinit var heroRepo: IHeroRepository
 
     private lateinit var viewModel: HeroDuelViewModelv2
 
@@ -140,7 +144,8 @@ class HeroDuelViewModelv2Test {
             playerDeck = playerDeck,
             adversaryDeck = adversaryDeck
         )
-        viewModel = HeroDuelViewModelv2(gameRepository)
+        coEvery { heroRepo.winHeroCard() } returns playerDeck[2]
+        viewModel = HeroDuelViewModelv2(gameRepository, heroRepo)
     }
 
     @Test

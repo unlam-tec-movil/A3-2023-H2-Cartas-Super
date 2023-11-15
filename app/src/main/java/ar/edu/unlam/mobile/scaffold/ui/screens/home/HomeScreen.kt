@@ -29,9 +29,10 @@ fun HomeScreen(
     navDuel: () -> Unit = { },
     navQuiz: () -> Unit = { },
     navMap: () -> Unit = { },
-    navCollection: () -> Unit = { },
     navUsuario: () -> Unit = { },
-    navDeck: () -> Unit = { }
+    navCollection: () -> Unit = { },
+    navDeck: () -> Unit = { },
+    navQrScanner: () -> Unit = { }
 ) {
     val cacheProgress by viewModel.cachingProgress.collectAsStateWithLifecycle()
 
@@ -52,8 +53,9 @@ fun HomeScreen(
         navMap = navMap,
         navUsuario = navUsuario,
         navCollection = navCollection,
-        cacheProgress = { cacheProgress },
-        navDeck = navDeck
+        navQrScanner = navQrScanner,
+        navDeck = navDeck,
+        cacheProgress = { cacheProgress }
     )
 }
 
@@ -67,6 +69,7 @@ fun HomeUi(
     navMap: () -> Unit = { },
     navUsuario: () -> Unit = { },
     navCollection: () -> Unit = { },
+    navQrScanner: () -> Unit = { },
     cacheProgress: () -> Float = { 0f },
     navDeck: () -> Unit = {}
 ) {
@@ -119,6 +122,11 @@ fun HomeUi(
                 label = { "Mazos" }
             )
 
+            CustomButton(
+                modifier = navButtonModifier,
+                onClick = navQrScanner,
+                label = { "Obtener heroe QR" }
+            )
             CollectionButton(
                 modifier = navButtonModifier,
                 cacheProgress = cacheProgress,

@@ -27,6 +27,7 @@ import ar.edu.unlam.mobile.scaffold.ui.screens.heroduel.HeroDuelScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.home.HomeScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.MapScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.qr.QrScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.qrscanner.QrScannerScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.quiz.QuizScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.usuario.UsuarioScreen
 import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
@@ -67,6 +68,7 @@ fun MainScreen() {
                     navMap = { controller.navigate(route = "Mapa") },
                     navUsuario = { controller.navigate(route = "Usuario") },
                     navCollection = { controller.navigate(route = "collection") },
+                    navQrScanner = { controller.navigate(route = "QrScanner") },
                     navDeck = {controller.navigate(route = "deck")}
                 )
             }
@@ -119,8 +121,10 @@ fun MainScreen() {
                     )
                 }
             }
-
             composable("Usuario") {
+                UsuarioScreen(
+                    modifier = Modifier.padding(paddingValue).fillMaxSize()
+                )
                 UsuarioScreen(
                     modifier = Modifier.padding(paddingValue).fillMaxSize()
                 )
@@ -128,6 +132,13 @@ fun MainScreen() {
             composable("deck"){
                 DeckScreen(
                     modifier = Modifier.padding(paddingValue).fillMaxSize()
+                )
+            }
+            composable("QrScanner") {
+                QrScannerScreen(
+                    modifier = Modifier
+                        .padding(paddingValue)
+                        .fillMaxSize()
                 )
             }
         }
