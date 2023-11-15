@@ -133,37 +133,4 @@ fun GalleryItem(
     }
 }
 
-@Composable
-fun HeroCardDeck(
-    modifier: Modifier = Modifier,
-    hero: HeroModel = HeroModel(),
-    cardColors: CardColors = playerCardColor(),
-    content: @Composable (ColumnScope.() -> Unit) = {}
-) {
-    ElevatedCard(
-        modifier = modifier
-            .border(width = 1.dp, color = Color.Black, shape = RectangleShape),
-        colors = cardColors,
-        shape = RectangleShape
-    ) {
-        // row { infiniteTransition (jojo) HeroImage infiniteTransition (jojo) }
-        // AnimatedContent para intercambiar UIs, CrossFade es una manera más simple que AnimatedContent
-        HeroImage(
-            modifier = Modifier
-                .padding(8.dp)
-                .size(160.dp)
-                .border(width = 1.dp, color = Color.Black)
-                .align(Alignment.CenterHorizontally),
-            url = hero.image.url,
-            contentScale = ContentScale.Crop
-        )
-        CustomTextLabelMedium(
-            modifier = Modifier
-                .padding(1.dp)
-                .align(Alignment.CenterHorizontally),
-            text = { hero.name }
-        )
-        content()
-    }
-}
 
