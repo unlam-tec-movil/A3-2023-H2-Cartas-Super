@@ -11,12 +11,6 @@ interface DeckDao {
     @Query("SELECT * FROM deck_table ORDER BY id")
     suspend fun getAll(): List<DeckEntity>
 
-    @Query("SELECT * FROM deck_table WHERE id is :id")
-    suspend fun getDeck(id: Int): DeckEntity
-
     @Insert
     suspend fun insertDeck(deck: DeckEntity)
-
-    @Insert
-    suspend fun insertDeckList(deckList: List<DeckEntity>)
 }
