@@ -9,6 +9,7 @@ import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
 import ar.edu.unlam.mobile.scaffold.data.network.model.Powerstats
 import ar.edu.unlam.mobile.scaffold.data.network.model.toHeroEntityModel
 import ar.edu.unlam.mobile.scaffold.data.network.model.toHeroModel
+import ar.edu.unlam.mobile.scaffold.domain.model.DeckModel
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -71,6 +72,19 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
             }
             list
         }
+    }
+
+    override suspend fun getRandomDeck(): DeckModel {
+        val list = getRandomPlayerDeck(6)
+        return DeckModel(
+            id = null,
+            carta1 = list[0],
+            carta2 = list[1],
+            carta3 = list[2],
+            carta4 = list[3],
+            carta5 = list[4],
+            carta6 = list[5]
+        )
     }
     private fun formatDataHero(h: HeroApiModel): HeroApiModel {
         return if (isPowerStatsNull(h)) convertNullPowerstatsToNotNull(h) else h

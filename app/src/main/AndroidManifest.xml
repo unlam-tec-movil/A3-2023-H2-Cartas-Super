@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 
     <!-- Permiso de notificaciones -->
@@ -16,13 +18,17 @@
         android:required="false" />
 
     <uses-feature android:name="android.hardware.screen.portrait" />
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="false" />
-    <uses-feature android:name="android.hardware.sensor.gyroscope" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.sensor.gyroscope"
+        android:required="false" />
 
 
     <application
         android:name=".ScaffoldApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_comic_war"
@@ -34,7 +40,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyCfcwo2LEBJ11aiW3bxZ9tUujYULXI-GN8" />
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
