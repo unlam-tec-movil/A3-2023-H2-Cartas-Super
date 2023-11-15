@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,7 +36,7 @@ import com.google.zxing.common.BitMatrix
 @Composable
 fun QrScreen(
     modifier: Modifier = Modifier,
-    controller: NavHostController,
+    //controller: NavHostController,
     viewModel: QrScreenViewModel = hiltViewModel(),
     heroID: Int = 1
 ) {
@@ -53,7 +54,9 @@ fun QrScreen(
                 painter = painterResource(id = R.drawable.fondo_coleccion),
                 contentDescription = "Pantalla detalles del héroe",
                 contentScale = ContentScale.FillBounds,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .testTag("TestQRScreen pantalla fondo")
             )
             Column(
                 modifier = Modifier
@@ -61,19 +64,23 @@ fun QrScreen(
             ) {
                 HeroImage(
                     modifier = Modifier
+                        .testTag("TestQRScreen imagen heroe")
                         .padding(8.dp)
                         .align(Alignment.CenterHorizontally)
                         .size(300.dp),
                     url = hero.image.url,
                     contentScale = ContentScale.FillWidth
                 )
-                HeroText(modifier = titleTextModifier, text = "${hero.id} ${hero.name}")
+                HeroText(modifier = titleTextModifier
+                    .testTag("TestQRScreen nombre heroe")
+                    , text = "${hero.id} ${hero.name}")
 
                 Image(
                     bitmap = qrCodeBitmap, // Utilizamos el código QR generado
                     contentDescription = "Código QR del héroe",
                     contentScale = ContentScale.FillHeight,
                     modifier = Modifier.fillMaxSize()
+                        .testTag("TestQRScreen imagen qr")
                         .padding(32.dp)
                         .size(300.dp)
 

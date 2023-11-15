@@ -67,7 +67,9 @@ fun DeckScreen(
                 painter = painterResource(id = R.drawable.fondo_mazo_azul),
                 contentDescription = "Pantalla detalles del héroe",
                 contentScale = ContentScale.FillBounds,
-                modifier = Modifier.fillMaxSize().testTag("TestDeckScreen pantalla fondo")
+                modifier = Modifier
+                    .fillMaxSize()
+                    .testTag("TestDeckScreen pantalla fondo")
             )
         }
         LazyColumn(

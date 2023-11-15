@@ -107,7 +107,7 @@ fun MainScreen() {
                 val heroID = navBackStackEntry.arguments?.getInt("heroID") ?: 1
                 QrScreen(
                     modifier = Modifier.padding(paddingValue),
-                    controller = controller,
+                    //controller = controller,
                     heroID = heroID
                 )
             }
