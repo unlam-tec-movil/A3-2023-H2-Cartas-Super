@@ -34,11 +34,13 @@ class HeroDetailViewModelImp @Inject constructor(
             orientationDataManager.getSensorData().collect {
                 _sensorData.value = it
             }
+            _isLoading.value = false
         }
     }
 
     fun getHero(heroID: Int) {
         viewModelScope.launch {
+            _isLoading.value = true
             _hero.value = withContext(Dispatchers.IO) {
                 repo.getHero(heroID)
             }

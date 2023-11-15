@@ -1,9 +1,6 @@
-package ar.edu.unlam.mobile.scaffold.network
+package ar.edu.unlam.mobile.scaffold.data.network
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import ar.edu.unlam.mobile.scaffold.data.network.HeroService
-import ar.edu.unlam.mobile.scaffold.data.network.HeroServiceException
-import ar.edu.unlam.mobile.scaffold.data.network.IHeroApiClient
 import com.google.common.truth.Truth.assertThat
 import io.mockk.junit4.MockKRule
 import kotlinx.coroutines.test.runTest

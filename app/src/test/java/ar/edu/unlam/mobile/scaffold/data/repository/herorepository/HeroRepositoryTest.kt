@@ -1,12 +1,10 @@
-package ar.edu.unlam.mobile.scaffold.repository
+package ar.edu.unlam.mobile.scaffold.data.repository.herorepository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
 import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
-import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.HeroRepository
-import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.HeroRepositoryException
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery

@@ -1,16 +1,18 @@
-package ar.edu.unlam.mobile.scaffold.heroDetail
+package ar.edu.unlam.mobile.scaffold.ui.screens.herodetail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ar.edu.unlam.mobile.scaffold.MainDispatcherRule
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.IOrientationDataManager
+import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
-import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailViewModelImp
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit4.MockKRule
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -36,26 +38,19 @@ class HeroDetailViewModelImpTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule() // leer la descripción de la clase
 
-    /*
-        @relaxedmockk
-        se pueden mockear manualmente los métodos que necesitamos y el resto se genera
-        automáticamente.
-
-        @mockk
-        debemos generar manualmente una respuesta para todos los métodos.
-     */
-
     @RelaxedMockK
     lateinit var repo: IHeroRepository
 
     @RelaxedMockK
-    lateinit var sensorDataManager: IOrientationDataManager
+    lateinit var orientationDataManager: IOrientationDataManager
 
     lateinit var viewModel: HeroDetailViewModelImp
 
     @Before
     fun setUp() {
-        viewModel = HeroDetailViewModelImp(repo, sensorDataManager)
+        coEvery { repo.getHero(1) } returns HeroModel(id = 1, name = "Mr. Test")
+        every { orientationDataManager.getSensorData() } returns flow { emit(SensorData(0f, 0f)) }
+        viewModel = HeroDetailViewModelImp(repo, orientationDataManager)
     }
 
     // runTest es una corutina para testing, lo que permite usar funciones suspend
@@ -63,15 +58,40 @@ class HeroDetailViewModelImpTest {
     @Test
     fun whenPassingAnId_returnTheCorrectHero() = runTest {
         val expectedHero = HeroModel(id = 1, name = "Mr. Test")
-        coEvery { repo.getHero(1) } returns expectedHero
 
+        while (viewModel.isLoading.value) {
+            delay(500)
+        }
         viewModel.getHero(1)
-        val isLoading = viewModel.isLoading
-        while (isLoading.value) {
-            delay(100L)
+        while (viewModel.isLoading.value) {
+            delay(500)
         }
         val hero = viewModel.hero.value
 
         assertThat(hero).isEqualTo(expectedHero)
+    }
+
+    @Test
+    fun getSensorData() {
+    }
+
+    @Test
+    fun getHero() {
+    }
+
+    @Test
+    fun isLoading() {
+    }
+
+    @Test
+    fun testGetHero() {
+    }
+
+    @Test
+    fun cancelSensorDataFlow() {
+    }
+
+    @Test
+    fun onCleared() {
     }
 }
