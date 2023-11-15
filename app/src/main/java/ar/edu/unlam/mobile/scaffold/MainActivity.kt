@@ -21,11 +21,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ar.edu.unlam.mobile.scaffold.ui.screens.collection.CollectionScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.deck.DeckScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.heroduel.HeroDuelScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.home.HomeScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.map.MapScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.qr.QrScreen
+import ar.edu.unlam.mobile.scaffold.ui.screens.qrscanner.QrScannerScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.quiz.QuizScreen
 import ar.edu.unlam.mobile.scaffold.ui.screens.usuario.UsuarioScreen
 import ar.edu.unlam.mobile.scaffold.ui.theme.ComicWarTheme
@@ -65,7 +67,9 @@ fun MainScreen() {
                     navQuiz = { controller.navigate(route = "quiz") },
                     navMap = { controller.navigate(route = "Mapa") },
                     navUsuario = { controller.navigate(route = "Usuario") },
-                    navCollection = { controller.navigate(route = "collection") }
+                    navCollection = { controller.navigate(route = "collection") },
+                    navQrScanner = { controller.navigate(route = "QrScanner") },
+                    navDeck = {controller.navigate(route = "deck")}
                 )
             }
             composable("collection") {
@@ -81,7 +85,7 @@ fun MainScreen() {
                 val heroID = navBackStackEntry.arguments?.getInt("heroid") ?: 1
                 HeroDetailScreen(
                     modifier = Modifier.padding(paddingValue),
-                    navigateToQR = { controller.navigate(route = "qr") },
+                    navigateToQR = { controller.navigate(route = "qr/$heroID") },
                     heroID = heroID
                 )
             }
@@ -96,10 +100,16 @@ fun MainScreen() {
                     modifier = Modifier.padding(paddingValue).fillMaxSize()
                 )
             }
-            composable("qr") {
+            composable(
+                route = "qr/{heroID}",
+                arguments = listOf(navArgument("heroID") { type = NavType.IntType }),
+            ) {
+                    navBackStackEntry ->
+                val heroID = navBackStackEntry.arguments?.getInt("heroID") ?: 1
                 QrScreen(
                     modifier = Modifier.padding(paddingValue),
-                    controller = controller
+                    // controller = controller,
+                    heroID = heroID
                 )
             }
             composable("Mapa") {
@@ -114,6 +124,21 @@ fun MainScreen() {
             composable("Usuario") {
                 UsuarioScreen(
                     modifier = Modifier.padding(paddingValue).fillMaxSize()
+                )
+                UsuarioScreen(
+                    modifier = Modifier.padding(paddingValue).fillMaxSize()
+                )
+            }
+            composable("deck"){
+                DeckScreen(
+                    modifier = Modifier.padding(paddingValue).fillMaxSize()
+                )
+            }
+            composable("QrScanner") {
+                QrScannerScreen(
+                    modifier = Modifier
+                        .padding(paddingValue)
+                        .fillMaxSize()
                 )
             }
         }
