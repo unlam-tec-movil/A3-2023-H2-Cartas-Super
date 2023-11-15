@@ -1,6 +1,7 @@
 package ar.edu.unlam.mobile.scaffold.ui.components
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -97,15 +98,20 @@ fun MazoPersonalizado(
     modifier: Modifier = Modifier,
     listaURL: List<String> = emptyList()
 ) {
-    Row(
+    val imagemMod = Modifier.size(50.dp)
+    Column(
         modifier = modifier
     ) {
-        HeroImage(url = listaURL[0])
-        HeroImage(url = listaURL[1])
-        HeroImage(url = listaURL[2])
-        HeroImage(url = listaURL[3])
-        HeroImage(url = listaURL[4])
-        HeroImage(url = listaURL[5])
+        Row {
+            HeroImage(modifier = imagemMod, url = listaURL[0])
+            HeroImage(modifier = imagemMod, url = listaURL[1])
+            HeroImage(modifier = imagemMod, url = listaURL[2])
+        }
+        Row {
+            HeroImage(modifier = imagemMod, url = listaURL[3])
+            HeroImage(modifier = imagemMod, url = listaURL[4])
+            HeroImage(modifier = imagemMod, url = listaURL[5])
+        }
     }
 }
 private fun obtenerLista(deck: DeckModel): List<String> {
