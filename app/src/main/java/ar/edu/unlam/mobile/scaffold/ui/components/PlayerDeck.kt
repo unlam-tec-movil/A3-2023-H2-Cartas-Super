@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -20,6 +23,7 @@ import ar.edu.unlam.mobile.scaffold.domain.model.DeckModel
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroImage
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroStats
+import ar.edu.unlam.mobile.scaffold.ui.components.hero.playerCardColor
 
 @Preview(showBackground = true)
 @Composable
@@ -96,21 +100,66 @@ fun ListaMazosPersonalizados(
 @Composable
 fun MazoPersonalizado(
     modifier: Modifier = Modifier,
-    listaURL: List<String> = emptyList()
+    listaURL: List<String> = emptyList(),
+    cardColors: CardColors = playerCardColor()
 ) {
-    val imagemMod = Modifier.size(50.dp)
+    val imagemMod = Modifier.size(100.dp)
     Column(
         modifier = modifier
     ) {
-        Row {
-            HeroImage(modifier = imagemMod, url = listaURL[0])
-            HeroImage(modifier = imagemMod, url = listaURL[1])
-            HeroImage(modifier = imagemMod, url = listaURL[2])
-        }
-        Row {
-            HeroImage(modifier = imagemMod, url = listaURL[3])
-            HeroImage(modifier = imagemMod, url = listaURL[4])
-            HeroImage(modifier = imagemMod, url = listaURL[5])
+        Card(modifier = modifier) {
+            Row {
+                ElevatedCard(
+                    modifier = modifier
+                        .border(width = 1.dp, color = Color.Black, shape = RectangleShape),
+                    colors = cardColors,
+                    shape = RectangleShape
+                ) {
+                    HeroImage(modifier = imagemMod, url = listaURL[0])
+                }
+                ElevatedCard(
+                    modifier = modifier
+                        .border(width = 1.dp, color = Color.Black, shape = RectangleShape),
+                    colors = cardColors,
+                    shape = RectangleShape
+                ) {
+                    HeroImage(modifier = imagemMod, url = listaURL[1])
+                }
+                ElevatedCard(
+                    modifier = modifier
+                        .border(width = 1.dp, color = Color.Black, shape = RectangleShape),
+                    colors = cardColors,
+                    shape = RectangleShape
+                ) {
+                    HeroImage(modifier = imagemMod, url = listaURL[2])
+                }
+            }
+            Row {
+                ElevatedCard(
+                    modifier = modifier
+                        .border(width = 1.dp, color = Color.Black, shape = RectangleShape),
+                    colors = cardColors,
+                    shape = RectangleShape
+                ) {
+                    HeroImage(modifier = imagemMod, url = listaURL[3])
+                }
+                ElevatedCard(
+                    modifier = modifier
+                        .border(width = 1.dp, color = Color.Black, shape = RectangleShape),
+                    colors = cardColors,
+                    shape = RectangleShape
+                ) {
+                    HeroImage(modifier = imagemMod, url = listaURL[4])
+                }
+                ElevatedCard(
+                    modifier = modifier
+                        .border(width = 1.dp, color = Color.Black, shape = RectangleShape),
+                    colors = cardColors,
+                    shape = RectangleShape
+                ) {
+                    HeroImage(modifier = imagemMod, url = listaURL[5])
+                }
+            }
         }
     }
 }
