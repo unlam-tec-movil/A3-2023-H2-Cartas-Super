@@ -121,9 +121,14 @@ fun QrSuccessUi(
                 hero = hero
             ) {
                 HeroStats(
+                    modifier = Modifier.padding(3.dp),
                     stats = { hero.stats }
                 )
             }
+            CustomTitle(
+                modifier = Modifier.padding(5.dp),
+                text = { "Cantidad actual: ${hero.quantity}" }
+            )
         }
     }
 }

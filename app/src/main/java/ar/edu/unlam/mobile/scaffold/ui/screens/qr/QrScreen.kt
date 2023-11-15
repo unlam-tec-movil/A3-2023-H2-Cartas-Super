@@ -42,6 +42,14 @@ fun QrScreen(
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     Box(modifier = modifier) {
+        Image(
+            painter = painterResource(id = R.drawable.fondo_coleccion),
+            contentDescription = "Pantalla detalles del héroe",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag("TestQRScreen pantalla fondo")
+        )
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
@@ -50,14 +58,6 @@ fun QrScreen(
             val titleTextModifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth()
-            Image(
-                painter = painterResource(id = R.drawable.fondo_coleccion),
-                contentDescription = "Pantalla detalles del héroe",
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .testTag("TestQRScreen pantalla fondo")
-            )
             Column(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState())

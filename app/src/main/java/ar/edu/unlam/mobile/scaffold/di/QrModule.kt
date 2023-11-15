@@ -21,7 +21,7 @@ object QrModule {
     @ViewModelScoped
     @Provides
     fun providesQrConfiguration() = GmsBarcodeScannerOptions.Builder()
-        .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
+        .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
         .enableAutoZoom()
         .build()
 
