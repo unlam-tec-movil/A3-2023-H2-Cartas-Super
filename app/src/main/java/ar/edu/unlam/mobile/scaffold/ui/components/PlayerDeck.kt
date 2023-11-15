@@ -1,6 +1,8 @@
 package ar.edu.unlam.mobile.scaffold.ui.components
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,6 +16,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ar.edu.unlam.mobile.scaffold.domain.model.DeckModel
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroImage
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroStats
@@ -70,3 +73,55 @@ fun DeckItem(
         )
     }
 }
+
+@Composable
+fun ListaMazosPersonalizados(
+    modifier: Modifier = Modifier,
+    deckList: List<DeckModel> = emptyList()
+) {
+    val tamanioLista = deckList.size
+    LazyColumn(
+        modifier = modifier,
+        content = {
+            items(tamanioLista) { i ->
+                MazoPersonalizado(
+                    modifier = Modifier.padding(8.dp),
+                    listaURL = obtenerLista(deckList[i])
+                )
+            }
+        }
+    )
+}
+
+@Composable
+fun MazoPersonalizado(
+    modifier: Modifier = Modifier,
+    listaURL: List<String> = emptyList()
+) {
+    val imagemMod = Modifier.size(50.dp)
+    Column(
+        modifier = modifier
+    ) {
+        Row {
+            HeroImage(modifier = imagemMod, url = listaURL[0])
+            HeroImage(modifier = imagemMod, url = listaURL[1])
+            HeroImage(modifier = imagemMod, url = listaURL[2])
+        }
+        Row {
+            HeroImage(modifier = imagemMod, url = listaURL[3])
+            HeroImage(modifier = imagemMod, url = listaURL[4])
+            HeroImage(modifier = imagemMod, url = listaURL[5])
+        }
+    }
+}
+private fun obtenerLista(deck: DeckModel): List<String> {
+    val lista = mutableListOf<String>()
+    lista.add(deck.carta1.image.url)
+    lista.add(deck.carta2.image.url)
+    lista.add(deck.carta3.image.url)
+    lista.add(deck.carta4.image.url)
+    lista.add(deck.carta5.image.url)
+    lista.add(deck.carta6.image.url)
+    return lista
+}
+

@@ -30,7 +30,8 @@ fun HomeScreen(
     navQuiz: () -> Unit = { },
     navMap: () -> Unit = { },
     navCollection: () -> Unit = { },
-    navUsuario: () -> Unit = { }
+    navUsuario: () -> Unit = { },
+    navDeck: () -> Unit = { }
 ) {
     val cacheProgress by viewModel.cachingProgress.collectAsStateWithLifecycle()
 
@@ -51,7 +52,8 @@ fun HomeScreen(
         navMap = navMap,
         navUsuario = navUsuario,
         navCollection = navCollection,
-        cacheProgress = { cacheProgress }
+        cacheProgress = { cacheProgress },
+        navDeck = navDeck
     )
 }
 
@@ -65,7 +67,8 @@ fun HomeUi(
     navMap: () -> Unit = { },
     navUsuario: () -> Unit = { },
     navCollection: () -> Unit = { },
-    cacheProgress: () -> Float = { 0f }
+    cacheProgress: () -> Float = { 0f },
+    navDeck: () -> Unit = {}
 ) {
     val navButtonModifier = Modifier
         .wrapContentSize()
@@ -108,6 +111,12 @@ fun HomeUi(
                 modifier = navButtonModifier.testTag("nav usuario button"),
                 onClick = navUsuario,
                 label = { "Usuario" }
+            )
+
+            CustomButton(
+                modifier = navButtonModifier.testTag("nav deck button"),
+                onClick = navDeck,
+                label = { "Mazos" }
             )
 
             CollectionButton(

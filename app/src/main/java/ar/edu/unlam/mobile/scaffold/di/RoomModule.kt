@@ -2,6 +2,7 @@ package ar.edu.unlam.mobile.scaffold.di
 
 import android.content.Context
 import androidx.room.Room
+import ar.edu.unlam.mobile.scaffold.data.database.DeckDatabase
 import ar.edu.unlam.mobile.scaffold.data.database.GuestDataBase
 import ar.edu.unlam.mobile.scaffold.data.database.HeroDataBase
 import dagger.Module
@@ -17,6 +18,7 @@ object RoomModule {
 
     private const val HERO_DATABASE_NAME = "hero_database"
     private const val GUEST_DATABASE_NAME = "usuario_database"
+    private const val DECK_DATABASE_NAME = "deck_database"
 
     @Singleton
     @Provides
@@ -44,4 +46,16 @@ object RoomModule {
     @Provides
     fun provideGuestDao(db: GuestDataBase) = db.getGuestDao()
 
+    @Singleton
+    @Provides
+    fun provideDeckRoom(@ApplicationContext context: Context) =
+        Room.databaseBuilder(
+            context = context,
+            klass = DeckDatabase::class.java,
+            name = DECK_DATABASE_NAME
+        ).build()
+
+    @Singleton
+    @Provides
+    fun provideDeckDao(db: DeckDatabase) = db.getDeckDao()
 }
