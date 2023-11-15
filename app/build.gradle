@@ -66,6 +66,7 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.7.2'
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.test:rules:1.5.0'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1'
@@ -152,8 +153,12 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
 
     //Map
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'com.google.maps.android:maps-compose:2.11.4'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation "com.google.accompanist:accompanist-permissions:0.33.2-alpha"
+
+
 
     //Camara (Permisos)
     implementation "com.google.accompanist:accompanist-permissions:0.29.1-alpha"

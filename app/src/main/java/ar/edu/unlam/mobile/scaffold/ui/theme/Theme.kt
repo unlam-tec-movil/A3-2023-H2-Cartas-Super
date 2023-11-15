@@ -85,7 +85,7 @@ fun ComicWarTheme(
     //dynamicColor: Boolean = true,
     content:
     @Composable()
-    () -> Unit
+        () -> Unit
 ) {
     val colors = if (!usesDarkTheme) {
         lightColors
@@ -163,4 +163,3 @@ fun ComicWarTheme2(
         content = content
     )
 }
-
