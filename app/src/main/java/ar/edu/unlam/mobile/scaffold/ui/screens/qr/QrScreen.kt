@@ -24,11 +24,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.ui.components.HeroText
 import ar.edu.unlam.mobile.scaffold.ui.components.hero.HeroImage
-import ar.edu.unlam.mobile.scaffold.ui.screens.herodetail.HeroDetailViewModelImp
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
@@ -36,20 +34,22 @@ import com.google.zxing.common.BitMatrix
 @Composable
 fun QrScreen(
     modifier: Modifier = Modifier,
-    //controller: NavHostController,
+    // controller: NavHostController,
     viewModel: QrScreenViewModel = hiltViewModel(),
     heroID: Int = 1
 ) {
     viewModel.getHero(heroID)
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
-    val qrCodeBitmap = generateQRCode("heroID:$heroID", 300)
 
     Box(modifier = modifier) {
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
             val hero by viewModel.hero.collectAsStateWithLifecycle()
-            val titleTextModifier = Modifier.padding(8.dp).fillMaxWidth()
+            val qrCodeBitmap = generateQRCode("${hero.id}\n${hero.name}", 300)
+            val titleTextModifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
             Image(
                 painter = painterResource(id = R.drawable.fondo_coleccion),
                 contentDescription = "Pantalla detalles del héroe",
@@ -71,15 +71,18 @@ fun QrScreen(
                     url = hero.image.url,
                     contentScale = ContentScale.FillWidth
                 )
-                HeroText(modifier = titleTextModifier
-                    .testTag("TestQRScreen nombre heroe")
-                    , text = "${hero.id} ${hero.name}")
+                HeroText(
+                    modifier = titleTextModifier
+                        .testTag("TestQRScreen nombre heroe"),
+                    text = "${hero.id} ${hero.name}"
+                )
 
                 Image(
                     bitmap = qrCodeBitmap, // Utilizamos el código QR generado
                     contentDescription = "Código QR del héroe",
                     contentScale = ContentScale.FillHeight,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .testTag("TestQRScreen imagen qr")
                         .padding(32.dp)
                         .size(300.dp)
