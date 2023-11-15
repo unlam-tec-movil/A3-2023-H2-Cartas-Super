@@ -1,8 +1,6 @@
-package ar.edu.unlam.mobile.scaffold.cardgame
+package ar.edu.unlam.mobile.scaffold.domain.cardgame
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
-import ar.edu.unlam.mobile.scaffold.domain.cardgame.Stat
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
 import ar.edu.unlam.mobile.scaffold.domain.model.StatModel
 import com.google.common.truth.Truth.assertThat

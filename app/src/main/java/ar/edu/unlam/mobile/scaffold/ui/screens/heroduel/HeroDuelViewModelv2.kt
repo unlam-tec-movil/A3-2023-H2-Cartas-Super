@@ -2,8 +2,8 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.heroduel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ar.edu.unlam.mobile.scaffold.data.repository.GameRepository
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
+import ar.edu.unlam.mobile.scaffold.data.repository.gamerepository.IGameRepository
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.CardGame
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.Stat
 import ar.edu.unlam.mobile.scaffold.domain.cardgame.Winner
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HeroDuelViewModelv2 @Inject constructor(
-    private val repo: GameRepository,
+    private val repo: IGameRepository,
     private val heroRepo: IHeroRepository
 ) : ViewModel() {
 

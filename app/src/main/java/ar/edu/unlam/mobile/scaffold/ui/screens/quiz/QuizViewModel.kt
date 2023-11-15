@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+// quitadas las interfaces de los viewmodels ya que, hilt solamente soporta viewModels que solamente
+// hereden de ViewModel y que no implementen interfaces.
 @HiltViewModel
 class QuizViewModel @Inject constructor(
     private val repo: IQuizGameRepository,
