@@ -3,7 +3,9 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
@@ -84,7 +86,6 @@ fun HomeUi(
             painterResourceId = R.drawable.pantalla_principal,
             data = sensorData
         )
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -92,40 +93,46 @@ fun HomeUi(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom
         ) {
-            CustomButton(
-                modifier = navButtonModifier.testTag("nav duel button"),
-                onClick = navDuel,
-                label = { "Duelo" }
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                CustomButton(
+                    modifier = navButtonModifier.testTag("nav duel button"),
+                    onClick = navDuel,
+                    label = { "Duelo" }
+                )
 
-            CustomButton(
-                modifier = navButtonModifier.testTag("nav quiz button"),
-                onClick = navQuiz,
-                label = { "Quiz" }
-            )
-
-            CustomButton(
-                modifier = navButtonModifier.testTag("nav map button"),
-                onClick = navMap,
-                label = { "Mapa" }
-            )
-
+                CustomButton(
+                    modifier = navButtonModifier.testTag("nav quiz button"),
+                    onClick = navQuiz,
+                    label = { "Quiz" }
+                )
+                CustomButton(
+                    modifier = navButtonModifier.testTag("nav deck button"),
+                    onClick = navDeck,
+                    label = { "Mazos" }
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                CustomButton(
+                    modifier = navButtonModifier,
+                    onClick = navQrScanner,
+                    label = { "Obtener heroe QR" }
+                )
+                CustomButton(
+                    modifier = navButtonModifier.testTag("nav map button"),
+                    onClick = navMap,
+                    label = { "Mapa" }
+                )
+            }
             CustomButton(
                 modifier = navButtonModifier.testTag("nav usuario button"),
                 onClick = navUsuario,
                 label = { "Usuario" }
-            )
-
-            CustomButton(
-                modifier = navButtonModifier.testTag("nav deck button"),
-                onClick = navDeck,
-                label = { "Mazos" }
-            )
-
-            CustomButton(
-                modifier = navButtonModifier,
-                onClick = navQrScanner,
-                label = { "Obtener heroe QR" }
             )
             CollectionButton(
                 modifier = navButtonModifier,

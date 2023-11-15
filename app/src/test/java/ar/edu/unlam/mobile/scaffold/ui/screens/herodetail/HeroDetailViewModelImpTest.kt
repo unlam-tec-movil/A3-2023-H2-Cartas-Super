@@ -71,6 +71,7 @@ class HeroDetailViewModelImpTest {
         assertThat(hero).isEqualTo(expectedHero)
     }
 
+    /*
     @Test
     fun getSensorData() {
     }
@@ -93,5 +94,5 @@ class HeroDetailViewModelImpTest {
 
     @Test
     fun onCleared() {
-    }
+    }*/
 }
