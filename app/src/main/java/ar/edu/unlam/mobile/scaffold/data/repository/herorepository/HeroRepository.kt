@@ -2,7 +2,6 @@ package ar.edu.unlam.mobile.scaffold.data.repository.herorepository
 
 import ar.edu.unlam.mobile.scaffold.data.database.dao.HeroDao
 import ar.edu.unlam.mobile.scaffold.data.database.entities.HeroEntity
-import ar.edu.unlam.mobile.scaffold.data.database.entities.ImageEntity
 import ar.edu.unlam.mobile.scaffold.data.database.entities.toHeroModel
 import ar.edu.unlam.mobile.scaffold.data.network.HeroService
 import ar.edu.unlam.mobile.scaffold.data.network.model.HeroApiModel
@@ -10,7 +9,6 @@ import ar.edu.unlam.mobile.scaffold.data.network.model.Powerstats
 import ar.edu.unlam.mobile.scaffold.data.network.model.toHeroEntityModel
 import ar.edu.unlam.mobile.scaffold.data.network.model.toHeroModel
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
-import ar.edu.unlam.mobile.scaffold.domain.model.ImageModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -119,28 +117,4 @@ class HeroRepository @Inject constructor(private val api: HeroService, private v
 
         return heroList
     }
-
-    suspend fun saveCardsToDatabase(cards: List<HeroModel>) {
-
-        val heroEntities = cards.map { heroModel ->
-            HeroEntity(
-                id = heroModel.id,
-                name = heroModel.name,
-                image = ImageEntity()
-            )
-        }
-
-        dataBase.insertHeroes(heroEntities)
-    }
-
-
-    suspend fun getSavedCards(quantity: Int): List<HeroModel> {
-        val heroEntities = dataBase.getAllDeck(quantity)
-        return heroEntities.map { heroEntity ->
-            heroEntity.toHeroModel()
-        }
-    }
-
 }
-
-

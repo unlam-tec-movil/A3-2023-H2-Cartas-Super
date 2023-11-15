@@ -6,28 +6,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffold.R
 import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomButton
 import ar.edu.unlam.mobile.scaffold.ui.components.CustomProgressBarWithDots
 import ar.edu.unlam.mobile.scaffold.ui.components.ParallaxBackgroundImage
-import ar.edu.unlam.mobile.scaffold.ui.theme.shaka_pow
 
 @Composable
 fun HomeScreen(
@@ -37,8 +30,7 @@ fun HomeScreen(
     navQuiz: () -> Unit = { },
     navMap: () -> Unit = { },
     navCollection: () -> Unit = { },
-    navUsuario: () -> Unit = { },
-    navDeck: () -> Unit = { }
+    navUsuario: () -> Unit = { }
 ) {
     val cacheProgress by viewModel.cachingProgress.collectAsStateWithLifecycle()
 
@@ -57,7 +49,6 @@ fun HomeScreen(
         navDuel = navDuel,
         navQuiz = navQuiz,
         navMap = navMap,
-        navDeck = navDeck,
         navUsuario = navUsuario,
         navCollection = navCollection,
         cacheProgress = { cacheProgress }
@@ -74,8 +65,7 @@ fun HomeUi(
     navMap: () -> Unit = { },
     navUsuario: () -> Unit = { },
     navCollection: () -> Unit = { },
-    cacheProgress: () -> Float = { 0f },
-    navDeck: () -> Unit = { }
+    cacheProgress: () -> Float = { 0f }
 ) {
     val navButtonModifier = Modifier
         .wrapContentSize()
@@ -112,13 +102,6 @@ fun HomeUi(
                 modifier = navButtonModifier.testTag("nav map button"),
                 onClick = navMap,
                 label = { "Mapa" }
-            )
-
-            CustomButton(
-                modifier = navButtonModifier.testTag("nav deck button"),
-                onClick = navDeck,
-                label = { "Deck" }
-
             )
 
             CustomButton(
