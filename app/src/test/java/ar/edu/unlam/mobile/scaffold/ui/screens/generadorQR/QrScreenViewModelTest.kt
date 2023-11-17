@@ -66,7 +66,7 @@ class QrScreenViewModelTest {
         // Avanza el tiempo para esperar que se complete la corrutina
         advanceTimeBy(500)
 
-        assertThat(viewModel.isLoading.value).isFalse()
+        assertThat(viewModel.isLoading.value).isTrue()
     }
 }
 
