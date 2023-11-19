@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -13,6 +14,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
@@ -69,7 +71,7 @@ fun MainScreen() {
                     navUsuario = { controller.navigate(route = "Usuario") },
                     navCollection = { controller.navigate(route = "collection") },
                     navQrScanner = { controller.navigate(route = "QrScanner") },
-                    navDeck = {controller.navigate(route = "deck")}
+                    navDeck = { controller.navigate(route = "deck") }
                 )
             }
             composable("collection") {
@@ -97,7 +99,9 @@ fun MainScreen() {
             }
             composable("duel") {
                 HeroDuelScreen(
-                    modifier = Modifier.padding(paddingValue).fillMaxSize()
+                    modifier = Modifier
+                        .padding(paddingValue)
+                        .fillMaxSize()
                 )
             }
             composable(
@@ -113,25 +117,36 @@ fun MainScreen() {
                 )
             }
             composable("Mapa") {
+                // Si la versión de android del dispositivo es menor que S, no mostrar el botón mapa
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     MapScreen(
                         modifier = Modifier.padding(paddingValue),
                         controller = controller,
 
                     )
+                } else {
+                    Column(modifier = Modifier.padding(paddingValue)) {
+                        Text(text = "Mapa no disponible en esta versión de android.")
+                    }
                 }
             }
             composable("Usuario") {
                 UsuarioScreen(
-                    modifier = Modifier.padding(paddingValue).fillMaxSize()
+                    modifier = Modifier
+                        .padding(paddingValue)
+                        .fillMaxSize()
                 )
                 UsuarioScreen(
-                    modifier = Modifier.padding(paddingValue).fillMaxSize()
+                    modifier = Modifier
+                        .padding(paddingValue)
+                        .fillMaxSize()
                 )
             }
-            composable("deck"){
+            composable("deck") {
                 DeckScreen(
-                    modifier = Modifier.padding(paddingValue).fillMaxSize()
+                    modifier = Modifier
+                        .padding(paddingValue)
+                        .fillMaxSize()
                 )
             }
             composable("QrScanner") {

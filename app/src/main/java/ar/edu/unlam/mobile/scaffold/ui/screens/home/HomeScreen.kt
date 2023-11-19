@@ -1,5 +1,6 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.home
 
+import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -123,11 +124,14 @@ fun HomeUi(
                     onClick = navQrScanner,
                     label = { "Obtener heroe QR" }
                 )
-                CustomButton(
-                    modifier = navButtonModifier.testTag("nav map button"),
-                    onClick = navMap,
-                    label = { "Mapa" }
-                )
+                // Si la versión de android del dispositivo es menor que S, no mostrar el botón mapa
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    CustomButton(
+                        modifier = navButtonModifier.testTag("nav map button"),
+                        onClick = navMap,
+                        label = { "Mapa" }
+                    )
+                }
             }
             CustomButton(
                 modifier = navButtonModifier.testTag("nav usuario button"),
