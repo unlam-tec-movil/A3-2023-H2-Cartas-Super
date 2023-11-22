@@ -17,7 +17,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class DeckViewModelTest {
+class DeckViewModelTestMarcos {
 
     @get:Rule
     val mockkRule = MockKRule(this)
