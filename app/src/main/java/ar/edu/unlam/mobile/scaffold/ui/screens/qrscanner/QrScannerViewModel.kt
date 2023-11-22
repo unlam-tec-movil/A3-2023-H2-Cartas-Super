@@ -2,8 +2,8 @@ package ar.edu.unlam.mobile.scaffold.ui.screens.qrscanner
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ar.edu.unlam.mobile.scaffold.data.qrmanager.HeroQrManager
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
-import ar.edu.unlam.mobile.scaffold.domain.qrmanager.HeroQrManager
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

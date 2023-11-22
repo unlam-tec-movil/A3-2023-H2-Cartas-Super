@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffold.domain.qrmanager
+package ar.edu.unlam.mobile.scaffold.data.qrmanager
 
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
 import ar.edu.unlam.mobile.scaffold.domain.model.HeroModel
