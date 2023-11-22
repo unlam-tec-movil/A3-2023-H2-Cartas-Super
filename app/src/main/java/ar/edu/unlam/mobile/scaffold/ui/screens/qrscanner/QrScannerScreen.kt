@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,7 +48,10 @@ fun QrScannerScreen(
         when (state) {
             QrScannerUiState.Cancelled -> {
                 QrScannerUi(modifier = modifier, startScan = startScan)
-                Toast.makeText(LocalContext.current, "Se canceló la lectura de QR", Toast.LENGTH_LONG).show()
+                val context = LocalContext.current
+                LaunchedEffect(key1 = Unit) {
+                    Toast.makeText(context, "Se canceló la lectura de QR", Toast.LENGTH_LONG).show()
+                }
             }
             is QrScannerUiState.Error -> QrFailureUi(
                 modifier = modifier,

@@ -136,11 +136,6 @@ fun MainScreen() {
                         .padding(paddingValue)
                         .fillMaxSize()
                 )
-                UsuarioScreen(
-                    modifier = Modifier
-                        .padding(paddingValue)
-                        .fillMaxSize()
-                )
             }
             composable("deck") {
                 DeckScreen(
