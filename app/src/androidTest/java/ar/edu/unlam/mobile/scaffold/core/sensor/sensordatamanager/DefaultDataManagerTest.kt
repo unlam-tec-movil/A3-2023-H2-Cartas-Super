@@ -1,11 +1,9 @@
-package ar.edu.unlam.mobile.scaffold.sensordatamanager
+package ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import app.cash.turbine.test
-import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.DefaultDataManager
-import ar.edu.unlam.mobile.scaffold.core.sensor.sensordatamanager.SensorData
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
