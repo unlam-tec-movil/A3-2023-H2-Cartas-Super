@@ -1,6 +1,7 @@
 package ar.edu.unlam.mobile.scaffold.ui.screens.qrscanner
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,19 +41,27 @@ fun QrScannerScreen(
     val uiState by viewModel.qrScannerUIState.collectAsStateWithLifecycle()
     val heroQr by viewModel.heroQr.collectAsStateWithLifecycle()
 
-    when (uiState) {
-        QrScannerUiState.Cancelled -> {
-            QrScannerUi(modifier = modifier, startScan = startScan)
-            Toast.makeText(LocalContext.current, "Se canceló la lectura de QR", Toast.LENGTH_LONG).show()
+    AnimatedContent(
+        targetState = uiState,
+        label = "QrScanner screen transition"
+    ) { state ->
+        when (state) {
+            QrScannerUiState.Cancelled -> {
+                QrScannerUi(modifier = modifier, startScan = startScan)
+                val context = LocalContext.current
+                LaunchedEffect(key1 = Unit) {
+                    Toast.makeText(context, "Se canceló la lectura de QR", Toast.LENGTH_LONG).show()
+                }
+            }
+            is QrScannerUiState.Error -> QrFailureUi(
+                modifier = modifier,
+                startScan = startScan,
+                failureMessage = (uiState as QrScannerUiState.Error).message
+            )
+            QrScannerUiState.Loading -> LoadingComposable(modifier = modifier)
+            QrScannerUiState.QrSuccess -> QrSuccessUi(modifier = modifier, hero = heroQr)
+            QrScannerUiState.Success -> QrScannerUi(modifier = modifier, startScan = startScan)
         }
-        is QrScannerUiState.Error -> QrFailureUi(
-            modifier = modifier,
-            startScan = startScan,
-            failureMessage = (uiState as QrScannerUiState.Error).message
-        )
-        QrScannerUiState.Loading -> LoadingComposable(modifier = modifier)
-        QrScannerUiState.QrSuccess -> QrSuccessUi(modifier = modifier, hero = heroQr)
-        QrScannerUiState.Success -> QrScannerUi(modifier = modifier, startScan = startScan)
     }
 }
 

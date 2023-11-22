@@ -11,8 +11,13 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit4.MockKRule
+import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -42,15 +47,15 @@ class HeroDetailViewModelImpTest {
     lateinit var repo: IHeroRepository
 
     @RelaxedMockK
-    lateinit var orientationDataManager: IOrientationDataManager
+    lateinit var sensorDataManager: IOrientationDataManager
 
-    lateinit var viewModel: HeroDetailViewModelImp
+    private lateinit var viewModel: HeroDetailViewModelImp
 
     @Before
     fun setUp() {
         coEvery { repo.getHero(1) } returns HeroModel(id = 1, name = "Mr. Test")
-        every { orientationDataManager.getSensorData() } returns flow { emit(SensorData(0f, 0f)) }
-        viewModel = HeroDetailViewModelImp(repo, orientationDataManager)
+        every { sensorDataManager.getSensorData() } returns flow { emit(SensorData(0f, 0f)) }
+        viewModel = HeroDetailViewModelImp(repo, sensorDataManager)
     }
 
     // runTest es una corutina para testing, lo que permite usar funciones suspend
@@ -71,28 +76,29 @@ class HeroDetailViewModelImpTest {
         assertThat(hero).isEqualTo(expectedHero)
     }
 
-    /*
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getSensorData() {
+    fun afterVieModelFinishesLoading_VerifyIfSensorDataIs0f0f() = runTest {
+        val expectedSensorData = SensorData(0f, 0f)
+
+        while (viewModel.isLoading.value) {
+            delay(500)
+        }
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.sensorData.collect()
+        }
+        val sensorData = viewModel.sensorData.value
+
+        assertThat(sensorData).isEqualTo(expectedSensorData)
     }
 
     @Test
-    fun getHero() {
-    }
+    fun afterVieModelFinishesLoading_VerifyCallingCancelSensorDataFlowCallsSensorDataManagerCancel() = runTest {
+        while (viewModel.isLoading.value) {
+            delay(500)
+        }
+        viewModel.cancelSensorDataFlow()
 
-    @Test
-    fun isLoading() {
+        verify(exactly = 1) { sensorDataManager.cancel() }
     }
-
-    @Test
-    fun testGetHero() {
-    }
-
-    @Test
-    fun cancelSensorDataFlow() {
-    }
-
-    @Test
-    fun onCleared() {
-    }*/
 }

@@ -1,8 +1,8 @@
 package ar.edu.unlam.mobile.scaffold.di
 
 import android.content.Context
+import ar.edu.unlam.mobile.scaffold.data.qrmanager.HeroQrManager
 import ar.edu.unlam.mobile.scaffold.data.repository.herorepository.IHeroRepository
-import ar.edu.unlam.mobile.scaffold.domain.qrmanager.HeroQrManager
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions

@@ -29,8 +29,8 @@ class HeroDuelScreenKtTest {
             FinishedDuelUi()
         }
         compose.onNodeWithContentDescription(label = "FinishedDuelUi background").assertExists()
-        compose.onNodeWithTag(testTag = "FinishedDuelUi result text").assertExists()
-        compose.onNodeWithTag(testTag = "FinishedDuelUi final score").assertExists()
+        compose.onNodeWithTag(testTag = "FinishedDuelUi result text", useUnmergedTree = true).assertExists()
+        compose.onNodeWithTag(testTag = "FinishedDuelUi final score", useUnmergedTree = true).assertExists()
     }
 
     @Test
@@ -41,8 +41,8 @@ class HeroDuelScreenKtTest {
             )
         }
         compose.onNodeWithContentDescription(label = "FinishedDuelUi background").assertExists()
-        compose.onNodeWithTag(testTag = "FinishedDuelUi result text").assertExists()
-        compose.onNodeWithTag(testTag = "FinishedDuelUi final score").assertExists()
+        compose.onNodeWithTag(testTag = "FinishedDuelUi result text", useUnmergedTree = true).assertExists()
+        compose.onNodeWithTag(testTag = "FinishedDuelUi final score", useUnmergedTree = true).assertExists()
     }
 
     @Test

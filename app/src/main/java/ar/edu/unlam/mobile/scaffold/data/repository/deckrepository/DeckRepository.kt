@@ -38,7 +38,7 @@ class DeckRepository @Inject constructor(private val dataBase: DeckDao, private 
         val carta4 = heroRepo.getHero(entityDeck.carta4)
         val carta5 = heroRepo.getHero(entityDeck.carta5)
         val carta6 = heroRepo.getHero(entityDeck.carta6)
-        val deck = DeckModel(
+        return DeckModel(
             id = entityDeck.id!!,
             carta1 = carta1,
             carta2 = carta2,
@@ -48,6 +48,5 @@ class DeckRepository @Inject constructor(private val dataBase: DeckDao, private 
             carta6 = carta6
 
         )
-        return deck
     }
 }

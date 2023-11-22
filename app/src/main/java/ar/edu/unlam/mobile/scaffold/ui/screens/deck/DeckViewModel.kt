@@ -30,8 +30,8 @@ class DeckViewModel @Inject constructor(
     val isLoading = _isLoading.asStateFlow()
 
     fun generarMazoRandom() {
+        _isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            _isLoading.value = true
             _randomDeck.value = heroRepository.getRandomDeck()
             _isLoading.value = false
         }
@@ -44,8 +44,8 @@ class DeckViewModel @Inject constructor(
     }
 
     fun obtenerTodosLosMazos() {
+        _isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            _isLoading.value = true
             _listDeck.value = deckRepository.getDeckList()
             _isLoading.value = false
         }
