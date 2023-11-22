@@ -40,15 +40,6 @@ class DeckViewModelTest {
     @RelaxedMockK
     lateinit var heroRepository: IHeroRepository
 
-    private val heroList = listOf(
-        HeroModel(id = 1, name = "Test 1"),
-        HeroModel(id = 2, name = "Test 2"),
-        HeroModel(id = 3, name = "Test 3"),
-        HeroModel(id = 4, name = "Test 4"),
-        HeroModel(id = 5, name = "Test 5"),
-        HeroModel(id = 6, name = "Test 6")
-    )
-
     private val randomDeck = DeckModel(
         id = null,
         carta1 = HeroModel(id = 10, name = "Mr. Test 10"),
@@ -118,7 +109,10 @@ class DeckViewModelTest {
     }
 
     @Test
-    fun guardarMazoRandom() = runTest {
+    fun whenGoingToGenerarMazosAndClickOnGuardarMazo_VerifyViewModelCreatesARandomDeckAndSavesItInDeckRepository() = runTest {
+        val expectedDeck = randomDeck
+        val expectedScreen = DeckUI.GENERAR_MAZOS
+
         while (viewModel.isLoading.value) {
             delay(500)
         }
@@ -126,14 +120,13 @@ class DeckViewModelTest {
         while (viewModel.isLoading.value) {
             delay(500)
         }
+        val currentScreen = viewModel.pantallaActual.value
+        val deck = viewModel.randomDeck.value
         viewModel.guardarMazoRandom()
-    }
 
-    @Test
-    fun irAListaDeMazos() {
-    }
-
-    @Test
-    fun irAGenerarMazos() {
+        coVerify(exactly = 1) { deckRepository.insertDeck(expectedDeck) }
+        coVerify(exactly = 1) { heroRepository.getRandomDeck() }
+        assertThat(deck).isEqualTo(expectedDeck)
+        assertThat(currentScreen).isEqualTo(expectedScreen)
     }
 }

@@ -5,6 +5,12 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import kotlinx.coroutines.flow.Flow
 
+/*
+https://proandroiddev.com/parallax-effect-with-sensormanager-using-jetpack-compose-a735a2f5811b
+https://stackoverflow.com/questions/4819626/android-phone-orientation-overview-including-compass/6804786#6804786
+https://gist.github.com/surajsau/b178e2646a1240f883774811e15bbb6a
+ */
+
 interface IOrientationDataManager : SensorEventListener {
 
     fun cancel()
